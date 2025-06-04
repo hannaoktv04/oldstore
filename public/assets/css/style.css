@@ -1,0 +1,433 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+  color: #333;
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 60px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 35px;
+  font-weight: 1000;
+  color: #2aa7a7;
+}
+
+.kategori {
+  margin-left: 16px;
+  font-size: 16px;
+  color: #333;
+  text-decoration: none;
+}
+
+.kategori:hover {
+  color: #2aa7a7;
+}
+
+
+.search-container {
+  flex: 1;
+  margin: 0 20px;
+  position: relative;
+  max-width: 850px;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 10px 40px 10px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: #777;
+}
+
+.icons i {
+  font-size: 18px;
+  margin-left: 20px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.3s;
+}
+
+.icons i:hover {
+  color: #2aa7a7;
+}
+
+.cart-icon-container {
+  position: relative;
+  display: inline-block;
+}
+
+#cart-icon {
+  cursor: pointer;
+  margin-left: 20px;
+}
+
+.cart-popup {
+  position: fixed;
+  text-align: center;
+  top: 70px;
+  right: 20px;
+  font-style: italic;
+  background-color: white;
+  color: #333;
+  padding: 18px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 160px;
+  height: 150px;
+  display: none;
+  z-index: 999;
+
+}
+
+.cart-popup p {
+  margin: 0 0 8px 0;
+  font-size: 12px;
+}
+
+.cart-popup a {
+  color: #2aa7a7;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.popup {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  padding: 20px;
+  width: 250px;
+  text-align: center;
+  z-index: 100;
+}
+
+.popup p {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.popup-buttons button {
+  width: 80px;
+  margin: 5px;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.popup-buttons button:first-child {
+  background-color: #dff6f3;
+  color: #0a8270;
+}
+
+.popup-buttons button:last-child {
+  background-color: #ffefef;
+  color: #c1121f;
+}
+
+.hidden {
+  display: none;
+}
+
+/* HERO SECTION */
+.hero {
+  position: relative;
+  height: 450px;
+  overflow: hidden;
+  border-radius: 16px;
+  margin: 40px auto;
+  max-width: 1110px;
+  padding: 0 16px;
+}
+
+.hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.4);
+  border-radius: 16px;
+}
+
+.hero-text {
+  position: absolute;
+  top: 50%;
+  left: 60px;
+  transform: translateY(-50%);
+  color: white;
+  max-width: 600px;
+}
+
+.hero-text h1 {
+  font-size: 40px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.hero-text p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #2aa7a7;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #238d8d;
+}
+
+/* PRODUK SECTION */
+.produk {
+  padding: 28px 24px;
+  background: #fff;
+}
+
+.produk h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 32px;
+  margin-left: 40px;
+}
+
+.produk-list {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.produk-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 16px;
+  width: 200px;
+  transition: transform 0.2s ease;
+}
+
+.produk-card:hover {
+  transform: translateY(-4px);
+}
+
+.produk-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.produk-card h3 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.produk-card p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 1024px) {
+  .produk-card {
+    width: calc(33.33% - 16px);
+  }
+
+  .hero {
+    height: 360px;
+  }
+
+  .hero-text h1 {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .produk-card {
+    width: calc(50% - 16px);
+  }
+
+  .hero {
+    height: 300px;
+  }
+
+  .hero-text {
+    left: 24px;
+    max-width: 90%;
+  }
+
+  .hero-text h1 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 16px;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .produk-card {
+    width: 100%;
+  }
+
+  .hero {
+    height: 240px;
+    margin: 16px;
+  }
+
+  .hero-text h1 {
+    font-size: 20px;
+  }
+
+  .hero-text p {
+    font-size: 14px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
+/* Hero untuk halaman kategori */
+.kategori-hero {
+  background: url('../img/hero.jpg') center/cover no-repeat;
+  height: 200px;
+  position: relative;
+  margin-top: 10px;
+  border-radius: 12px;
+  max-width: 1110px;
+  margin-inline: auto;
+}
+
+.kategori-hero .overlay {
+  background: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  padding: 40px 60px;
+  color: white;
+  border-radius: 12px;
+}
+
+.kategori-hero h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.kategori-hero p {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* Kategori Content Layout */
+.kategori-content {
+  display: flex;
+  gap: 32px;
+  max-width: 1110px;
+  margin: 40px auto;
+  padding: 0 16px;
+}
+
+.sidebar {
+  flex: 1;
+  max-width: 240px;
+}
+
+.sidebar h3 {
+  margin-bottom: 16px;
+  font-size: 18px;
+  color: #2aa7a7;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin-bottom: 12px;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.sidebar li:hover {
+  color: #2aa7a7;
+}
+
+/* Produk Grid */
+.produk-grid {
+  flex: 3;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+.produk-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 16px;
+  transition: transform 0.2s;
+}
+
+.produk-card:hover {
+  transform: translateY(-4px);
+}
+
+.produk-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.produk-card h4 {
+  font-size: 16px;
+  margin: 8px 0 4px;
+}
+
+.produk-card p {
+  font-size: 14px;
+  color: #666;
+}
