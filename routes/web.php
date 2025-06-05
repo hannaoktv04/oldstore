@@ -1,20 +1,39 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
-// use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/produk/{id}', function ($id) {
+    $produkList = [
+        1 => [
+            'name' => 'Pulpen',
+            'kategori' => 'ATK',
+            'image' => 'assets/img/products/samsung-watch-4.png',
+            'deskripsi' => 'Pulpen berkualitas tinggi untuk kebutuhan harian.',
+            'stock' => 100
+        ],
+    ];
+
+    if (!array_key_exists($id, $produkList)) {
+        abort(404);
+    }
+
+    $produk = (object) $produkList[$id];
+
+    return view('layout.produk.detail', compact('produk'));
+})->name('produk.detail');
 
 Route::get('/', function () {
-    return File::get(public_path('index.html'));
+    return view('layouts.home'); 
 });
 
-// Route::get('/', [AuthController::class, 'login'])->name('login');
-// Route::post('/do-login', [AuthController::class, 'do_login'])->name('do-login');
-// Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/kategori', function () {
+    return view('layouts.kategori'); 
+});
 
-Route::middleware('auth')->group(function () {
-   Route::prefix('dashboard')->name('dashboard.')->group(function () {
-      Route::get('/', [DashboardController::class, 'index'])->name('index');
-   });
+Route::get('/user-login', function () {
+    return view('auth.user-login'); 
+});
+
+Route::get('/admin-login', function () {
+    return view('auth.admin-login'); 
 });

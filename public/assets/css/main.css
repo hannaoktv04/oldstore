@@ -1,0 +1,134 @@
+.icon-button i {
+  transition: all 0.2s ease-in-out;
+  color: #343a40;
+}
+
+#cart-icon:hover i::before,
+#user-icon:hover i::before {
+  color: #2aa7a7;
+}
+
+body {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.brand-custom {
+  color: #2aa7a7 !important;
+}
+
+input.form-control.rounded-pill::placeholder {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+input.form-control.rounded-pill:focus {
+  border-color: #2aa7a7 !important;       
+  outline: none !important;
+  border-radius: 50rem !important;
+}
+
+input.form-control {
+  transition: border-color 0.2s ease;
+}
+
+.hero-content {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.hero-content.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .hero-content {
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        text-align: center;
+        padding: 1.5rem !important;
+    }
+}
+
+.card-3d {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    will-change: transform;
+    cursor: pointer;
+}
+
+.card-3d:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px) rotateX(1deg) rotateY(1deg) scale(1.02);
+    transition-duration: 0.5s
+}
+
+.list-group-item {
+  border: none !important;
+  cursor: pointer;
+}
+
+.list-group-item:hover { 
+  color: #2aa7a7; 
+  text-decoration: none;
+}
+
+.user-popup {
+  position: fixed;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, 0);
+  min-width: 280px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  z-index: 1050;
+  transition: all 0.4s ease;
+  opacity: 0;
+}
+
+.user-popup.show {
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
+
+.user-popup .btn {
+  border-radius: 0;
+  border-color: #ddd;
+}
+
+.user-popup .btn:focus {
+  box-shadow: none;
+}
+
+.popup-overlay  { 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); 
+  z-index: 1040; 
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.popup-overlay.show {
+  opacity: 1;
+}
+
+.user-popup:not(.show),
+.popup-overlay:not(.show) {
+  pointer-events: none !important; 
+  visibility: hidden !important;  
+}
+
+.text-custom {
+  color: #1b1b1b;
+}
+
+.text-custom:hover {
+  color: #2aa7a7;
+  text-decoration: none;
+}

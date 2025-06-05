@@ -1,58 +1,54 @@
-<nav
-  class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-  id="layout-navbar">
-  <div class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0 d-xl-none">
-    <a class="nav-item nav-link px-0 me-xl-6" href="javascript:void(0)">
-      <i class="ri-menu-fill ri-22px"></i>
-    </a>
-  </div>
+<nav class="navbar navbar-expand-lg bg-white shadow-sm py-3 sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold brand-custom fs-2" href="#">PERI</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-  <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-    <ul class="navbar-nav flex-row align-items-center ms-auto">
-      <!-- User -->
-      <li class="nav-item navbar-dropdown dropdown-user dropdown">
-        <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-          <div class="avatar avatar-online">
-            <img src="{{ asset('assets') }}/img/avatars/1.png" alt class="rounded-circle" />
-          </div>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end">
-          <li>
-            <a class="dropdown-item" href="#">
-              <div class="d-flex">
-                <div class="flex-shrink-0 me-2">
-                  <div class="avatar avatar-online">
-                    <img src="{{ asset('assets') }}/img/avatars/1.png" alt class="rounded-circle" />
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link fw-medium" href="{{ url('/kategori') }}">Kategori</a>
+                </li>
+            </ul>
+
+            <form class="d-flex me-3 flex-grow-1" role="search">
+                <div class="input-group">
+                    <input class="form-control rounded-pill ps-4" type="search" placeholder="Cari barang yang kamu inginkan..." aria-label="Search">
+                    <span class="position-absolute top-50 end-0 translate-middle-y me-3 text-muted">
+                        <i class="bi bi-search"></i>
+                    </span>
+                </div>
+            </form>
+
+            <div class="d-flex align-items-center gap-3">
+                <!-- Cart -->
+                <div class="position-relative">
+                  <button id="cart-icon" class="icon-button text-dark bg-transparent border-0 p-0">
+                    <i class="bi bi-bag-fill fs-5"></i>
+                  </button>
+                  <div class="position-absolute bg-white shadow rounded p-2 mt-2 d-none z-3 text-center" id="cart-popup" style="min-width: 160px; min-height: 150px; right: 0px; font-size: 14px">
+                    <p class="mt-1 mb-3">Keranjang pesanan kamu kosong</p>
+                    <a href="#" class="text-decoration-none fst-italic text-custom">Ajukan pesanan sekarang!</a>
                   </div>
                 </div>
-                <div class="flex-grow-1">
-                  <span class="fw-medium d-block">John Doe</span>
-                  <small class="text-muted">Admin</small>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <div class="dropdown-divider"></div>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">
-              <i class="ri-user-3-line me-3"></i><span class="align-middle">My Profile</span>
-            </a>
-          </li>
 
-          <li>
-            <div class="dropdown-divider"></div>
-          </li>
-          <li>
-            <a class="dropdown-item action-logout" href="javascript:void(0);">
-              <i class="ri-shut-down-line me-3"></i>
-              <span class="align-middle">Log Out</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <!--/ User -->
-    </ul>
-  </div>
+                <!-- User -->
+                <div class="position-relative">
+                  <div id="popup-overlay" class="popup-overlay d-none"></div>
+                  <button id="user-icon" class="icon-button text-dark bg-transparent border-0 p-0">
+                    <i class="bi bi-person-fill fs-4"></i>
+                  </button>
+                  <div id="user-popup" class="user-popup d-none">
+                    <p class="mb-3 text-center">Masuk sebagai...</p>
+                    <div class="d-flex">
+                      <button onclick="window.location.href='{{ url('/user-login') }}'" class="btn w-50 border-end rounded-0">User</button>
+                      <button onclick="window.location.href='{{ url('/admin-login') }}'" class="btn w-50 rounded-0">Admin</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </nav>
