@@ -6,7 +6,6 @@
     @forelse ($requests as $request)
         <div class="mb-5 p-3 border rounded">
 
-            {{-- Header: Nomor Pengajuan, Status, Tombol --}}
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="fw-bold mb-0">Pengajuan #{{ str_pad($loop->iteration, 3, '0', STR_PAD_LEFT) }}</h5>
 
@@ -23,7 +22,6 @@
                         @endswitch
                     </small>
 
-                    {{-- Tombol Edit --}}
                     <a href="#" class="btn btn-sm btn-outline-primary" title="Edit Pengajuan">
                         <i class="bi bi-pencil"></i>
                     </a>
@@ -44,8 +42,8 @@
 
                     <div>
                         <strong>{{ $detail->item->kategori ?? 'Kategori Tidak Diketahui' }}</strong><br>
-                        {{ $detail->item->nama_barang }} <em>(Deskripsi: {{ $detail->item->deskripsi ?? '-' }})</em><br>
-                        Jumlah: {{ $detail->qty_requested }}
+                        {{ $detail->item->nama_barang }} <br>
+                        Jumlah: {{ $detail->qty_requested }} {{ $detail->item->satuan }}
                     </div>
                 </div>
             @endforeach

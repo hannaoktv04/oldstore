@@ -29,11 +29,7 @@
             <h3 class="fw-bold mt-1">{{ $produk->nama_barang }}</h3>
             <p class="text-muted mt-2">{{ $produk->deskripsi }}</p>
 
-            <h6 class="mt-4">Pilih Varian</h6>
-            <div class="d-flex gap-3 mb-3">
-                <button class="btn btn-outline-dark rounded-pill px-4">Biru</button>
-                <button class="btn btn-outline-dark rounded-pill px-4">Hitam</button>
-            </div>
+            
 
             <form method="POST" action="{{ route('produk.addToCart', ['id' => $produk->id]) }}">
                 @csrf

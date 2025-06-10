@@ -10,10 +10,10 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\ItemRequestController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\UserSettingsController;
 
 
 Route::get('/riwayat-pengajuan', [ItemRequestController::class, 'history'])->name('item_requests.history');
-
 
 // -------------------------
 // CART ROUTES
@@ -63,10 +63,6 @@ Route::middleware(['auth', 'can:isAdmin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/pengajuan/status/{status}', [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
 });
-// Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
-//     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-//     Route::get('/pengajuan/status/{status}', [AdminPengajuanController::class, 'status'])->name('admin.pengajuan.status');
-// });
 
 
 // -------------------------
@@ -80,10 +76,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user/setting', function () {
         return view('user.setting');
     })->name('user.setting');
+
+    Route::put('/user/{id}', [UserSettingsController::class, 'update'])->name('user.update');
+    Route::post('/user/edit', [UserSettingsController::class, 'edit'])->name('user.edit');
 });
 
 // -------------------------
 // PUBLIC ROUTES (NO LOGIN REQUIRED)
 // -------------------------
 Route::get('/kategori', [ItemController::class, 'index'])->name('kategori.index');
-Route::get('/produk/{id}', [ProductController::class, 'show'])->name('produk.detail');
+
+Route::controller(ProductController::class)->group(function () {
+    Route::get('/produk/{id}', 'show')->name('produk.show');
+    Route::get('/search', 'search')->name('search');
+});
+

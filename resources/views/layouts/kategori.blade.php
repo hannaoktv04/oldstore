@@ -38,7 +38,7 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                 @foreach ($items as $item)
                 <div class="col">
-                    <a href="{{ route('produk.detail', ['id' => $item->id]) }}" class="text-decoration-none">
+                    <a href="{{ route('produk.show', ['id' => $item->id]) }}" class="text-decoration-none">
                         <div class="card h-100 card-3d shadow-sm">
                             <img src="{{ asset('assets/img/products/' . $item->image) }}" class="card-img-top" alt="{{ $item->nama_barang }}">
                             <div class="card-body">

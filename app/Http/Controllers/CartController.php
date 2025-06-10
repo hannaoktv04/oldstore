@@ -15,7 +15,6 @@ class CartController extends Controller
 {
     public function index()
     {
-        // Ambil data cart user yang sedang login, beserta relasi item
         $carts = Cart::with('item')->where('user_id', Auth::id())->get();
         return view('cart.index', compact('carts'));
     }
@@ -29,17 +28,14 @@ class CartController extends Controller
             'qty' => "required|numeric|min:1|max:{$item->stok_minimum}",
         ]);
 
-        // Cari cart existing
         $cart = Cart::where('user_id', Auth::id())
                     ->where('item_id', $request->item_id)
                     ->first();
 
         if ($cart) {
-            // Kalau sudah ada, update qty dengan menambah jumlah baru
             $cart->qty += $request->qty;
             $cart->save();
         } else {
-            // Kalau belum ada, buat baru dengan qty sesuai request
             Cart::create([
                 'user_id' => Auth::id(),
                 'item_id' => $request->item_id,
@@ -52,7 +48,6 @@ class CartController extends Controller
 
     public function destroy($id)
     {
-        // Hapus item cart sesuai id dan user yang login
         $cart = Cart::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
         $cart->delete();
 
@@ -88,15 +83,13 @@ class CartController extends Controller
         DB::beginTransaction();
 
         try {
-            // Buat header permintaan
             $itemRequest = ItemRequest::create([
                 'user_id' => $user->id,
-                'status' => 'submitted', // status awal langsung diajukan
+                'status' => 'submitted', 
                 'tanggal_permintaan' => now(),
-                'keterangan' => null, // Bisa diubah jika kamu tambahkan input di form
+                'keterangan' => null, 
             ]);
 
-            // Simpan semua item dari cart ke item_request_details
             foreach ($carts as $cart) {
                 ItemRequestDetail::create([
                     'item_request_id' => $itemRequest->id,
@@ -106,7 +99,6 @@ class CartController extends Controller
                 ]);
             }
 
-            // Hapus isi keranjang
             $user->carts()->delete();
 
             DB::commit();

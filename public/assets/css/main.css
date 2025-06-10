@@ -134,6 +134,7 @@ input.form-control {
   text-decoration: none;
 }
 
+
 @media (max-width: 768px) {
       h2.fw-bold {
             font-size: 1.5rem;

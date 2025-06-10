@@ -36,8 +36,8 @@
                     <img src="{{ asset('assets/img/products/' . $detail->item->image) }}" class="me-3 rounded" width="80" height="80" style="object-fit: cover;">
                     <div>
                         <strong>{{ $detail->item->kategori ?? 'Kategori Tidak Diketahui' }}</strong><br>
-                        {{ $detail->item->nama_barang }} <em>(Deskripsi: {{ $detail->item->deskripsi ?? '-' }})</em><br>
-                        Jumlah: {{ $detail->qty_requested }}
+                        {{ $detail->item->nama_barang }} <br>
+                        Jumlah: {{ $detail->qty_requested }} {{ $detail->item->satuan }}
                     </div>
                 </div>
             @endforeach

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-white shadow-sm py-3 sticky-top">
   <div class="container">
-    <a class="navbar-brand fw-bold brand-custom fs-2" href="#">PERI</a>
+    <a class="navbar-brand fw-bold brand-custom fs-2" href="{{ url('/home') }}">PERI</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
       aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -13,9 +13,9 @@
         </li>
       </ul>
 
-      <form class="d-flex me-3 flex-grow-1" role="search">
-        <div class="input-group">
-          <input class="form-control rounded-pill ps-4" type="search" placeholder="Cari barang yang kamu inginkan..." aria-label="Search">
+      <form class="d-flex me-3 flex-grow-1" role="search" method="GET" action="{{ route('search') }}">
+        <div class="input-group position-relative">
+          <input name="q" class="form-control rounded-pill ps-4" type="search" placeholder="Cari barang yang kamu inginkan..." aria-label="Search" value="{{ request('q') }}">
           <span class="position-absolute top-50 end-0 translate-middle-y me-3 text-muted">
             <i class="bi bi-search"></i>
           </span>
@@ -26,7 +26,6 @@
       <div class="d-flex align-items-center gap-3">
 
         @guest
-          <!-- Cart untuk guest -->
           <div class="position-relative">
             <button id="cart-icon" class="icon-button text-dark bg-transparent border-0 p-0">
               <i class="bi bi-bag-fill fs-5"></i>
@@ -45,7 +44,7 @@
                 $jumlahKeranjang = \App\Models\Cart::where('user_id', Auth::id())->count();
               @endphp
               @if($jumlahKeranjang > 0)
-                <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                <span class="badge bg-success rounded-pill position-absolute top-0 start-100 translate-middle">
                   {{ $jumlahKeranjang }}
                 </span>
               @endif

@@ -14,6 +14,7 @@
                     <div class="text-muted small">{{ $cart->item->kategori ?? 'Kategori Tidak Diketahui' }}</div>
                     <div class="fw-semibold">{{ $cart->item->nama_barang }}</div>
                     <div class="fst-italic text-muted">{{ $cart->item->warna ?? '-' }}</div>
+                    <div class="text-muted">{{ $produk->stok_minimum ?? 'Produk Habis' }}</div>
                 </div>
             </div>
 
