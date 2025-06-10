@@ -1,130 +1,59 @@
 @extends('layouts.app')
 
 @section('content')
-
-<div class="container py-5">
+<div class="container mt-4">
     <div class="row">
-        <div class="col-md-3 mb-4">
-            <h5 class="fw-bold">Kategori Barang</h5>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item bi-clipboard2-check-fill">Daftar Barang</li>
-                <li class="list-group-item">Cek Pengajuan</li>
-                <li class="list-group-item">CRUD Barang</li>
-            </ul>
+        <h5 class="mb-4">Admin Dashboard</h5>
+        {{-- Sidebar --}}
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm" style="min-height: 300px;">
+                <ul class="nav flex-column sidebar-nav">
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('kategori.index') }}" class="nav-link text-dark d-flex align-items-center">
+                            <i class="bi bi-box-seam me-2"></i> Daftar Barang
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.pengajuan.status', 'submitted') }}" class="nav-link text-dark d-flex align-items-center">
+                            <i class="bi bi-clipboard-check me-2"></i> Cek Pengajuan
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
 
+        {{-- Main Content --}}
         <div class="col-md-9">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/sup-game-box-400.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <a href="{{ route('admin.pengajuan.status', 'submitted') }}" 
+                       class="card text-decoration-none text-dark shadow-sm hover-3d"
+                       style="height: 160px;">
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
+                            <h6>Pengajuan Baru</h6>
+                            <h1 class="display-2 fw-normal">{{ $pengajuanBaru }}</h1>
                         </div>
-                    </div>
+                    </a>
                 </div>
-                
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/samsung-s22.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
+                <div class="col-md-4 mb-3">
+                    <a href="{{ route('admin.pengajuan.status', 'revised') }}" 
+                       class="card text-decoration-none text-dark shadow-sm hover-3d"
+                       style="height: 160px;">
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
+                            <h6>Perubahan</h6>
+                            <h1 class="display-2 fw-normal">{{ $perubahan }}</h1>
                         </div>
-                    </div>
+                    </a>
                 </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/nintendo-switch.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
+                <div class="col-md-4 mb-3">
+                    <a href="{{ route('admin.pengajuan.status', 'cancelled') }}" 
+                       class="card text-decoration-none text-dark shadow-sm hover-3d"
+                       style="height: 160px;">
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
+                            <h6>Pembatalan</h6>
+                            <h1 class="display-2 fw-normal">{{ $pembatalan }}</h1>
                         </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/sup-game-box-400.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/samsung-watch-4.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/samsung-s22.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/nintendo-switch.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/sup-game-box-400.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/samsung-watch-4.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/samsung-s22.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/nintendo-switch.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>

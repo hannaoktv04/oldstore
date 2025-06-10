@@ -1,8 +1,11 @@
 <?php
 
-use App\Models\Item; 
+namespace App\Http\Controllers;
 
-class ProdukController extends Controller
+use Illuminate\Http\Request;
+use App\Models\Item;
+
+class ProductController extends Controller
 {
     public function show($id)
     {

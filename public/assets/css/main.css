@@ -72,56 +72,57 @@ input.form-control {
   text-decoration: none;
 }
 
-.user-popup {
-  position: fixed;
-  left: 50%;
-  top: 100%;
-  transform: translate(-50%, 0);
-  min-width: 280px;
+#cart-popup {
+  position: absolute;
+  top: 100%; /* tepat di bawah ikon cart */
+  right: 0;
+  min-width: 160px;
+  min-height: 150px;
   background: white;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  padding: 15px 20px;
+  font-size: 14px;
   z-index: 1050;
-  transition: all 0.4s ease;
   opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.user-popup.show {
-  top: 50%;
-  transform: translate(-50%, -50%);
+#cart-popup:not(.d-none) {
   opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
-.user-popup .btn {
+/* styling tombol cart */
+.icon-button {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: #343a40;
+  transition: color 0.2s ease-in-out;
+}
+
+.icon-button:hover {
+  color: #2aa7a7;
+}
+
+.dropdown-menu {
+  border-radius: 12px;
+  min-width: 250px;
+  font-size: 14px;
+}
+
+.dropdown-menu .btn {
   border-radius: 0;
   border-color: #ddd;
-}
-
-.user-popup .btn:focus {
   box-shadow: none;
 }
 
-.popup-overlay  { 
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); 
-  z-index: 1040; 
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.popup-overlay.show {
-  opacity: 1;
-}
-
-.user-popup:not(.show),
-.popup-overlay:not(.show) {
-  pointer-events: none !important; 
-  visibility: hidden !important;  
+.dropdown-toggle::after {
+  display: none !important;
 }
 
 .text-custom {
@@ -137,4 +138,83 @@ input.form-control {
       h2.fw-bold {
             font-size: 1.5rem;
       }
+}
+
+.img-thumbnail:hover {
+    border: 2px solid #28a745;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.mascot {
+  position: absolute;
+  left: 125px;
+  top: 30%;
+  transform: translateY(-50%);
+  width: 300px;
+  z-index: 0;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .mascot {
+    position: absolute;
+    width: 200px;
+    left: 50%;
+    top: auto;
+    bottom: 0;
+    transform: translateX(-50%);
+    opacity: 0.5;
+  }
+}
+
+.login-box {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+}
+
+.mascot-reg{
+  position: absolute;
+  left: 860px;
+  top: 30%;
+  transform: translateY(-50%);
+  width: 300px;
+  z-index: 0;
+  opacity: 1;
+}
+
+.register-box {
+  position: relative;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 800px;
+  z-index: 1;
+}
+
+.hover-3d {
+  transition: all 0.3s ease-in-out;
+}
+
+.hover-3d:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-nav .nav-link:hover {
+  color: #2aa7a7 !important;
 }

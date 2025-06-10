@@ -36,128 +36,20 @@
 
         <div class="col-md-9">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                @foreach ($items as $item)
                 <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/sup-game-box-400.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <a href="{{ route('produk.detail', ['id' => 1]) }}" class="text-decoration-none">
+                    <a href="{{ route('produk.detail', ['id' => $item->id]) }}" class="text-decoration-none">
                         <div class="card h-100 card-3d shadow-sm">
-                            <img src="{{ asset('assets/img/products/samsung-watch-4.png') }}" class="card-img-top" alt="Pulpen">
+                            <img src="{{ asset('assets/img/products/' . $item->image) }}" class="card-img-top" alt="{{ $item->nama_barang }}">
                             <div class="card-body">
-                                <h6 class="card-title">Pulpen</h6>
-                                <p class="card-text small text-muted mb-1">ATK</p>
-                                <p class="card-text"><strong>100</strong> Tersisa</p>
+                                <h6 class="card-title">{{ $item->nama_barang }}</h6>
+                                <p class="card-text small text-muted mb-1">{{ $item->kategori }}</p>
+                                <p class="card-text"><strong>{{ number_format($item->stok_minimum, 0) }}</strong> Tersisa</p>
                             </div>
                         </div>
                     </a>
                 </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/samsung-s22.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/nintendo-switch.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/sup-game-box-400.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/samsung-watch-4.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/samsung-s22.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/nintendo-switch.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/sup-game-box-400.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/samsung-watch-4.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/samsung-s22.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/nintendo-switch.png') }}" class="card-img-top" alt="Produk">
-                        <div class="card-body">
-                            <h6 class="card-title">Nama Produk</h6>
-                            <p class="card-text small text-muted mb-1">Kategori</p>
-                            <p class="card-text"><strong>469</strong> Tersisa</p>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>

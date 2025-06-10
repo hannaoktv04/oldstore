@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Homepage | E-Persediaan</title>
+  <title>Homepage | PERI</title>
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
@@ -76,6 +76,7 @@
   <script src="{{ asset('assets/js/main.js') }}"></script>
 
   <script src="{{ asset('assets/js/hero.js') }}"></script>
+
 
   <!-- Page JS -->
   @stack('script')

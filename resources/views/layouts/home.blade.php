@@ -14,7 +14,7 @@
             <h1 class="fw-bold display-5 mb-3">Headline</h1>
             <p class="lead mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br> 
                 Quisque varius gravida ligula rutrum gravida.</p>
-            <a href="#" class="btn fw-bold text-white px-4 py-2" style="background-color: #2aa7a7;">Ajukan Sekarang</a>
+            <a href="{{ url('/kategori') }}" class="btn fw-bold text-white px-4 py-2" style="background-color: #2aa7a7;">Ajukan Sekarang</a>
         </div>
     </div>
 </div>
