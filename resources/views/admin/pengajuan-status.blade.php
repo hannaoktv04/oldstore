@@ -11,7 +11,7 @@
                 <div>
                     <h5 class="fw-bold mb-0">Pengajuan #{{ str_pad($pengajuan->id, 3, '0', STR_PAD_LEFT) }}</h5>
                     <small class="text-muted">
-                        Pemohon: <strong>{{ $pengajuan->user->name ?? 'Tidak diketahui' }}</strong> &middot;
+                        Pemohon: <strong>{{ $pengajuan->user->nama ?? 'Tidak diketahui' }}</strong> &middot;
                         Diajukan: {{ \Carbon\Carbon::parse($pengajuan->tanggal_permintaan)->format('d F Y') }}
                     </small>
                 </div>

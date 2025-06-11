@@ -26,6 +26,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    Route::post('/produk/{id}/pesanLangsung', [CartController::class, 'store'])->name('produk.pesanLangsung');
+    Route::post('/produk/{id}/wishlist', [ProdukController::class, 'tambahKeWishlist'])->name('produk.tambahWishlist');
 
 });
 
