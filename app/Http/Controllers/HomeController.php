@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Item;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('user.home');
+        $items = Item::withSum('details', 'qty_requested')
+                ->orderByDesc('details_sum_qty_requested')
+                ->take(8)
+                ->get();
+
+        return view('layouts.home', compact('items'));
     }
 }

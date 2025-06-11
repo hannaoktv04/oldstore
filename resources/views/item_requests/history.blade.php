@@ -2,12 +2,29 @@
 
 @section('content')
 <div class="container py-4">
+     @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <h4 class="mb-4">Status Pengajuan</h4>
     @forelse ($requests as $request)
         <div class="mb-5 p-3 border rounded">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="fw-bold mb-0">Pengajuan #{{ str_pad($loop->iteration, 3, '0', STR_PAD_LEFT) }}</h5>
+                @php
+                    $pengajuanNumber = str_pad($requests->count() - $loop->index, 3, '0', STR_PAD_LEFT);
+                @endphp
+                <h5 class="fw-bold mb-0">Pengajuan #{{ $pengajuanNumber }}</h5>
 
                 <div class="d-flex align-items-center gap-2">
                     <small>
@@ -51,5 +68,18 @@
     @empty
         <div class="alert alert-info">Belum ada pengajuan barang.</div>
     @endforelse
+    <div class="d-flex justify-content-end">
+        <a class="btn btn-success" href="{{ route('kategori.index') }}" role="button">Buat Pesanan Baru</a>
+    </div>
+
+    <script>
+        setTimeout(function () {
+            var alert = document.querySelector('.alert');
+            if (alert) {
+                var bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 1000);
+    </script>
 </div>
 @endsection

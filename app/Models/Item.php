@@ -26,4 +26,9 @@ class Item extends Model
         return $this->hasMany(Cart::class);
     }
 
+    public function details()
+    {
+        return $this->hasMany(ItemRequestDetail::class);
+    }
+
 }

@@ -2,25 +2,35 @@
 
 @section('content')
 <div class="container py-5">
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <h4 class="fw-bold mb-4">Keranjang Belanja</h4>
 
     @forelse($carts as $cart)
-    <div class="card mb-3 p-3 shadow-sm">
+    <div class="card border-0 mb-3 p-3 shadow-sm">
         <div class="d-flex align-items-center justify-content-between">
-            <!-- Gambar -->
             <div class="d-flex align-items-center">
                 <img src="{{ asset('assets/img/products/' . $cart->item->image) }}" alt="gambar" width="80" height="80" class="rounded me-3" style="object-fit: cover;">
                 <div>
                     <div class="text-muted small">{{ $cart->item->kategori ?? 'Kategori Tidak Diketahui' }}</div>
                     <div class="fw-semibold">{{ $cart->item->nama_barang }}</div>
-                    <div class="fst-italic text-muted">{{ $cart->item->warna ?? '-' }}</div>
-                    <div class="text-muted">{{ $produk->stok_minimum ?? 'Produk Habis' }}</div>
+                    <div class="text-muted small">Produk tersedia : {{ $cart->item->stok_minimum }} {{ $cart->item->satuan }}</div>
                 </div>
             </div>
 
-            <!-- Aksi -->
             <div class="d-flex align-items-center">
-                <!-- Tombol Hapus -->
                 <form method="POST" action="{{ route('cart.destroy', $cart->id) }}" class="me-3">
                     @csrf
                     @method('DELETE')
@@ -29,7 +39,6 @@
                     </button>
                 </form>
 
-                <!-- Kuantitas -->
                 <form method="POST" action="{{ route('cart.update', $cart->id) }}" class="d-flex align-items-center">
                     @csrf
                     @method('PUT')
@@ -52,6 +61,16 @@
             </form>
         </div>
     @endif
+
+    <script>
+        setTimeout(function () {
+            var alert = document.querySelector('.alert');
+            if (alert) {
+                var bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 1000);
+    </script>
 
 </div>
 @endsection

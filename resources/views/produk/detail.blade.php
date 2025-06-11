@@ -13,7 +13,7 @@
     <div class="row g-5">
         <div class="col-md-6">
             <div class="mb-3">
-                <img src="{{ asset('assets/img/products/' . $produk->image) }}" class="img-fluid rounded-4 shadow-sm w-100" alt="{{ $produk->nama_barang }}">
+                <img src="{{ asset('assets/img/products/' . $produk->image) }}" class="img-fluid rounded-4 shadow-sm w-75" alt="{{ $produk->nama_barang }}">
             </div>
             <div class="d-flex gap-2 overflow-auto">
                 @for($i = 1; $i <= 4; $i++)
@@ -29,32 +29,35 @@
             <h3 class="fw-bold mt-1">{{ $produk->nama_barang }}</h3>
             <p class="text-muted mt-2">{{ $produk->deskripsi }}</p>
 
-            
-
-            <form method="POST" action="{{ route('produk.addToCart', ['id' => $produk->id]) }}">
-                @csrf
-                <input type="hidden" name="item_id" value="{{ $produk->id }}">
-
-                <div class="mb-3">
-                    <label for="qty" class="form-label">Jumlah</label>
-                    <div class="input-group" style="width: 140px;">
-                        <button type="button" class="btn btn-outline-secondary" id="btn-minus">-</button>
-                        <input type="number" name="qty" id="qty" value="1" min="1" max="{{ $produk->stok_minimum }}" class="form-control text-center">
-                        <button type="button" class="btn btn-outline-secondary" id="btn-plus">+</button>
-                    </div>
+            {{-- Input Jumlah --}}
+            <div class="mb-3">
+                <label for="qty" class="form-label">Jumlah</label>
+                <div class="input-group" style="width: 140px;">
+                    <button type="button" class="btn btn-outline-secondary" onclick="ubahQty(-1)">-</button>
+                    <input type="number" id="qty" value="1" min="1" max="{{ $produk->stok_minimum }}" class="form-control text-center">
+                    <button type="button" class="btn btn-outline-secondary" onclick="ubahQty(1)">+</button>
                 </div>
+                <div id="qtyAlertContainer"></div>
+            </div>
 
-                <p class="text-muted">{{ $produk->stok_minimum }} produk tersedia</p>
+            <p class="text-muted">{{ $produk->stok_minimum }} produk tersedia</p>
 
-                <div class="d-flex gap-3">
-                    <a href="#" class="btn btn-outline-secondary px-4 py-2">Pesan Langsung</a>
+            <div class="d-flex gap-3">
+                <form method="POST" action="{{ route('produk.pesanLangsung', ['id' => $produk->id]) }}" id="formPesan">
+                    @csrf
+                    <input type="hidden" name="qty" id="formPesanQty">
+                    <button type="submit" class="btn btn-outline-secondary px-4 py-2">Pesan Langsung</button>
+                </form>
+
+                <form method="POST" action="{{ route('produk.addToCart', ['id' => $produk->id]) }}" id="formTambah">
+                    @csrf
+                    <input type="hidden" name="item_id" value="{{ $produk->id }}">
+                    <input type="hidden" name="qty" id="formTambahQty">
                     <button type="submit" class="btn btn-success px-4 py-2">Tambahkan ke Keranjang</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-
-<script src="{{ asset('assets/js/produk-detail.js') }}"></script>
 
 @endsection

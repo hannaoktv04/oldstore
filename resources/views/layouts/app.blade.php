@@ -81,6 +81,8 @@
   <!-- Page JS -->
   @stack('script')
   <script src="{{ asset('assets/js/navbar.js') }}"></script>
+  <script src="{{ asset('assets/js/produk-detail.js') }}"></script>
+
 
 </body>
 </html>

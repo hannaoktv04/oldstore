@@ -56,20 +56,39 @@ class CartController extends Controller
 
     public function update(Request $request, $id)
     {
-        $cart = Cart::findOrFail($id);
+        $cart = Cart::with('item')->findOrFail($id); // pastikan relasi item ikut dimuat
+
+        if (!$cart->item) {
+            return redirect()->route('cart.index')->with('error', 'Item tidak ditemukan.');
+        }
+
+        $stokTersedia = $cart->item->stok_minimum;
 
         if ($request->action === 'increase') {
-            $cart->qty += 1;
+            if ($cart->qty < $stokTersedia) {
+                $cart->qty += 1;
+            } else {
+                return redirect()->route('cart.index')->with('error', 'Jumlah melebihi stok tersedia.');
+            }
         } elseif ($request->action === 'decrease') {
             if ($cart->qty > 1) {
                 $cart->qty -= 1;
             }
+        } elseif ($request->filled('qty')) {
+            $qtyBaru = intval($request->qty);
+            if ($qtyBaru < 1) {
+                $qtyBaru = 1;
+            } elseif ($qtyBaru > $stokTersedia) {
+                return redirect()->route('cart.index')->with('error', 'Jumlah melebihi stok tersedia.');
+            }
+            $cart->qty = $qtyBaru;
         }
 
         $cart->save();
 
-        return redirect()->route('cart.index')->with('success', 'Jumlah diperbarui');
-    }
+        return redirect()->route('cart.index')->with('success', 'Jumlah diperbarui.');
+}
+
 
     public function checkout()
     {
@@ -102,10 +121,43 @@ class CartController extends Controller
             $user->carts()->delete();
 
             DB::commit();
-            return redirect()->route('cart.index')->with('success', 'Permintaan berhasil diajukan.');
+            return redirect()->route('item_requests.history')->with('success', 'Permintaan berhasil diajukan.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('cart.index')->with('error', 'Gagal mengajukan permintaan.');
+            return redirect()->route('item_requests.history')->with('error', 'Gagal mengajukan permintaan.');
+        }
+    }
+
+    public function pesanLangsung(Request $request, $id)
+    {
+        $item = Item::findOrFail($id);
+
+        $request->validate([
+            'qty' => "required|numeric|min:1|max:{$item->stok_minimum}",
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $itemRequest = ItemRequest::create([
+                'user_id' => Auth::id(),
+                'status' => 'submitted',
+                'tanggal_permintaan' => now(),
+                'keterangan' => null,
+            ]);
+
+            ItemRequestDetail::create([
+                'item_request_id' => $itemRequest->id,
+                'item_id' => $item->id,
+                'qty_requested' => $request->qty,
+                'qty_approved' => null,
+            ]);
+
+            DB::commit();
+            return redirect()->route('item_requests.history')->with('success', 'Permintaan langsung berhasil diajukan.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal melakukan permintaan langsung.');
         }
     }
 

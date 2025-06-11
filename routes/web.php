@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\ItemRequestController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserSettingsController;
 
 
@@ -69,9 +70,8 @@ Route::middleware(['auth', 'can:isAdmin'])->group(function () {
 // USER ROUTES (LOGGED-IN USERS)
 // -------------------------
 Route::middleware(['auth'])->group(function () {
-    Route::get('/home', function () {
-        return view('layouts.home');
-    })->name('home');
+
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::get('/user/setting', function () {
         return view('user.setting');
@@ -90,4 +90,6 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('/produk/{id}', 'show')->name('produk.show');
     Route::get('/search', 'search')->name('search');
 });
+
+Route::post('/produk/{id}/pesan-langsung', [CartController::class, 'pesanLangsung'])->name('produk.pesanLangsung');
 
