@@ -5,28 +5,13 @@
     <div class="row">
         <h5 class="mb-4">Admin Dashboard</h5>
         {{-- Sidebar --}}
-        <div class="col-md-3">
-            <div class="card p-3 shadow-sm" style="min-height: 300px;">
-                <ul class="nav flex-column sidebar-nav">
-                    <li class="nav-item mb-2">
-                        <a href="{{ route('kategori.index') }}" class="nav-link text-dark d-flex align-items-center">
-                            <i class="bi bi-box-seam me-2"></i> Daftar Barang
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.pengajuan.status', 'submitted') }}" class="nav-link text-dark d-flex align-items-center">
-                            <i class="bi bi-clipboard-check me-2"></i> Cek Pengajuan
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        @include('components.sidebar')
 
         {{-- Main Content --}}
         <div class="col-md-9">
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <a href="{{ route('admin.pengajuan.status', 'submitted') }}" 
+                    <a href="{{ route('admin.pengajuan.status', 'submitted') }}"
                        class="card text-decoration-none text-dark shadow-sm hover-3d"
                        style="height: 160px;">
                         <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
@@ -36,7 +21,7 @@
                     </a>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <a href="{{ route('admin.pengajuan.status', 'revised') }}" 
+                    <a href="{{ route('admin.pengajuan.status', 'revised') }}"
                        class="card text-decoration-none text-dark shadow-sm hover-3d"
                        style="height: 160px;">
                         <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
@@ -46,7 +31,7 @@
                     </a>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <a href="{{ route('admin.pengajuan.status', 'cancelled') }}" 
+                    <a href="{{ route('admin.pengajuan.status', 'cancelled') }}"
                        class="card text-decoration-none text-dark shadow-sm hover-3d"
                        style="height: 160px;">
                         <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
