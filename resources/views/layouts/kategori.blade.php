@@ -20,17 +20,9 @@
         <div class="col-md-3 mb-4">
             <h5 class="fw-bold">Kategori Barang</h5>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">Alat Tulis</li>
-                <li class="list-group-item">Penjepit Kertas</li>
-                <li class="list-group-item">Penghapus/Korektor</li>
-                <li class="list-group-item">Buku Tulis</li>
-                <li class="list-group-item">Ordner & Map</li>
-                <li class="list-group-item">Penggaris</li>
-                <li class="list-group-item">Cutter (Alat Tulis Kantor)</li>
-                <li class="list-group-item">Alat Perekat</li>
-                <li class="list-group-item">Barang Cetakan</li>
-                <li class="list-group-item">USB/Flash Disk</li>
-                <li class="list-group-item">Lainnya...</li>
+                @foreach ($categories as $category)
+                     <li class="list-group-item">{{ $category->categori_name }}</li>
+                @endforeach
             </ul>
         </div>
 
@@ -40,10 +32,12 @@
                 <div class="col">
                     <a href="{{ route('produk.show', ['id' => $item->id]) }}" class="text-decoration-none">
                         <div class="card h-100 card-3d shadow-sm">
-                            <img src="{{ asset('assets/img/products/' . $item->image) }}" class="card-img-top" alt="{{ $item->nama_barang }}">
+                            <img src="{{ asset('storage/' . ($item->photo?->image ?? 'placeholder.jpg')) }}" class="card-img-top" alt="{{ $item->nama_barang }}">
+
                             <div class="card-body">
                                 <h6 class="card-title">{{ $item->nama_barang }}</h6>
-                                <p class="card-text small text-muted mb-1">{{ $item->kategori }}</p>
+                                <p class="card-text small text-muted mb-1">{{ $item->category?->categori_name ?? '-' }}</p>
+
                                 <p class="card-text"><strong>{{ number_format($item->stok_minimum, 0) }}</strong> Tersisa</p>
                             </div>
                         </div>

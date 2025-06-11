@@ -5,12 +5,25 @@
     <div class="row">
         <h5 class="mb-4">Add New Item</h5>
 
+        {{-- Flash Message --}}
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show fadeout" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show fadeout" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+
+
         {{-- Main Content --}}
         <div class="col-md-12">
-            <form action="#" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.storeItem') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
-
                     <div class="col-md-7">
                         {{-- Item Information --}}
                         <div class="card p-4 mb-3 shadow-sm">
@@ -31,12 +44,12 @@
                                 <label for="satuan" class="form-label">Satuan</label>
                                 <select name="satuan" id="satuan" class="form-select" required>
                                     <option value="">Select Satuan</option>
-                                    <option value="pcs">pcs</option>
-                                    <option value="lembar">lembar</option>
-                                    <option value="meter">meter</option>
-                                    <option value="liter">liter</option>
-                                    <option value="box">box</option>
-                                    <option value="kg">kg</option>
+                                    <option value="pcs">Pcs</option>
+                                    <option value="buah">Buah</option>
+                                    <option value="rim">Rim</option>
+                                    <option value="pack">Pack</option>
+                                    <option value="dus">Dus</option>
+                                    <option value="botol">Botol</option>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -45,7 +58,9 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-5">
+                        {{-- Upload Image --}}
                         <div class="card p-4 mb-3 shadow-sm">
                             <h5>Upload Image</h5>
                             <div class="mb-3">
@@ -53,12 +68,11 @@
                                 <input type="file" name="photo_Item[]" id="photo_Item" class="form-control" multiple>
                                 <small class="text-muted">You can upload multiple images (main, thumbnail, detail)</small>
                             </div>
-                            {{-- Preview Images (optional) --}}
-                            <div class="d-flex gap-2 mt-2" id="previewContainer">
-                                <!-- Preview thumbnails appear here (JavaScript needed) -->
-                            </div>
+                            {{-- Preview Images --}}
+                            <div class="d-flex gap-2 mt-2" id="previewContainer"></div>
                         </div>
-                        {{-- Category Selection --}}
+
+                        {{-- Category --}}
                         <div class="card p-4 mb-3 shadow-sm">
                             <h5>Category</h5>
                             <div class="mb-3">
@@ -81,7 +95,6 @@
                             <a href="#" class="btn btn-secondary">Cancel</a>
                         </div>
                     </div>
-
                 </div>
             </form>
         </div>
@@ -96,7 +109,7 @@
                 <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="addCategoryForm">
+            <form action="{{ route('categories.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -115,9 +128,7 @@
 @endsection
 
 {{-- Script --}}
-<script src="{{ asset('assets/js/addCategory.js') }}"></script>
 <script>
-    // Optional: image preview
     document.getElementById('photo_Item')?.addEventListener('change', function(e) {
         const previewContainer = document.getElementById('previewContainer');
         previewContainer.innerHTML = '';
@@ -134,6 +145,17 @@
                 previewContainer.appendChild(img);
             };
             reader.readAsDataURL(file);
+        });
+    });
+     // Auto hide flash message
+    window.addEventListener('DOMContentLoaded', () => {
+        const alerts = document.querySelectorAll('.fadeout');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.classList.remove('show');
+                alert.classList.add('fade');
+                setTimeout(() => alert.remove(), 500);
+            }, 3000); // 3 seconds
         });
     });
 </script>

@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 },
                 credentials: "same-origin",
                 body: JSON.stringify({
-                    categori_name: name
+                    categori_name: name         
                 })
             })
             .then(response => {

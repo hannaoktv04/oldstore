@@ -2,19 +2,30 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
-    protected $fillable = [
-        'kode_barang',
+    use HasFactory;    protected $fillable = [
         'nama_barang',
+        'kode_barang',
+        'category_id',
         'satuan',
         'stok_minimum',
         'deskripsi',
-        'image',
-        'kategori'
+        'photo_id',
     ];
+
+    public function photos()
+    {
+        return $this->hasMany(Photo::class);
+    }
+
+    public function photo()
+    {
+        return $this->belongsTo(Photo::class, 'photo_id');
+    }
 
     public function stocks()
     {
@@ -29,6 +40,10 @@ class Item extends Model
     public function details()
     {
         return $this->hasMany(ItemRequestDetail::class);
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
 }

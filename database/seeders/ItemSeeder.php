@@ -16,8 +16,8 @@ class ItemSeeder extends Seeder
                 'satuan' => 'pcs',
                 'stok_minimum' => 10,
                 'deskripsi' => 'Buku tulis 40 lembar untuk pelajar.',
-                'image' => 'sup-game-box-400.png',
-                'kategori' => 'Alat Tulis',
+                'photo_product' => 'sup-game-box-400.png',
+                'category_id' => '4',
             ],
             [
                 'kode_barang' => 'P002',
@@ -25,8 +25,8 @@ class ItemSeeder extends Seeder
                 'satuan' => 'pcs',
                 'stok_minimum' => 20,
                 'deskripsi' => 'Pulpen tinta biru standar.',
-                'image' => 'samsung-watch-4.png',
-                'kategori' => 'Alat Tulis',
+                'photo_product' => 'samsung-watch-4.png',
+                'category_id' => '4',
             ],
             [
                 'kode_barang' => 'P003',
@@ -34,8 +34,8 @@ class ItemSeeder extends Seeder
                 'satuan' => 'box',
                 'stok_minimum' => 5,
                 'deskripsi' => 'Kertas A4 80 gsm isi 500 lembar.',
-                'image' => 'samsung-s22.png',
-                'kategori' => 'Perlengkapan Kantor',
+                'photo_product' => 'samsung-s22.png',
+                'category_id' => 'Perlengkapan Kantor',
             ],
         ];
 

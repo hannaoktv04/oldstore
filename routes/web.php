@@ -69,9 +69,9 @@ Route::middleware(['auth', 'can:isAdmin'])->group(function () {
 Route::middleware(['auth', 'can:isAdmin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/pengajuan/status/{status}', [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
-    Route::get('/admin/add-item', function () {
-        return view('admin.addItem');
-    })->name('admin.addItem');
+    Route::get('/admin/add-item', [ItemController::class, 'create'])->name('admin.addItem');
+    Route::post('/admin/add-item', [ItemController::class, 'store'])->name('admin.storeItem');
+
     Route::resource('categories', CategoryController::class);
 
 });
@@ -97,8 +97,8 @@ Route::middleware(['auth'])->group(function () {
 // -------------------------
 Route::get('/kategori', [ItemController::class, 'index'])->name('kategori.index');
 
+
 Route::controller(ProductController::class)->group(function () {
     Route::get('/produk/{id}', 'show')->name('produk.show');
     Route::get('/search', 'search')->name('search');
 });
-

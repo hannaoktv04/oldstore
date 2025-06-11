@@ -15,21 +15,21 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'categori_name' => 'required|unique:category'
-        ]);
+        try {
+            $request->validate([
+                'categori_name' => 'required|unique:category'
+            ]);
 
-        $category = Category::create([
-            'categori_name' => $request->categori_name
-        ]);
+            Category::create([
+                'categori_name' => $request->categori_name
+            ]);
 
-        // AJAX response
-        if ($request->ajax()) {
-            return response()->json($category, 200);
+            return redirect()->back()->with('success', 'Kategori item berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Kategory item sudah ada.');
         }
-
-        return redirect()->back()->with('success', 'Category added successfully!');
     }
+
 
     public function create()
     {
