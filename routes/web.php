@@ -12,6 +12,7 @@ use App\Http\Controllers\ItemRequestController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserSettingsController;
+use App\Http\Controllers\CategoryController;
 
 
 Route::get('/riwayat-pengajuan', [ItemRequestController::class, 'history'])->name('item_requests.history');
@@ -25,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-    
+
 });
 
 
@@ -65,6 +66,16 @@ Route::middleware(['auth', 'can:isAdmin'])->group(function () {
     Route::get('/admin/pengajuan/status/{status}', [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
 });
 
+Route::middleware(['auth', 'can:isAdmin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/pengajuan/status/{status}', [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
+    Route::get('/admin/add-item', function () {
+        return view('admin.addItem');
+    })->name('admin.addItem');
+    Route::resource('categories', CategoryController::class);
+
+});
+
 
 // -------------------------
 // USER ROUTES (LOGGED-IN USERS)
@@ -90,6 +101,4 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('/produk/{id}', 'show')->name('produk.show');
     Route::get('/search', 'search')->name('search');
 });
-
-Route::post('/produk/{id}/pesan-langsung', [CartController::class, 'pesanLangsung'])->name('produk.pesanLangsung');
 
