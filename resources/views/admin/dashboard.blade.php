@@ -4,10 +4,7 @@
 <div class="container mt-4">
     <div class="row">
         <h5 class="mb-4">Admin Dashboard</h5>
-        {{-- Sidebar --}}
         @include('components.sidebar')
-
-        {{-- Main Content --}}
         <div class="col-md-9">
             <div class="row">
                 <div class="col-md-4 mb-3">

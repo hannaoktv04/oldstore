@@ -42,25 +42,30 @@
 
             <p class="text-muted">{{ $produk->stok_minimum }} produk tersedia</p>
 
-            @if($produk->stok_minimum > 0)
-                <form method="POST" action="{{ route('produk.pesanLangsung', ['id' => $produk->id]) }}" id="formPesan">
-                    @csrf
-                    <input type="hidden" name="qty" id="formPesanQty">
-                    <button type="submit" class="btn btn-outline-secondary px-4 py-2">Pesan Langsung</button>
-                </form>
+            <div class="d-flex gap-3">
+                @if ($produk->stok_minimum > 0)
+                    <form method="POST" action="{{ route('produk.pesanLangsung', ['id' => $produk->id]) }}" id="formPesan">
+                        @csrf
+                        <input type="hidden" name="qty" id="formPesanQty">
+                        <button type="submit" class="btn btn-outline-secondary px-4 py-2">Pesan Langsung</button>
+                    </form>
 
-                <form method="POST" action="{{ route('produk.addToCart', ['id' => $produk->id]) }}" id="formTambah">
-                    @csrf
-                    <input type="hidden" name="item_id" value="{{ $produk->id }}">
-                    <input type="hidden" name="qty" id="formTambahQty">
-                    <button type="submit" class="btn btn-success px-4 py-2">Tambahkan ke Keranjang</button>
-                </form>
-            @else
-                <form method="POST" action="{{ route('produk.tambahWishlist', ['id' => $produk->id]) }}">
-                    @csrf
-                    <button type="submit" class="btn btn-warning px-4 py-2">Tambah ke Wishlist</button>
-                </form>
-            @endif
+                    <form method="POST" action="{{ route('produk.addToCart', ['id' => $produk->id]) }}" id="formTambah">
+                        @csrf
+                        <input type="hidden" name="item_id" value="{{ $produk->id }}">
+                        <input type="hidden" name="qty" id="formTambahQty">
+                        <button type="submit" class="btn btn-success px-4 py-2">Tambahkan ke Keranjang</button>
+                    </form>
+                @else
+                    <div class="alert alert-warning">Stok produk habis. Anda bisa menambahkan ke wishlist.</div>
+
+                    <form method="POST" action="{{ route('produk.wishlist', ['id' => $produk->id]) }}">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-warning px-4 py-2">Tambah ke Wishlist</button>
+                    </form>
+                @endif
+            </div>
+
         </div>
     </div>
 </div>

@@ -23,7 +23,7 @@
             <div class="col">
                 <a href="{{ route('produk.show', ['id' => $item->id]) }}" class="text-decoration-none">
                     <div class="card h-100 card-3d shadow-sm">
-                        <img src="{{ asset('assets/img/products/' . $item->image) }}" class="card-img-top" alt="{{ $item->nama_barang }}">
+                        <img src="{{ asset('storage/' . ($item->photo?->image ?? 'placeholder.jpg')) }}" class="card-img-top" alt="{{ $item->nama_barang }}">
                         <div class="card-body">
                             <h6 class="card-title">{{ $item->nama_barang }}</h6>
                             <p class="card-text small text-muted mb-1">{{ $item->kategori }}</p>

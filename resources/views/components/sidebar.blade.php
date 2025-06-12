@@ -17,6 +17,11 @@
                             <i class="bi bi-clipboard-check me-2"></i> Add Item
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.wishlist.index') }}" class="nav-link text-dark d-flex align-items-center">
+                            <i class="bi bi-heart me-2"></i> Wishlist User
+                        </a>
+                    </li>
                 </ul>
             </div>
 </div>

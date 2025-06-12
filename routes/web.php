@@ -13,9 +13,9 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AdminWishlistController;
+use App\Http\Controllers\WishlistController;
 
-
-Route::get('/riwayat-pengajuan', [ItemRequestController::class, 'history'])->name('item_requests.history');
 
 // -------------------------
 // CART ROUTES
@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
     Route::post('/produk/{id}/pesanLangsung', [CartController::class, 'store'])->name('produk.pesanLangsung');
-    Route::post('/produk/{id}/wishlist', [ProdukController::class, 'tambahKeWishlist'])->name('produk.tambahWishlist');
+    Route::post('/produk/{id}/wishlist', [ProductController::class, 'tambahWishlist'])->name('produk.wishlist');
 
 });
 
@@ -66,16 +66,12 @@ Route::get('/', function () {
 Route::middleware(['auth', 'can:isAdmin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/pengajuan/status/{status}', [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
-});
-
-Route::middleware(['auth', 'can:isAdmin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/pengajuan/status/{status}', [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
     Route::get('/admin/add-item', [ItemController::class, 'create'])->name('admin.addItem');
     Route::post('/admin/add-item', [ItemController::class, 'store'])->name('admin.storeItem');
-
     Route::resource('categories', CategoryController::class);
-
+    Route::get('/admin/wishlist', [AdminWishlistController::class, 'index'])->name('admin.wishlist.index');
+    Route::post('/admin/wishlist/{id}/akomodasi', [AdminWishlistController::class, 'akomodasi'])->name('admin.wishlist.akomodasi');
+    Route::post('/admin/wishlist/{id}/tolak', [AdminWishlistController::class, 'tolak'])->name('admin.wishlist.tolak');
 });
 
 
@@ -90,15 +86,14 @@ Route::middleware(['auth'])->group(function () {
         return view('user.setting');
     })->name('user.setting');
 
-    Route::put('/user/{id}', [UserSettingsController::class, 'update'])->name('user.update');
-    Route::post('/user/edit', [UserSettingsController::class, 'edit'])->name('user.edit');
+    Route::get('/riwayat-pengajuan', [ItemRequestController::class, 'history'])->name('user.history');
+    Route::get('/wishlist', [App\Http\Controllers\WishlistController::class, 'index'])->name('user.wishlist');
 });
 
 // -------------------------
 // PUBLIC ROUTES (NO LOGIN REQUIRED)
 // -------------------------
 Route::get('/kategori', [ItemController::class, 'index'])->name('kategori.index');
-
 
 Route::controller(ProductController::class)->group(function () {
     Route::get('/produk/{id}', 'show')->name('produk.show');

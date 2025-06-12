@@ -121,10 +121,10 @@ class CartController extends Controller
             $user->carts()->delete();
 
             DB::commit();
-            return redirect()->route('item_requests.history')->with('success', 'Permintaan berhasil diajukan.');
+            return redirect()->route('user.history')->with('success', 'Permintaan berhasil diajukan.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('item_requests.history')->with('error', 'Gagal mengajukan permintaan.');
+            return redirect()->route('user.history')->with('error', 'Gagal mengajukan permintaan.');
         }
     }
 
@@ -154,7 +154,7 @@ class CartController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route('item_requests.history')->with('success', 'Permintaan langsung berhasil diajukan.');
+            return redirect()->route('user.history')->with('success', 'Permintaan langsung berhasil diajukan.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Gagal melakukan permintaan langsung.');

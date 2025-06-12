@@ -22,7 +22,6 @@
         </div>
       </form>
 
-      <!-- Cart dan User Icon -->
       <div class="d-flex align-items-center gap-3">
 
         @guest
@@ -71,7 +70,7 @@
 
 
               <div class="d-flex justify-content-between mt-3">
-                <a href="{{ route('item_requests.history') }}" class="btn btn-outline-success btn-sm">Status Pengajuan</a>
+                <a href="{{ route('user.history') }}" class="btn btn-outline-success btn-sm">Status Pengajuan</a>
                 <a href="{{ route('cart.index') }}" class="btn btn-success btn-sm">Lihat Keranjang</a>
               </div>
             </div>
@@ -79,7 +78,6 @@
         @endif
         @endguest
 
-        <!-- User dropdown -->
         <div class="dropdown">
           <button id="user-icon" class="icon-button text-dark bg-transparent border-0 p-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-person-fill fs-4"></i>
@@ -101,7 +99,7 @@
               @if(Auth::user()->role === 'admin')
                 <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
               @else
-                <li><a class="dropdown-item" href="{{ route('user.setting') }}"><i class="bi bi-gear-fill me-2"></i>Setting</a></li>
+                <li><a class="dropdown-item" href="{{ route('user.wishlist') }}"><i class="bi bi-heart me-2"></i>My Wishlist</a></li>
               @endif
 
               <li><hr class="dropdown-divider"></li>
