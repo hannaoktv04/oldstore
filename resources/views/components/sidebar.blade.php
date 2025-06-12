@@ -2,7 +2,7 @@
 <div class="col-md-3">
             <div class="card p-3 shadow-sm" style="min-height: 300px;">
                 <ul class="nav flex-column sidebar-nav">
-                    <li class="nav-item mb-2">
+                    <li class="nav-item">
                         <a href="{{ route('kategori.index') }}" class="nav-link text-dark d-flex align-items-center">
                             <i class="bi bi-box-seam me-2"></i> Daftar Barang
                         </a>
