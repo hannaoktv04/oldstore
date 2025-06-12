@@ -14,7 +14,7 @@ class ItemRequestController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('item_requests.history', compact('requests'));
+        return view('user.history', compact('requests'));
     }
 
 }

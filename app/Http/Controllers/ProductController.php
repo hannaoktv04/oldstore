@@ -24,20 +24,20 @@ class ProductController extends Controller
         return view('search.results', compact('produk', 'keyword'));
     }
 
-    public function tambahKeWishlist(Request $request, $id)
+    public function tambahWishlist($id, Request $request)
     {
         $produk = Item::findOrFail($id);
 
         ItemWishlist::create([
-            'user_id' => Auth::id(),
-            'nama_barang' => $produk->nama_barang,
-            'deskripsi' => $produk->deskripsi,
-            'category_id' => $produk->category_id,
+            'user_id'       => auth()->id(),
+            'nama_barang'   => $produk->nama_barang,
+            'deskripsi'     => $produk->deskripsi,
+            'category_id'   => $produk->category_id,
             'qty_diusulkan' => 1,
-            'status' => 'pending',
-            'catatan_admin' => null,
+            'status'        => 'pending',
         ]);
 
-        return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke wishlist.');
+        return redirect()->back()->with('success', 'Produk ditambahkan ke wishlist karena stok habis.');
     }
+
 }
