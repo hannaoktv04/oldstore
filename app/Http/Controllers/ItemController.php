@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\Photo;
+use App\Models\ItemStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -38,6 +39,11 @@ class ItemController extends Controller
                 'satuan' => $validated['satuan'],
                 'deskripsi' => $validated['deskripsi'],
                 'category_id' => $validated['category_id'],
+            ]);
+
+            ItemStock::create([
+            'item_id' => $item->id,
+            'qty' => $validated['stok'],  
             ]);
 
             $photoIds = [];
