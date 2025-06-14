@@ -29,6 +29,7 @@ class ItemController extends Controller
                 'satuan' => 'required|string',
                 'deskripsi' => 'required|string',
                 'category_id' => 'nullable|exists:category,id',
+                'photo_Item'   => 'required|array|min:1|max:5',
                 'photo_Item.*' => 'image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
@@ -43,25 +44,27 @@ class ItemController extends Controller
 
             ItemStock::create([
             'item_id' => $item->id,
-            'qty' => $validated['stok'],  
+            'qty' => $validated['stok'],
             ]);
 
-            $photoIds = [];
+            $slots = [null, null, null, null, null];
+
             if ($request->hasFile('photo_Item')) {
-                foreach ($request->file('photo_Item') as $file) {
-                    $path = $file->store('images', 'public');
-                    $photo = Photo::create([
-                        'item_id' => $item->id,
-                        'image' => $path,
-                    ]);
-                    $photoIds[] = $photo->id;
+                foreach ($request->file('photo_Item') as $idx => $file) {
+                    $slots[$idx] = $file->store('images', 'public');
                 }
 
-                if (count($photoIds) > 0) {
-                    $item->photo_id = $photoIds[0];
-                    $item->save();
-                }
+                $photo = Photo::create([
+                    'item_id' => $item->id,
+                    'image'   => $slots[0],
+                    'img_xl'  => $slots[1],
+                    'img_l'   => $slots[2],
+                    'img_m'   => $slots[3],
+                    'img_s'   => $slots[4],
+                ]);
+                $item->update(['photo_id' => $photo->id]);
             }
+
 
             DB::commit();
             return redirect()->back()->with('success', 'Item berhasil ditambahkan!');

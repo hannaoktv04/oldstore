@@ -24,7 +24,21 @@
                 <div class="text-end">
                     <small class="text-muted d-block mb-1">Aksi</small>
                     <div class="d-flex gap-2 justify-content-end">
-                        <a href="#" class="text-success" title="Setujui"><i class="bi bi-check-circle fs-5"></i></a>
+                        {{-- <a href="#" class="text-success" title="Setujui"><i class="bi bi-check-circle fs-5"></i></a> --}}
+                        <a href="#"
+                            class="text-success"
+                            title="Setujui"
+                            onclick="event.preventDefault(); if(confirm('Yakin ingin menyetujui pengajuan ini?')) document.getElementById('approve-form-{{ $pengajuan->id }}').submit();">
+                            <i class="bi bi-check-circle fs-5"></i>
+                            </a>
+
+                            {{-- <form id="approve-form-{{ $pengajuan->id }}"
+                                action="{{ route('pengajuan.approve', $pengajuan->id) }}"
+                                method="POST"
+                                style="display: none;">
+                                @csrf --}}
+                            </form>
+
                         <a href="#" class="text-primary" title="Detail"><i class="bi bi-file-earmark-text fs-5"></i></a>
                         <a href="#" class="text-danger" title="Tolak"><i class="bi bi-x-circle fs-5"></i></a>
                     </div>
@@ -48,4 +62,18 @@
 
     <a href="{{ route('admin.dashboard') }}" class="btn btn-success">Kembali ke Dashboard</a>
 </div>
+@if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
+@if (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
 @endsection

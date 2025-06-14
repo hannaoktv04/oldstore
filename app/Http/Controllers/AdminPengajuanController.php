@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\ItemStock;
+use App\Models\ItemLog;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\ItemRequest;
 
