@@ -27,6 +27,12 @@ class Item extends Model
         return $this->belongsTo(Photo::class, 'photo_id');
     }
 
+    public function getPhotoUrlAttribute()
+    {
+        $filename = $this->photo->image ?? 'default.jpg';
+        return asset('storage/' . $filename);
+    }
+
     public function stocks()
     {
         return $this->hasMany(ItemStock::class);
