@@ -25,5 +25,5 @@ class ItemRequest extends Model
     public function details() {
         return $this->hasMany(ItemRequestDetail::class);
     }
-    
+
 }

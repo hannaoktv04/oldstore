@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-5">
+<div class="container py-3">
+    {{-- Breadcrumb --}}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">PERI</a></li>
@@ -10,20 +11,42 @@
         </ol>
     </nav>
 
+    @php
+        $photo = $produk->photo;
+        $gallery = collect([
+            $photo->image,
+            $photo->img_xl,
+            $photo->img_l,
+            $photo->img_m,
+            $photo->img_s,
+        ])->filter();
+    @endphp
+
     <div class="row g-5">
+        {{-- Kolom Gambar --}}
         <div class="col-md-6">
+            {{-- Gambar Utama --}}
             <div class="mb-3">
-                <img src="{{ asset('assets/img/products/' . $produk->image) }}" class="img-fluid rounded-4 shadow-sm w-75" alt="{{ $produk->nama_barang }}">
+                <img id="mainImage"
+                     src="{{ asset('storage/' . $gallery->first()) }}"
+                     class="img-fluid rounded-4 shadow-sm w-75"
+                     alt="{{ $produk->nama_barang }}">
             </div>
+
+            {{-- Thumbnail --}}
             <div class="d-flex gap-2 overflow-auto">
-                @for($i = 1; $i <= 4; $i++)
+                @foreach($gallery as $path)
                     <div class="flex-shrink-0">
-                        <img src="{{ asset('assets/img/products/' . $produk->image) }}" class="img-thumbnail rounded-3" style="width: 70px; height: 70px; object-fit: cover;">
+                        <img src="{{ asset('storage/' . $path) }}"
+                             data-full="{{ asset('storage/' . $path) }}"
+                             class="img-thumbnail rounded-3 thumbnail-click"
+                             style="width: 70px; height: 70px; object-fit: cover; cursor: pointer;">
                     </div>
-                @endfor
+                @endforeach
             </div>
         </div>
 
+        {{-- Kolom Informasi Produk --}}
         <div class="col-md-6">
             <small class="text-muted">{{ $produk->kategori }}</small>
             <h3 class="fw-bold mt-1">{{ $produk->nama_barang }}</h3>
@@ -44,12 +67,14 @@
 
             <div class="d-flex gap-3">
                 @if ($produk->stok_minimum > 0)
+                    {{-- Tombol Pesan Langsung --}}
                     <form method="POST" action="{{ route('produk.pesanLangsung', ['id' => $produk->id]) }}" id="formPesan">
                         @csrf
                         <input type="hidden" name="qty" id="formPesanQty">
                         <button type="submit" class="btn btn-outline-secondary px-4 py-2">Pesan Langsung</button>
                     </form>
 
+                    {{-- Tombol Tambah ke Keranjang --}}
                     <form method="POST" action="{{ route('produk.addToCart', ['id' => $produk->id]) }}" id="formTambah">
                         @csrf
                         <input type="hidden" name="item_id" value="{{ $produk->id }}">
@@ -58,16 +83,29 @@
                     </form>
                 @else
                     <div class="alert alert-warning">Stok produk habis. Anda bisa menambahkan ke wishlist.</div>
-
                     <form method="POST" action="{{ route('produk.wishlist', ['id' => $produk->id]) }}">
                         @csrf
                         <button type="submit" class="btn btn-outline-warning px-4 py-2">Tambah ke Wishlist</button>
                     </form>
                 @endif
             </div>
-
         </div>
     </div>
 </div>
-
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const thumbnails = document.querySelectorAll('.thumbnail-click');
+        const mainImage = document.getElementById('mainImage');
+
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', function () {
+                const fullSrc = this.getAttribute('data-full');
+                mainImage.src = fullSrc;
+            });
+        });
+    });
+</script>
+@endpush

@@ -11,7 +11,7 @@ class AdminController extends Controller
     {
         $pengajuanBaru = ItemRequest::where('status', 'submitted')->count();
         $perubahan = ItemRequest::where('status', 'revised')->count();
-        $pembatalan = ItemRequest::where('status', 'cancelled')->count();
+        $pembatalan = ItemRequest::where('status', 'rejected')->count();
 
         return view('admin.dashboard', compact('pengajuanBaru', 'perubahan', 'pembatalan'));
     }

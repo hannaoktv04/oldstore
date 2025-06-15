@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('photos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('item_id')->nullable()->constrained('items')->nullOnDelete();
-            $table->string('image'); // Path utama
+            $table->string('image'); 
             $table->string('img_xl')->nullable();
             $table->string('img_l')->nullable();
             $table->string('img_m')->nullable();

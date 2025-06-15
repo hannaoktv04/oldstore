@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/addItem.css') }}">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
@@ -31,6 +32,8 @@
     <script src="{{ asset('assets/js/config.js') }}"></script>
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     @stack('style')
+    @stack('scripts')
+
 </head>
 <body>
   <div class="layout-wrapper layout-content-navbar">

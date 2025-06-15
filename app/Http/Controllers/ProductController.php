@@ -10,7 +10,8 @@ class ProductController extends Controller
 {
     public function show($id)
     {
-        $produk = Item::findOrFail($id);
+        // $produk = Item::findOrFail($id);
+        $produk = Item::with('photo')->findOrFail($id);
         return view('produk.detail', compact('produk'));
     }
 

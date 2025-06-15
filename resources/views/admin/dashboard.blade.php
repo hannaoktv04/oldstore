@@ -28,11 +28,11 @@
                     </a>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <a href="{{ route('admin.pengajuan.status', 'cancelled') }}"
+                    <a href="{{ route('admin.pengajuan.status', 'rejected') }}"
                        class="card text-decoration-none text-dark shadow-sm hover-3d"
                        style="height: 160px;">
                         <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
-                            <h6>Pembatalan</h6>
+                            <h6>Ditolak</h6>
                             <h1 class="display-2 fw-normal">{{ $pembatalan }}</h1>
                         </div>
                     </a>
