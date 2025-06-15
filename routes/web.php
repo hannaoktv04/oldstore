@@ -23,12 +23,11 @@ use App\Http\Controllers\WishlistController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/produk/{id}/add-to-cart', [CartController::class, 'store'])->name('produk.addToCart');
-    Route::post('/produk/{id}/pesanLangsung', [CartController::class, 'store'])->name('produk.pesanLangsung');
+    Route::post('/produk/{id}/pesanLangsung', [CartController::class, 'pesanLangsung'])->name('produk.pesanLangsung');
     Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 });
-
 
 
 // -------------------------

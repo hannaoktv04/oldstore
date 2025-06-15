@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 class ItemController extends Controller
 {
 
-        public function create()
+    public function create()
     {
         return view('admin.addItem');
     }

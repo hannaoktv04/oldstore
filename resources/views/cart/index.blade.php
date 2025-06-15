@@ -22,9 +22,9 @@
     <div class="card border-0 mb-3 p-3 shadow-sm">
         <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
-                <img src="{{ asset('assets/img/products/' . $cart->item->image) }}" alt="gambar" width="80" height="80" class="rounded me-3" style="object-fit: cover;">
+                <img src="{{ asset('storage/' . ($item->photo?->image ?? 'placeholder.jpg')) }}" alt="gambar" width="80" height="80" class="rounded me-3" style="object-fit: cover;">
                 <div>
-                    <div class="text-muted small">{{ $cart->item->kategori ?? 'Kategori Tidak Diketahui' }}</div>
+                    <div class="text-muted small">{{ $cart->item->category_id ?? 'Kategori Tidak Diketahui' }}</div>
                     <div class="fw-semibold">{{ $cart->item->nama_barang }}</div>
                     <div class="text-muted small">Produk tersedia : {{ $cart->item->stok_minimum }} {{ $cart->item->satuan }}</div>
                 </div>
