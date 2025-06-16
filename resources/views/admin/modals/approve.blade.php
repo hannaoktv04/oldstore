@@ -10,7 +10,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mb-4 text-muted">Silakan sesuaikan jumlah barang …</p>
+                    <p class="mb-4 text-muted">Silakan sesuaikan jumlah barang</p>
 
                     @foreach ($pengajuan->details as $detail)
                         {{-- Item input --}}

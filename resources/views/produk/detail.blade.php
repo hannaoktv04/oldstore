@@ -48,23 +48,24 @@
 
         {{-- Kolom Informasi Produk --}}
         <div class="col-md-6">
-            <small class="text-muted">{{ $produk->kategori }}</small>
-            <h3 class="fw-bold mt-1">{{ $produk->nama_barang }}</h3>
-            <p class="text-muted mt-2">{{ $produk->deskripsi }}</p>
+            <span class="text-black fw-bold d-block mb-1 fs-6">{{ $produk->category->categori_name ?? 'Kategori Tidak Diketahui' }}</span>
+            <h3 class="fw-bold mb-3"> {{ $produk->nama_barang }}</h3>
 
-            {{-- Input Jumlah --}}
-            <div class="mb-3">
-                <label for="qty" class="form-label">Jumlah</label>
+            <div class="deskripsi-item text-muted mb-4">
+                <p class="fw-bold text-black mb-1">Detail produk</p>
+                <p class="text-black" style="line-height: 1.6;"> {!! nl2br(e($produk->deskripsi)) !!}</p>
+            </div>
+
+            <div class="mb-3 ">
+                <label for="qty " class="form-label fw-bold">Jumlah</label>
                 <div class="input-group" style="width: 140px;">
                     <button type="button" class="btn btn-outline-secondary" onclick="ubahQty(-1)">-</button>
                     <input type="number" id="qty" value="1" min="1" max="{{ $produk->stok_minimum }}" class="form-control text-center">
                     <button type="button" class="btn btn-outline-secondary" onclick="ubahQty(1)">+</button>
                 </div>
-                <div id="qtyAlertContainer"></div>
+                <div id="qtyAlertContainer" class="mt-2"></div>
             </div>
-
-            <p class="text-muted">{{ $produk->stok_minimum }} produk tersedia</p>
-
+            <p class="mb-5"> <span class="fw-bold text-black">{{ $produk->stok_minimum }}</span> produk tersedia</p>
             <div class="d-flex gap-3">
                 @if ($produk->stok_minimum > 0)
                     {{-- Tombol Pesan Langsung --}}
@@ -89,8 +90,8 @@
                     </form>
                 @endif
             </div>
+
         </div>
-    </div>
 </div>
 @endsection
 
