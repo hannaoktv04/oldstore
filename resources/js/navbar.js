@@ -13,12 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isOpen) cartPopup.classList.remove('d-none');
     });
 
-    // Tutup popup kalau klik di luar
     document.addEventListener('click', () => {
         closeCartPopup();
     });
 
-    // Optional: tutup popup dengan ESC
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeCartPopup();
     });

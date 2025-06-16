@@ -22,11 +22,11 @@
     <div class="card border-0 mb-3 p-3 shadow-sm">
         <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
-                <img src="{{ asset('storage/' . ($item->photo?->image ?? 'placeholder.jpg')) }}" alt="gambar" width="80" height="80" class="rounded me-3" style="object-fit: cover;">
+                <img src="{{ asset('storage/' . ($cart->item->photo->image ?? 'placeholder.jpg')) }}" alt="gambar" width="80" height="80" class="rounded me-3" style="object-fit: cover;">
                 <div>
-                    <div class="text-muted small">{{ $cart->item->category_id ?? 'Kategori Tidak Diketahui' }}</div>
+                    <div class="text-muted small">{{ $cart->item->category->nama_kategori ?? 'Kategori Tidak Diketahui' }}</div>
                     <div class="fw-semibold">{{ $cart->item->nama_barang }}</div>
-                    <div class="text-muted small">Produk tersedia : {{ $cart->item->stok_minimum }} {{ $cart->item->satuan }}</div>
+                    <div class="text-muted small">Stok tersedia : {{ $cart->item->stok_minimum }} {{ $cart->item->satuan }}</div>
                 </div>
             </div>
 
@@ -54,13 +54,33 @@
     @endforelse
 
     @if($carts->count())
-        <div class="text-end mt-4">
+    <div class="text-end mt-4">
+        <button type="button" class="btn btn-success px-4 py-2" data-bs-toggle="modal" data-bs-target="#tanggalModal">
+            Ajukan Permintaan
+        </button>
+    </div>
+    @endif
+
+    <div class="modal fade" id="tanggalModal" tabindex="-1" aria-labelledby="tanggalModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <form method="POST" action="{{ route('cart.checkout') }}">
                 @csrf
-                <button class="btn btn-success px-4 py-2">Ajukan Permintaan</button>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="tanggalModalLabel">Pilih Tanggal Pengambilan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="tanggal_pengambilan" class="form-label">Tanggal Pengambilan</label>
+                        <input type="date" name="tanggal_pengambilan" class="form-control" id="tanggal_pengambilan" min="{{ \Carbon\Carbon::today()->toDateString() }}" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Ajukan</button>
+                    </div>
+                </div>
             </form>
         </div>
-    @endif
+    </div>
 
     <script>
         setTimeout(function () {
@@ -71,6 +91,5 @@
             }
         }, 1000);
     </script>
-
 </div>
 @endsection

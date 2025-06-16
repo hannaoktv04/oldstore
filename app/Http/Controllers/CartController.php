@@ -87,10 +87,10 @@ class CartController extends Controller
         $cart->save();
 
         return redirect()->route('cart.index')->with('success', 'Jumlah diperbarui.');
-}
+    }
 
 
-    public function checkout()
+    public function checkout(Request $request)
     {
         $user = auth()->user();
         $carts = $user->carts()->with('item')->get();
@@ -99,6 +99,10 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('error', 'Keranjang kamu kosong.');
         }
 
+        $request->validate([
+            'tanggal_pengambilan' => 'required|date|after_or_equal:' . now()->toDateString(),
+        ]);
+
         DB::beginTransaction();
 
         try {
@@ -106,7 +110,8 @@ class CartController extends Controller
                 'user_id' => $user->id,
                 'status' => 'submitted', 
                 'tanggal_permintaan' => now(),
-                'keterangan' => null, 
+                'tanggal_pengambilan' => $request->tanggal_pengambilan, 
+                'keterangan' => null,
             ]);
 
             foreach ($carts as $cart) {
@@ -114,19 +119,20 @@ class CartController extends Controller
                     'item_request_id' => $itemRequest->id,
                     'item_id' => $cart->item_id,
                     'qty_requested' => $cart->qty,
-                    'qty_approved' => null,
+                    'qty_approved' => null, 
                 ]);
             }
 
             $user->carts()->delete();
 
             DB::commit();
-            return redirect()->route('user.history')->with('success', 'Permintaan berhasil diajukan.');
+            return redirect()->route('user.history')->with('success', 'Permintaan berhasil diajukan dan menunggu konfirmasi admin.');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('user.history')->with('error', 'Gagal mengajukan permintaan.');
         }
     }
+
 
     public function pesanLangsung(Request $request, $id)
     {

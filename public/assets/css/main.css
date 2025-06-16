@@ -219,3 +219,15 @@ input[type=number]::-webkit-outer-spin-button {
 .sidebar-nav .nav-link:hover {
   color: #2aa7a7 !important;
 }
+
+#calendarContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+#calendarFlatpickr {
+    width: 100%;
+    max-width: 300px;
+}

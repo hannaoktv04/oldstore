@@ -11,10 +11,38 @@ class ItemRequestController extends Controller
     {
         $requests = \App\Models\ItemRequest::with(['details.item'])
             ->where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')
+            ->orderBy('tanggal_permintaan', 'asc')
             ->get();
 
-        return view('user.history', compact('requests'));
+        $sortedRequests = $requests->sortBy('tanggal_permintaan')->values();
+
+        $numberMap = [];
+        foreach ($sortedRequests as $index => $req) {
+            $numberMap[$req->id] = str_pad($index + 1, 3, '0', STR_PAD_LEFT);
+        }
+
+        return view('user.history', compact('requests', 'numberMap'));
+    }
+
+    public function updateTanggalPengambilan(Request $request, $id)
+    {
+        dd($request->all());
+         $validator = Validator::make($request->all(), [
+            'tanggal_pengambilan' => 'required|date|after_or_equal:today',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validasi gagal',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $itemRequest = ItemRequest::findOrFail($id);
+        $itemRequest->tanggal_pengambilan = $request->tanggal_pengambilan;
+        $itemRequest->save();
+
+        return response()->json(['message' => 'Tanggal pengambilan diperbarui']);
     }
 
 }

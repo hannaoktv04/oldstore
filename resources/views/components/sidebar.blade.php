@@ -22,6 +22,11 @@
                             <i class="bi bi-heart me-2"></i> Wishlist User
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.purchase_orders.index') }}" class="nav-link text-dark d-flex align-items-center">
+                            <i class="bi bi-clipboard me-2"></i> Purchase Order
+                        </a>
+                    </li>
                 </ul>
             </div>
 </div>

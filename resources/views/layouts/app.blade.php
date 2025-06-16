@@ -23,6 +23,9 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/addItem.css') }}">
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
@@ -30,7 +33,7 @@
     <!-- Helpers & Config -->
     <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
     <script src="{{ asset('assets/js/config.js') }}"></script>
-    @vite(['resources/css/app.scss', 'resources/js/app.js'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @stack('style')
     @stack('scripts')
 
@@ -75,8 +78,8 @@
   <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
   <script src="{{ asset('assets/vendor/libs/hammer/hammer.js') }}"></script>
   <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
+  
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script src="{{ asset('assets/js/main.js') }}"></script>
 
@@ -84,8 +87,7 @@
 
 
   <!-- Page JS -->
-  @stack('script')
-  <script src="{{ asset('assets/js/navbar.js') }}"></script>
+  @stack('scripts')
   <script src="{{ asset('assets/js/produk-detail.js') }}"></script>
 
 

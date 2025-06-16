@@ -10,7 +10,7 @@ class ItemRequest extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'status', 'keterangan', 'tanggal_permintaan',
+        'user_id', 'status', 'keterangan', 'tanggal_permintaan','tanggal_pengambilan',
         'approved_by', 'approved_at'
     ];
 

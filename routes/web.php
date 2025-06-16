@@ -16,7 +16,11 @@ use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AdminWishlistController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\PurchaseOrderController;
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/purchase-orders', [PurchaseOrderController::class, 'index'])->name('admin.purchase_orders.index');
+});
 
 // -------------------------
 // CART ROUTES
@@ -89,6 +93,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/riwayat-pengajuan', [ItemRequestController::class, 'history'])->name('user.history');
     Route::get('/wishlist', [App\Http\Controllers\WishlistController::class, 'index'])->name('user.wishlist');
+    Route::post('/update-pengambilan/{id}', [ItemRequestController::class, 'updateTanggalPengambilan']);
 });
 
 // -------------------------
