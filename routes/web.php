@@ -84,8 +84,6 @@ Route::middleware(['auth', 'can:isAdmin'])->group(function () {
     Route::put('/admin/items/{item}', [ItemController::class, 'update'])->name('admin.items.update');
     Route::delete('/admin/items/{item}', [ItemController::class, 'destroy'])->name('admin.items.destroy');
     Route::post('/admin/items/{item}/toggle', [ItemController::class, 'toggle'])->name('admin.items.toggle');
-
-
 });
 
 

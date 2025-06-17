@@ -42,27 +42,11 @@
             @endif
         </div>
 
-        {{-- Aksi --}}
+  
         <div class="col-12 col-md-2 col-lg-3 d-flex flex-column align-items-center text-center text-md-end ms-md-auto">
             <small class="text-muted d-block mb-1">Aksi</small>
             <x-pengajuan-actions :pengajuan="$pengajuan" />
         </div>
-
-        {{-- <div class="col-12 col-md-2 col-lg-2 d-flex flex-column align-items-center text-center text-md-end ms-md-auto">
-            <small class="text-muted d-block mb-1">Aksi</small>
-            <div class="d-flex justify-content-center justify-content-md-end gap-3">
-                <a href="#" class="text-success" data-bs-toggle="modal" data-bs-target="#approveModal-{{ $id }}">
-                    <i class="bi bi-check-circle fs-5"></i>
-                </a>
-                <a href="#" class="text-primary" title="Detail">
-                    <i class="bi bi-file-earmark-text fs-5"></i>
-                </a>
-                <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#rejectModal-{{ $id }}">
-                    <i class="bi bi-x-circle fs-5"></i>
-                </a>
-            </div>
-        </div> --}}
-    </div>
 
     {{-- Modals --}}
     @include('admin.modals.approve', ['pengajuan' => $pengajuan])

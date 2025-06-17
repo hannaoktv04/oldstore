@@ -14,7 +14,7 @@
         </a>
     </div>
 
-@elseif ($status === 'approved' || $status === 'delivered')
+@elseif ($status === 'approved')
     <div class="d-flex justify-content-center justify-content-md-end gap-3">
         <a href="{{ route('pengajuan.nota', $pengajuan->id) }}" class="btn btn-sm btn-outline-primary">
             <i class="bi bi-printer" title="Cetak Nota"></i>
@@ -25,13 +25,15 @@
                 <i class="bi bi-truck" title="Dikirim"></i>
             </button>
         </form>
-        <form action="{{ route('pengajuan.received', $pengajuan->id) }}" method="POST">
-            @csrf
-            <button class="btn btn-sm btn-outline-secondary" type="submit">
-                <i class="bi bi-box" title="Diterima"></i>
-            </button>
-        </form>
     </div>
+
+@elseif ($status === 'delivered')
+    <form action="{{ route('pengajuan.received', $pengajuan->id) }}" method="POST">
+        @csrf
+        <button class="btn btn-sm btn-outline-secondary" type="submit">
+            <i class="bi bi-box" title="Diterima"></i>
+        </button>
+    </form>
 
 @elseif ($status === 'received')
     <a href="{{ route('pengajuan.nota', $pengajuan->id) }}" class="btn btn-sm btn-outline-primary">
