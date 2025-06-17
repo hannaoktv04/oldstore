@@ -44,7 +44,7 @@
         </div>
     @endif
 
-    
+
 
     @forelse($carts as $cart)
     <div class="card border-0 mb-3 p-3 shadow-sm position-relative">
@@ -58,12 +58,7 @@
 
         <div class="d-flex align-items-center justify-content-between ps-7">
             <div class="d-flex align-items-center">
-                <img src="{{ asset('storage/' . ($cart->item->photo->image ?? 'placeholder.jpg')) }}"
-                    alt="gambar"
-                    width="80"
-                    height="80"
-                    class="rounded me-3"
-                    style="object-fit: cover;">
+                <img src="{{ $cart->item->photo_url }}"" alt="gambar" width="80" height="80" class="rounded me-3" style="object-fit: cover;">
                 <div>
                     <div class="text-muted small">{{ $cart->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</div>
                     <div class="fw-semibold">{{ $cart->item->nama_barang }}</div>
@@ -94,7 +89,7 @@
                             max="{{ $cart->item->stok_minimum }}"
                             class="form-control text-center border-0"
                             style="max-width: 50px; height: 30px; line-height: 1; padding: 0 0.25rem;"
-                           
+
                         >
 
                         <button type="submit" name="action" value="increase" class="btn btn-outline-success px-2 py-1 border-0 qty-btn">+</button>

@@ -3,18 +3,18 @@
             <div class="card p-3 shadow-sm" style="min-height: 300px;">
                 <ul class="nav flex-column sidebar-nav">
                     <li class="nav-item">
-                        <a href="{{ route('kategori.index') }}" class="nav-link text-dark d-flex align-items-center">
+                        <a href="{{ route('admin.items') }}" class="nav-link text-dark d-flex align-items-center">
                             <i class="bi bi-box-seam me-2"></i> Daftar Barang
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.pengajuan.status', 'submitted') }}" class="nav-link text-dark d-flex align-items-center">
+                        <a href="{{ route('admin.pengajuan.status', 'approved') }}" class="nav-link text-dark d-flex align-items-center">
                             <i class="bi bi-clipboard-check me-2"></i> Cek Pengajuan
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('admin.addItem') }}" class="nav-link text-dark d-flex align-items-center">
-                            <i class="bi bi-clipboard-check me-2"></i> Add Item
+                            <i class="bi bi-bag-plus me-2"></i> Add Item
                         </a>
                     </li>
                     <li class="nav-item">

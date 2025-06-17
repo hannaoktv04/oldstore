@@ -76,6 +76,15 @@ Route::middleware(['auth', 'can:isAdmin'])->group(function () {
     Route::post('/admin/wishlist/{id}/tolak', [AdminWishlistController::class, 'tolak'])->name('admin.wishlist.tolak');
     Route::post('/pengajuan/{pengajuan}/approve', [AdminPengajuanController::class, 'approve'])->name('pengajuan.approve');
     Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('pengajuan.reject');
+    Route::post('/pengajuan/{pengajuan}/deliver', [AdminPengajuanController::class, 'deliver'])->name('pengajuan.deliver');
+    Route::post('/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])->name('pengajuan.received');
+    Route::get('/pengajuan/{pengajuan}/nota', [AdminPengajuanController::class, 'nota'])->name('pengajuan.nota');
+    Route::get('/admin/items', [ItemController::class, 'itemList'])->name('admin.items');
+    Route::get('/admin/items/{item}/edit', [ItemController::class, 'edit'])->name('admin.items.edit');
+    Route::put('/admin/items/{item}', [ItemController::class, 'update'])->name('admin.items.update');
+    Route::delete('/admin/items/{item}', [ItemController::class, 'destroy'])->name('admin.items.destroy');
+    Route::post('/admin/items/{item}/toggle', [ItemController::class, 'toggle'])->name('admin.items.toggle');
+
 
 });
 

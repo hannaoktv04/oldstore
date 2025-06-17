@@ -84,14 +84,12 @@
         <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 @endif
-
 @if (session('error'))
     <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
         {{ session('error') }}
         <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 @endif
-
 @if (session('rejected'))
     <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
         {{ session('rejected') }}
