@@ -33,7 +33,7 @@
     <!-- Helpers & Config -->
     <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
     <script src="{{ asset('assets/js/config.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @stack('style')
     @stack('scripts')
@@ -74,7 +74,7 @@
   <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
   <script src="{{ asset('assets/vendor/libs/hammer/hammer.js') }}"></script>
   <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
-  
+
 
 
   <script src="{{ asset('assets/js/main.js') }}"></script>
