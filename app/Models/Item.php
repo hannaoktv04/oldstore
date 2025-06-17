@@ -37,6 +37,10 @@ class Item extends Model
     {
         return $this->hasMany(ItemStock::class);
     }
+    public function getTotalStokAttribute()
+    {
+        return $this->stocks()->sum('qty');
+    }
 
     public function carts()
     {

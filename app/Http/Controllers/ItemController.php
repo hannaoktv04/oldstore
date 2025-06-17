@@ -74,10 +74,106 @@ class ItemController extends Controller
             return redirect()->back()->with('error', 'Gagal menambahkan item.');
         }
     }
+    public function update(Request $request, Item $item)
+    {
+        DB::beginTransaction();
+        try {
+            $validated = $request->validate([
+                'nama_barang' => 'required|string|max:255',
+                'kode_barang' => 'required|string|max:255|unique:items,kode_barang,' . $item->id,
+                'stok' => 'required|numeric',
+                'satuan' => 'required|string',
+                'deskripsi' => 'required|string',
+                'category_id' => 'nullable|exists:category,id',
+                'photo_Item'   => 'nullable|array|max:5',
+                'photo_Item.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+
+            $item->update([
+                'nama_barang' => $validated['nama_barang'],
+                'kode_barang' => $validated['kode_barang'],
+                'stok_minimum' => $validated['stok'],
+                'satuan' => $validated['satuan'],
+                'deskripsi' => $validated['deskripsi'],
+                'category_id' => $validated['category_id'],
+            ]);
+
+            // Update stok (jika perlu)
+            $stock = ItemStock::where('item_id', $item->id)->first();
+            if ($stock) {
+                $stock->qty = $validated['stok'];
+                $stock->save();
+            } else {
+                // Jika belum ada stok, buat baru
+                ItemStock::create([
+                    'item_id' => $item->id,
+                    'qty' => $validated['stok'],
+                ]);
+            }
+
+            // Update foto jika ada
+            if ($request->hasFile('photo_Item')) {
+                $slots = [null, null, null, null, null];
+
+                foreach ($request->file('photo_Item') as $idx => $file) {
+                    $slots[$idx] = $file->store('images', 'public');
+                }
+
+                $photo = $item->photo;
+                if ($photo) {
+                    $photo->update([
+                        'image'   => $slots[0] ?? $photo->image,
+                        'img_xl'  => $slots[1] ?? $photo->img_xl,
+                        'img_l'   => $slots[2] ?? $photo->img_l,
+                        'img_m'   => $slots[3] ?? $photo->img_m,
+                        'img_s'   => $slots[4] ?? $photo->img_s,
+                    ]);
+                }
+            }
+
+            DB::commit();
+            return redirect()->route('admin.items')->with('success', 'Item berhasil diperbarui!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', 'Gagal memperbarui item.');
+        }
+    }
+
     public function index()
     {
         $categories = Category::orderBy('categori_name')->get();
         $items = Item::with('category')->get();
         return view('layouts.kategori', compact('items','categories'));
     }
+
+    public function itemList()
+    {
+        $items = Item::with(['photo', 'category'])
+                    ->withCount('photos as variant_count')
+                    ->withSum('stocks as total_stok', 'qty')
+                    ->orderBy('nama_barang')
+                    ->get();
+
+        return view('admin.items', compact('items'));
+    }
+    public function edit(Item $item)
+    {
+        $categories = Category::all();
+        return view('admin.editItem', compact('item', 'categories'));
+    }
+    public function destroy(Item $item)
+    {
+        $item->delete();
+        return redirect()->route('admin.items')->with('success', 'Item berhasil dihapus.');
+    }
+
+    public function toggle(Item $item)
+    {
+        $item->is_active = !$item->is_active;
+        $item->save();
+
+        return back();
+}
+
 }

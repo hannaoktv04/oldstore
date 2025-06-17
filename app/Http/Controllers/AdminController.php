@@ -22,4 +22,5 @@ class AdminController extends Controller
 
         return view('admin.pengajuan-status', compact('pengajuans', 'status'));
     }
+    
 }
