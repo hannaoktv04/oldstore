@@ -22,9 +22,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/purchase-orders', [PurchaseOrderController::class, 'index'])->name('admin.purchase_orders.index');
 });
 
-// -------------------------
-// CART ROUTES
-// -------------------------
+Route::delete('/cart/bulk-delete', [CartController::class, 'bulkDelete'])->name('cart.bulkDelete');
+
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/produk/{id}/add-to-cart', [CartController::class, 'store'])->name('produk.addToCart');
@@ -32,7 +32,6 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-    Route::delete('/cart/bulk-delete', [CartController::class, 'bulkDelete'])->name('cart.bulkDelete');
 });
 
 

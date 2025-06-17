@@ -22,19 +22,28 @@
         $cartItems = \App\Models\Cart::where('user_id', Auth::id())->get();
         $jumlahKeranjang = $cartItems->count();
     @endphp
-    <div class="card border-0 mb-3 p-3 shadow-sm">
-        <div class="d-flex align-items-center justify-content-between">
-            <div class="form-check">
-                <input class="form-check-input me-2 border-success" style="box-shadow: none; width: 1.3em; height: 1.3em;" type="checkbox" value="" id="flexCheckDefault">
-                <label class="form-check-label fw-semibold" for="flexCheckDefault">
-                    Pilih Semua ({{ $jumlahKeranjang }})
-                </label>
+
+    @if($jumlahKeranjang > 0)
+        <div class="card border-0 mb-3 p-3 shadow-sm">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="form-check">
+                    <input class="form-check-input me-2 border-success"
+                        style="box-shadow: none; width: 1.3em; height: 1.3em;"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault">
+                    <label class="form-check-label fw-semibold" for="flexCheckDefault">
+                        Pilih Semua ({{ $jumlahKeranjang }})
+                    </label>
+                </div>
+                <button id="btnHapusTerpilih" class="btn btn-success btn-sm d-none"
+                    data-bs-toggle="modal" data-bs-target="#konfirmasiHapusModal">
+                    Hapus
+                </button>
             </div>
-            <button id="btnHapusTerpilih" class="btn btn-success btn-sm d-none" data-bs-toggle="modal" data-bs-target="#konfirmasiHapusModal">
-                Hapus
-            </button>
         </div>
-    </div>
+    @endif
+
     
 
     @forelse($carts as $cart)
@@ -129,16 +138,6 @@
             </form>
         </div>
     </div>
-
-    <script>
-        setTimeout(function () {
-            var alert = document.querySelector('.alert');
-            if (alert) {
-                var bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            }
-        }, 3000);
-    </script>
 </div>
 <div class="modal fade" id="konfirmasiHapusModal" tabindex="-1" aria-labelledby="hapusModalLabel" aria-hidden="true">
     <div class="modal-dialog">

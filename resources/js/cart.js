@@ -28,3 +28,12 @@ document.addEventListener('DOMContentLoaded', function () {
         checkAll.checked = checked.length === checkboxes.length;
     }
 });
+
+setTimeout(function () {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function (alert) {
+        const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+        bsAlert.close();
+    });
+}, 1000);
+

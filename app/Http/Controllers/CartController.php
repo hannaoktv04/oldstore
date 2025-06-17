@@ -67,7 +67,7 @@ class CartController extends Controller
             if ($cart->qty < $stokTersedia) {
                 $cart->qty += 1;
             } else {
-                return redirect()->route('cart.index')->with('error', 'Jumlah melebihi stok tersedia.');
+                return redirect()->route('cart.index');
             }
         } elseif ($request->action === 'decrease') {
             if ($cart->qty > 1) {
@@ -78,14 +78,14 @@ class CartController extends Controller
             if ($qtyBaru < 1) {
                 $qtyBaru = 1;
             } elseif ($qtyBaru > $stokTersedia) {
-                return redirect()->route('cart.index')->with('error', 'Jumlah melebihi stok tersedia.');
+                return redirect()->route('cart.index');
             }
             $cart->qty = $qtyBaru;
         }
 
         $cart->save();
 
-        return redirect()->route('cart.index')->with('success', 'Jumlah diperbarui.');
+        return redirect()->route('cart.index');
     }
 
 
@@ -178,11 +178,10 @@ class CartController extends Controller
     {
         $ids = explode(',', $request->cart_ids);
 
-        Cart::whereIn('id', $ids)
-            ->where('user_id', Auth::id())
-            ->delete();
+        Cart::whereIn('id', $ids)->where('user_id', Auth::id())->delete();
 
-        return back()->with('success', 'Item berhasil dihapus.');
+        return redirect()->route('cart.index')->with('success', 'Item berhasil dihapus.');
     }
+
 
 }
