@@ -1,10 +1,17 @@
 <nav class="navbar navbar-expand-lg bg-white shadow-sm py-3 sticky-top">
   <div class="container">
-    <a class="navbar-brand fw-bold brand-custom fs-2" href="{{ url('/home') }}">PERI</a>
+    <a class="navbar-brand fw-bold brand-custom fs-2" href="{{ url('/home') }}">
+        @if(Auth::check() && Auth::user()->role === 'admin')
+            PERI <span class="fw-normal text-secondary fs-6">Seller</span>
+        @else
+            PERI
+        @endif
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
       aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
 
     <div class="collapse navbar-collapse" id="navbarContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -57,9 +64,9 @@
 
               @forelse($cartItems as $item)
                 <div class="d-flex align-items-start mb-2">
-                  <img src="{{ asset('assets/img/products/' . $item->item->image) }}" alt="{{ $item->item->nama_barang }}" width="50" class="me-2 rounded">
+                  <img src="{{ asset('storage/' . ($item->item->photo->image ?? 'placeholder.jpg')) }}" alt="{{ $item->item->nama_barang }}" width="50" class="me-2 rounded">
                   <div>
-                    <small>{{ $item->item->kategori }}</small><br>
+                    <small>{{ $item->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</small><br>
                     <strong>{{ $item->item->nama_barang }}</strong><br>
                     <small>Jumlah: {{ $item->qty }} {{ $item->item->satuan }}</small>
                   </div>

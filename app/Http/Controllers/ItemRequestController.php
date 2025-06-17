@@ -11,17 +11,10 @@ class ItemRequestController extends Controller
     {
         $requests = \App\Models\ItemRequest::with(['details.item'])
             ->where('user_id', auth()->id())
-            ->orderBy('tanggal_permintaan', 'asc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
-        $sortedRequests = $requests->sortBy('tanggal_permintaan')->values();
-
-        $numberMap = [];
-        foreach ($sortedRequests as $index => $req) {
-            $numberMap[$req->id] = str_pad($index + 1, 3, '0', STR_PAD_LEFT);
-        }
-
-        return view('user.history', compact('requests', 'numberMap'));
+        return view('user.history', compact('requests'));
     }
 
     public function updateTanggalPengambilan(Request $request, $id)

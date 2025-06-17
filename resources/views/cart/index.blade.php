@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-5">
+<div class="container py-3">
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -16,15 +16,47 @@
         </div>
     @endif
 
-    <h4 class="fw-bold mb-4">Keranjang Belanja</h4>
+    <h3 class="fw-semibold mb-4">Keranjang</h3>
 
-    @forelse($carts as $cart)
+    @php
+        $cartItems = \App\Models\Cart::where('user_id', Auth::id())->get();
+        $jumlahKeranjang = $cartItems->count();
+    @endphp
     <div class="card border-0 mb-3 p-3 shadow-sm">
         <div class="d-flex align-items-center justify-content-between">
+            <div class="form-check">
+                <input class="form-check-input me-2 border-success" style="box-shadow: none; width: 1.3em; height: 1.3em;" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label fw-semibold" for="flexCheckDefault">
+                    Pilih Semua ({{ $jumlahKeranjang }})
+                </label>
+            </div>
+            <button id="btnHapusTerpilih" class="btn btn-success btn-sm d-none" data-bs-toggle="modal" data-bs-target="#konfirmasiHapusModal">
+                Hapus
+            </button>
+        </div>
+    </div>
+    
+
+    @forelse($carts as $cart)
+    <div class="card border-0 mb-3 p-3 shadow-sm position-relative">
+        <input
+            class="form-check-input position-absolute item-checkbox border-success"
+            style="top: 10px; left: 10px; box-shadow: none; width: 1.3em; height: 1.3em;"
+            name="cart_ids[]"
+            type="checkbox"
+            value="{{ $cart->id }}"
+        >
+
+        <div class="d-flex align-items-center justify-content-between ps-7">
             <div class="d-flex align-items-center">
-                <img src="{{ asset('storage/' . ($cart->item->photo->image ?? 'placeholder.jpg')) }}" alt="gambar" width="80" height="80" class="rounded me-3" style="object-fit: cover;">
+                <img src="{{ asset('storage/' . ($cart->item->photo->image ?? 'placeholder.jpg')) }}"
+                    alt="gambar"
+                    width="80"
+                    height="80"
+                    class="rounded me-3"
+                    style="object-fit: cover;">
                 <div>
-                    <div class="text-muted small">{{ $cart->item->category->nama_kategori ?? 'Kategori Tidak Diketahui' }}</div>
+                    <div class="text-muted small">{{ $cart->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</div>
                     <div class="fw-semibold">{{ $cart->item->nama_barang }}</div>
                     <div class="text-muted small">Stok tersedia : {{ $cart->item->stok_minimum }} {{ $cart->item->satuan }}</div>
                 </div>
@@ -34,18 +66,34 @@
                 <form method="POST" action="{{ route('cart.destroy', $cart->id) }}" class="me-3">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-link text-danger p-0">
+                    <button type="submit" class="btn text-secondary">
                         <i class="bi bi-trash" style="font-size: 1.2rem;"></i>
                     </button>
                 </form>
 
-                <form method="POST" action="{{ route('cart.update', $cart->id) }}" class="d-flex align-items-center">
+               <form method="POST" action="{{ route('cart.update', $cart->id) }}" class="d-flex align-items-center">
                     @csrf
                     @method('PUT')
-                    <button type="submit" name="action" value="decrease" class="btn btn-outline-secondary btn-sm me-2">-</button>
-                    <span class="mx-1">{{ $cart->qty }}</span>
-                    <button type="submit" name="action" value="increase" class="btn btn-outline-secondary btn-sm ms-2">+</button>
+                    <div class="input-group btn-outline-success" style="width: fit-content; border: 1px solid #198754; border-radius: 50px; overflow: hidden;">
+                        <button type="submit" name="action" value="decrease" class="btn btn-outline-success px-2 py-1 border-0 qty-btn">−</button>
+
+                        <input
+                            type="number"
+                            name="manual_qty"
+                            value="{{ $cart->qty }}"
+                            min="1"
+                            max="{{ $cart->item->stok_minimum }}"
+                            class="form-control text-center border-0"
+                            style="max-width: 50px; height: 30px; line-height: 1; padding: 0 0.25rem;"
+                           
+                        >
+
+                        <button type="submit" name="action" value="increase" class="btn btn-outline-success px-2 py-1 border-0 qty-btn">+</button>
+                    </div>
                 </form>
+
+
+
             </div>
         </div>
     </div>
@@ -89,7 +137,29 @@
                 var bsAlert = new bootstrap.Alert(alert);
                 bsAlert.close();
             }
-        }, 1000);
+        }, 3000);
     </script>
+</div>
+<div class="modal fade" id="konfirmasiHapusModal" tabindex="-1" aria-labelledby="hapusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" action="{{ route('cart.bulkDelete') }}">
+            @csrf
+            @method('DELETE')
+            <input type="hidden" name="cart_ids" id="selectedCartIds">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="hapusModalLabel">Konfirmasi Hapus</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    Apakah kamu yakin ingin menghapus item yang dipilih dari keranjang?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Hapus</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection

@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container py-3">
-    {{-- Breadcrumb --}}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">PERI</a></li>
@@ -23,9 +22,7 @@
     @endphp
 
     <div class="row g-5">
-        {{-- Kolom Gambar --}}
         <div class="col-md-6">
-            {{-- Gambar Utama --}}
             <div class="mb-3">
                 <img id="mainImage"
                      src="{{ asset('storage/' . $gallery->first()) }}"
@@ -33,7 +30,6 @@
                      alt="{{ $produk->nama_barang }}">
             </div>
 
-            {{-- Thumbnail --}}
             <div class="d-flex gap-2 overflow-auto">
                 @foreach($gallery as $path)
                     <div class="flex-shrink-0">
@@ -46,16 +42,14 @@
             </div>
         </div>
 
-        {{-- Kolom Informasi Produk --}}
         <div class="col-md-6">
             <small class="text-muted">{{ $produk->kategori }}</small>
             <h3 class="fw-bold mt-1">{{ $produk->nama_barang }}</h3>
             <p class="text-muted mt-2">{{ $produk->deskripsi }}</p>
 
-            {{-- Input Jumlah --}}
             <div class="mb-3">
                 <label for="qty" class="form-label">Jumlah</label>
-                <div class="input-group" style="width: 140px;">
+                <div class="input-group" style="width: 120px;">
                     <button type="button" class="btn btn-outline-secondary" onclick="ubahQty(-1)">-</button>
                     <input type="number" id="qty" value="1" min="1" max="{{ $produk->stok_minimum }}" class="form-control text-center">
                     <button type="button" class="btn btn-outline-secondary" onclick="ubahQty(1)">+</button>
@@ -67,14 +61,12 @@
 
             <div class="d-flex gap-3">
                 @if ($produk->stok_minimum > 0)
-                    {{-- Tombol Pesan Langsung --}}
                     <form method="POST" action="{{ route('produk.pesanLangsung', ['id' => $produk->id]) }}" id="formPesan">
                         @csrf
                         <input type="hidden" name="qty" id="formPesanQty">
                         <button type="submit" class="btn btn-outline-secondary px-4 py-2">Pesan Langsung</button>
                     </form>
 
-                    {{-- Tombol Tambah ke Keranjang --}}
                     <form method="POST" action="{{ route('produk.addToCart', ['id' => $produk->id]) }}" id="formTambah">
                         @csrf
                         <input type="hidden" name="item_id" value="{{ $produk->id }}">
@@ -82,10 +74,9 @@
                         <button type="submit" class="btn btn-success px-4 py-2">Tambahkan ke Keranjang</button>
                     </form>
                 @else
-                    <div class="alert alert-warning">Stok produk habis. Anda bisa menambahkan ke wishlist.</div>
-                    <form method="POST" action="{{ route('produk.wishlist', ['id' => $produk->id]) }}">
+                    <form method="POST" action="{{ route('user.wishlist', ['id' => $produk->id]) }}">
                         @csrf
-                        <button type="submit" class="btn btn-outline-warning px-4 py-2">Tambah ke Wishlist</button>
+                        <button type="submit" class="btn btn-outline-danger px-4 py-2"><i class="bi bi-heart me-2"></i>Tambah ke Wishlist</button>
                     </form>
                 @endif
             </div>

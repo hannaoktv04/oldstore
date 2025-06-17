@@ -56,8 +56,7 @@ class CartController extends Controller
 
     public function update(Request $request, $id)
     {
-        $cart = Cart::with('item')->findOrFail($id); // pastikan relasi item ikut dimuat
-
+        $cart = Cart::with('item')->findOrFail($id);
         if (!$cart->item) {
             return redirect()->route('cart.index')->with('error', 'Item tidak ditemukan.');
         }
@@ -92,25 +91,32 @@ class CartController extends Controller
 
     public function checkout(Request $request)
     {
-        $user = auth()->user();
-        $carts = $user->carts()->with('item')->get();
-
-        if ($carts->isEmpty()) {
-            return redirect()->route('cart.index')->with('error', 'Keranjang kamu kosong.');
-        }
-
         $request->validate([
             'tanggal_pengambilan' => 'required|date|after_or_equal:' . now()->toDateString(),
+            'cart_ids' => 'required|array|min:1',
+            'cart_ids.*' => 'exists:carts,id',
         ]);
+
+        $user = auth()->user();
+        $cartIds = $request->cart_ids;
+
+        $carts = Cart::with('item')
+            ->where('user_id', $user->id)
+            ->whereIn('id', $cartIds)
+            ->get();
+
+        if ($carts->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Tidak ada item yang dipilih.');
+        }
 
         DB::beginTransaction();
 
         try {
             $itemRequest = ItemRequest::create([
                 'user_id' => $user->id,
-                'status' => 'submitted', 
+                'status' => 'submitted',
                 'tanggal_permintaan' => now(),
-                'tanggal_pengambilan' => $request->tanggal_pengambilan, 
+                'tanggal_pengambilan' => $request->tanggal_pengambilan,
                 'keterangan' => null,
             ]);
 
@@ -119,11 +125,11 @@ class CartController extends Controller
                     'item_request_id' => $itemRequest->id,
                     'item_id' => $cart->item_id,
                     'qty_requested' => $cart->qty,
-                    'qty_approved' => null, 
+                    'qty_approved' => null,
                 ]);
             }
 
-            $user->carts()->delete();
+            Cart::whereIn('id', $cartIds)->delete();
 
             DB::commit();
             return redirect()->route('user.history')->with('success', 'Permintaan berhasil diajukan dan menunggu konfirmasi admin.');
@@ -132,6 +138,7 @@ class CartController extends Controller
             return redirect()->route('user.history')->with('error', 'Gagal mengajukan permintaan.');
         }
     }
+
 
 
     public function pesanLangsung(Request $request, $id)
@@ -165,6 +172,17 @@ class CartController extends Controller
             DB::rollBack();
             return back()->with('error', 'Gagal melakukan permintaan langsung.');
         }
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = explode(',', $request->cart_ids);
+
+        Cart::whereIn('id', $ids)
+            ->where('user_id', Auth::id())
+            ->delete();
+
+        return back()->with('success', 'Item berhasil dihapus.');
     }
 
 }

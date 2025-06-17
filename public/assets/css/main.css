@@ -10,6 +10,7 @@
 
 body {
     font-family: 'Poppins', sans-serif !important;
+    background-color: #dedede5c !important;
 }
 
 .brand-custom {
@@ -230,4 +231,14 @@ input[type=number]::-webkit-outer-spin-button {
 #calendarFlatpickr {
     width: 100%;
     max-width: 300px;
+}
+
+
+.form-check-input {
+  box-shadow: none !important;
+}
+
+.form-check-input:checked {
+  background-color: #198754 !important; /* Bootstrap success color */
+  border-color: #198754 !important;
 }

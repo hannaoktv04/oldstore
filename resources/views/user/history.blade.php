@@ -5,15 +5,16 @@
     <h4 class="mb-4">Status Pengajuan Anda</h4>
 
     @forelse ($requests as $request)
+       
         @php
-            $no = $numberMap[$request->id] ?? '???';
+          $pengajuanNumber = str_pad($requests->count() - $loop->index, 3, '0', STR_PAD_LEFT);
         @endphp
 
-        <div class="mb-5 p-3 border rounded shadow-sm">
+        <div class="card border-0 mb-3 p-3 shadow-sm">
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <div>
-                    <h5 class="fw-bold mb-0">Pengajuan #{{ $no }}</h5>
-                    <small class="text-muted">Diajukan: {{ \Carbon\Carbon::parse($request->tanggal_permintaan)->format('d F Y') }}</small>
+                    <h5 class="fw-bold mb-0">Pengajuan #{{ $pengajuanNumber }}</h5>
+                    <small class="text-muted">{{ \Carbon\Carbon::parse($request->tanggal_permintaan)->format('d F Y') }}</small>
                 </div>
             </div>
 
@@ -27,7 +28,7 @@
                                 width="80" height="80"
                                 style="object-fit: cover;">
                             <div>
-                                <strong>{{ $detail->item->kategori ?? 'Kategori Tidak Diketahui' }}</strong><br>
+                                <strong>{{ $detail->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</strong><br>
                                 {{ $detail->item->nama_barang }}<br>
                                 Jumlah: {{ $detail->qty_requested }} {{ $detail->item->satuan }}
                             </div>
@@ -54,7 +55,7 @@
                             <em>Atur Tanggal Pengambilan</em> <i class="bi bi-calendar"></i>
                         </a>
                     @else
-                        <strong class="text-danger">Belum Dijadwalkan</strong>
+                        <strong class="text-danger"><em>Belum Dijadwalkan</em></strong>
                     @endif
                 </div>
 

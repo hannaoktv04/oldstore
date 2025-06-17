@@ -45,28 +45,23 @@
       {{-- @include('layouts.components.sidebar') --}}
 
       <div class="layout-page">
-        <!-- Navbar -->
         @include('components.navbar')
-        <!-- / Navbar -->
 
-        <!-- Content wrapper -->
         <div class="content-wrapper">
-          <div class="container-xxl flex-grow-1 container-p-y">
-            @yield('content')
-          </div>
+            <div class="container-xxl flex-grow-1 container-p-y">
+                @yield('content')
+            </div>
 
-          <!-- Footer -->
-          @include('components.footer')
-          <!-- / Footer -->
+            @if(!(Auth::check() && Auth::user()->role === 'admin'))
+                @include('components.footer')
+            @endif
 
-          <div class="content-backdrop fade"></div>
+            <div class="content-backdrop fade"></div>
         </div>
-        <!-- / Content wrapper -->
+
       </div>
-      <!-- / Layout page -->
     </div>
 
-    <!-- Overlay -->
     <div class="layout-overlay layout-menu-toggle"></div>
     <div class="drag-target"></div>
   </div>
