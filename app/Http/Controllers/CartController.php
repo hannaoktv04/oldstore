@@ -78,14 +78,14 @@ class CartController extends Controller
             if ($qtyBaru < 1) {
                 $qtyBaru = 1;
             } elseif ($qtyBaru > $stokTersedia) {
-                return redirect()->route('cart.index');
+                return redirect()->route('cart.index')->with('error', 'Jumlah melebihi stok tersedia.');
             }
             $cart->qty = $qtyBaru;
         }
 
         $cart->save();
 
-        return redirect()->route('cart.index');
+        return redirect()->route('cart.index')->with('success', 'Jumlah diperbarui.');
     }
 
 

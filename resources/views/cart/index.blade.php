@@ -1,21 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-3">
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
+<div class="container">
+    
     <h3 class="fw-semibold mb-4">Keranjang</h3>
 
     @php
@@ -95,14 +82,18 @@
                         <button type="submit" name="action" value="increase" class="btn btn-outline-success px-2 py-1 border-0 qty-btn">+</button>
                     </div>
                 </form>
-
-
-
             </div>
         </div>
     </div>
     @empty
-        <p>Keranjang kamu kosong.</p>
+        <div class="card border-0 mb-3 p-3 shadow-sm">
+            <div class=" align-items-center text-center">
+                <img src="{{ asset('assets/img/cart.png') }}" alt="Cart Image">
+                <h3>Wah, keranjang kamu kosong <br></h3>
+                <p>Yuk, isi dengan barang-barang kebutuhanmu!</p>
+                <a class="btn btn-success" href="{{ url('/home') }}" role="button">Cari Barang</a>
+            </div>
+        </div>
     @endforelse
 
     @if($carts->count())
@@ -115,8 +106,9 @@
 
     <div class="modal fade" id="tanggalModal" tabindex="-1" aria-labelledby="tanggalModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form method="POST" action="{{ route('cart.checkout') }}">
+            <form method="POST" action="{{ route('cart.checkout') }}" id="checkoutForm">
                 @csrf
+                <input type="hidden" name="cart_ids[]" id="hiddenCartIds">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="tanggalModalLabel">Pilih Tanggal Pengambilan</h5>

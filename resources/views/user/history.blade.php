@@ -106,13 +106,13 @@
                   @if(in_array($request->status, ['submitted', 'approved', 'delivered', 'received']))
                     <li class="mb-3">
                       <strong>Pesanan sedang ditinjau</strong><br>
-                      {{ \Carbon\Carbon::parse($request->updated_at)->format('H:i:s, d M Y') }}
+                      {{ \Carbon\Carbon::parse($request->updated_at)->format('H:m:s, d M Y') }}
                     </li>
                   @endif
                   @if(in_array($request->status, ['approved', 'delivered', 'received']))
                     <li class="mb-3">
                       <strong>Pesanan disetujui dan segera dikirimkan</strong><br>
-                      {{ \Carbon\Carbon::parse($request->updated_at)->format('H:i:s, d M Y') }}
+                      {{ \Carbon\Carbon::parse($request->updated_at)->format('H:m:s, d M Y') }}
                     </li>
                   @endif
                   @if(in_array($request->status, ['delivered', 'received']) && $request->tanggal_pengambilan)
