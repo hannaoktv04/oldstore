@@ -145,7 +145,10 @@ class CartController extends Controller
             $itemRequest = ItemRequest::create([
                 'user_id' => $user->id,
                 'status' => 'submitted',
+                'status' => 'submitted',
                 'tanggal_permintaan' => now(),
+                'tanggal_pengambilan' => $request->tanggal_pengambilan,
+                'keterangan' => null,
                 'tanggal_pengambilan' => $request->tanggal_pengambilan,
                 'keterangan' => null,
             ]);

@@ -18,12 +18,22 @@
                     </a>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <a href="{{ route('admin.pengajuan.status', 'revised') }}"
+                    <a href="{{ route('admin.pengajuan.status', 'approved') }}"
                        class="card text-decoration-none text-dark shadow-sm hover-3d"
                        style="height: 160px;">
                         <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
-                            <h6>Perubahan</h6>
-                            <h1 class="display-2 fw-normal">{{ $perubahan }}</h1>
+                            <h6>Perlu Dikirim</h6>
+                            <h1 class="display-2 fw-normal">{{ $perluDikirim }}</h1>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <a href="{{ route('admin.pengajuan.status', 'delivered') }}"
+                       class="card text-decoration-none text-dark shadow-sm hover-3d"
+                       style="height: 160px;">
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
+                            <h6>Selesai</h6>
+                            <h1 class="display-2 fw-normal">{{ $pengajuanSelesai }}</h1>
                         </div>
                     </a>
                 </div>
