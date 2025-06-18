@@ -1,6 +1,12 @@
 <nav class="navbar navbar-expand-lg bg-white shadow-sm py-3 sticky-top">
   <div class="container">
-    <a class="navbar-brand fw-bold brand-custom fs-2" href="{{ url('/home') }}">PERI</a>
+    <a class="navbar-brand fw-bold brand-custom fs-2" href="{{ url('/home') }}">
+        @if(Auth::check() && Auth::user()->role === 'admin')
+            PERI <span class="fw-normal text-secondary fs-6">Admin</span>
+        @else
+            PERI
+        @endif
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
       aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -35,7 +41,7 @@
             </div>
           </div>
         @else
-        
+
           @if(Auth::user()->role === 'pegawai')
           @php
             $cartItems = \App\Models\Cart::where('user_id', Auth::id())->get();

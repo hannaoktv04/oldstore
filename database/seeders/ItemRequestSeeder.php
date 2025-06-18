@@ -22,7 +22,7 @@ class ItemRequestSeeder extends Seeder
                 'role' => 'pegawai',
                 'jabatan' => 'Staff',
                 'email' => 'user@example.com',
-                'password' => 'password',  // di-hash otomatis
+                'password' => 'password',  
             ]);
         }
 

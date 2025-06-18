@@ -13,7 +13,6 @@
                     <p class="mb-4 text-muted">Silakan sesuaikan jumlah barang</p>
 
                     @foreach ($pengajuan->details as $detail)
-                        {{-- Item input --}}
                         <div class="mb-4 border rounded p-3">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>

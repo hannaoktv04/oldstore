@@ -56,11 +56,8 @@ class CartController extends Controller
 
     public function update(Request $request, $id)
     {
-        $cart = Cart::with('item')->findOrFail($id); // pastikan relasi item ikut dimuat
-
-        if (!$cart->item) {
-            return redirect()->route('cart.index')->with('error', 'Item tidak ditemukan.');
-        }
+    // Pastikan cart ditemukan dan relasi item dimuat
+    $cart = Cart::with('item')->findOrFail($id);
 
         $stokTersedia = $cart->item->stok_minimum;
 
@@ -87,10 +84,9 @@ class CartController extends Controller
         $cart->save();
 
         return redirect()->route('cart.index')->with('success', 'Jumlah diperbarui.');
-}
+    }
 
-
-    public function checkout()
+    public function checkout(Request $request)
     {
         $user = auth()->user();
         $carts = $user->carts()->with('item')->get();
@@ -104,9 +100,10 @@ class CartController extends Controller
         try {
             $itemRequest = ItemRequest::create([
                 'user_id' => $user->id,
-                'status' => 'submitted', 
+                'status' => 'submitted',
                 'tanggal_permintaan' => now(),
-                'keterangan' => null, 
+                'tanggal_pengambilan' => $request->tanggal_pengambilan,
+                'keterangan' => null,
             ]);
 
             foreach ($carts as $cart) {
