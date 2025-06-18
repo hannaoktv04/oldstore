@@ -25,5 +25,10 @@ class ItemRequest extends Model
     public function details() {
         return $this->hasMany(ItemRequestDetail::class);
     }
+    public function itemDelivery()
+    {
+        return $this->hasOne(ItemDelivery::class);
+     }
+
 
 }

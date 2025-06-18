@@ -68,17 +68,27 @@ Route::get('/', function () {
 Route::middleware(['auth', 'can:isAdmin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/pengajuan/status/{status}', [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
+    Route::post('/pengajuan/{pengajuan}/approve', [AdminPengajuanController::class, 'approve'])->name('pengajuan.approve');
+    Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('pengajuan.reject');
+    Route::post('/pengajuan/{pengajuan}/deliver', [AdminPengajuanController::class, 'deliver'])->name('pengajuan.deliver');
+    Route::post('/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])->name('pengajuan.received');
+     Route::post('/admin/pengajuan/{pengajuan}/deliver',  [AdminPengajuanController::class, 'deliver'])
+        ->name('admin.pengajuan.deliver');
+
+    Route::post('/admin/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])
+        ->name('admin.pengajuan.received');   // ← inilah yang dicari Blade!
+
+    // Nota
+    Route::get('/admin/pengajuan/{pengajuan}/nota',      [AdminPengajuanController::class, 'nota'])
+        ->name('admin.pengajuan.nota');
+    Route::get('/pengajuan/{pengajuan}/nota', [AdminPengajuanController::class, 'nota'])->name('pengajuan.nota');
+
     Route::get('/admin/add-item', [ItemController::class, 'create'])->name('admin.addItem');
     Route::post('/admin/add-item', [ItemController::class, 'store'])->name('admin.storeItem');
     Route::resource('categories', CategoryController::class);
     Route::get('/admin/wishlist', [AdminWishlistController::class, 'index'])->name('admin.wishlist.index');
     Route::post('/admin/wishlist/{id}/akomodasi', [AdminWishlistController::class, 'akomodasi'])->name('admin.wishlist.akomodasi');
     Route::post('/admin/wishlist/{id}/tolak', [AdminWishlistController::class, 'tolak'])->name('admin.wishlist.tolak');
-    Route::post('/pengajuan/{pengajuan}/approve', [AdminPengajuanController::class, 'approve'])->name('pengajuan.approve');
-    Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('pengajuan.reject');
-    Route::post('/pengajuan/{pengajuan}/deliver', [AdminPengajuanController::class, 'deliver'])->name('pengajuan.deliver');
-    Route::post('/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])->name('pengajuan.received');
-    Route::get('/pengajuan/{pengajuan}/nota', [AdminPengajuanController::class, 'nota'])->name('pengajuan.nota');
     Route::get('/admin/items', [ItemController::class, 'itemList'])->name('admin.items');
     Route::get('/admin/items/{item}/edit', [ItemController::class, 'edit'])->name('admin.items.edit');
     Route::put('/admin/items/{item}', [ItemController::class, 'update'])->name('admin.items.update');

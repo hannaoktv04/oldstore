@@ -42,7 +42,7 @@
             @endif
         </div>
 
-  
+
         <div class="col-12 col-md-2 col-lg-3 d-flex flex-column align-items-center text-center text-md-end ms-md-auto">
             <small class="text-muted d-block mb-1">Aksi</small>
             <x-pengajuan-actions :pengajuan="$pengajuan" />
@@ -51,4 +51,6 @@
     {{-- Modals --}}
     @include('admin.modals.approve', ['pengajuan' => $pengajuan])
     @include('admin.modals.reject',  ['pengajuan' => $pengajuan])
+    @include('admin.modals.receive',  ['pengajuan' => $pengajuan])
+
 </div>

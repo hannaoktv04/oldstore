@@ -59,7 +59,6 @@ class CartController extends Controller
     // Pastikan cart ditemukan dan relasi item dimuat
     $cart = Cart::with('item')->findOrFail($id);
 
-<<<<<<< HEAD
         $stokTersedia = $cart->item->stok_minimum;
 
         if ($request->action === 'increase') {
@@ -85,41 +84,6 @@ class CartController extends Controller
         $cart->save();
 
         return redirect()->route('cart.index')->with('success', 'Jumlah diperbarui.');
-=======
-    if (!$cart->item) {
-        return redirect()->route('cart.index')->with('error', 'Item tidak ditemukan.');
->>>>>>> 750c01684ca2829d7ffeabbae4d960587a2bac58
-    }
-
-    $stokTersedia = $cart->item->stok_minimum;
-
-    if ($request->action === 'increase') {
-        if ($cart->qty < $stokTersedia) {
-            $cart->qty += 1;
-        } else {
-            return redirect()->route('cart.index')->with('error', 'Jumlah melebihi stok tersedia.');
-        }
-
-    } elseif ($request->action === 'decrease') {
-        if ($cart->qty > 1) {
-            $cart->qty -= 1;
-        }
-
-    } elseif ($request->filled('qty')) {
-        $qtyBaru = intval($request->qty);
-
-        if ($qtyBaru < 1) {
-            $qtyBaru = 1;
-        } elseif ($qtyBaru > $stokTersedia) {
-            return redirect()->route('cart.index')->with('error', 'Jumlah melebihi stok tersedia.');
-        }
-
-        $cart->qty = $qtyBaru;
-    }
-
-    $cart->save();
-
-    return redirect()->route('cart.index')->with('success', 'Jumlah berhasil diperbarui.');
     }
 
     public function checkout(Request $request)

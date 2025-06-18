@@ -28,16 +28,16 @@
     </div>
 
 @elseif ($status === 'delivered')
-    <form action="{{ route('pengajuan.received', $pengajuan->id) }}" method="POST">
-        @csrf
-        <button class="btn btn-sm btn-outline-secondary" type="submit">
-            <i class="bi bi-box" title="Diterima"></i>
-        </button>
-    </form>
+    <a href="#" class="btn btn-sm btn-outline-secondary"
+       data-bs-toggle="modal"
+       data-bs-target="#receiveModal-{{ $pengajuan->id }}">
+        <i class="bi bi-box" title="Terima Barang"></i>
+    </a>
 
 @elseif ($status === 'received')
-    <a href="{{ route('pengajuan.nota', $pengajuan->id) }}" class="btn btn-sm btn-outline-primary">
-        <i class="bi bi-printer"></i>
+    <a href="{{ route('admin.pengajuan.nota', $pengajuan->id) }}"
+       class="btn btn-sm btn-outline-primary">
+        <i class="bi bi-printer" title="Cetak Nota"></i>
     </a>
 
 @elseif ($status === 'rejected')

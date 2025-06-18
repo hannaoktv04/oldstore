@@ -21,7 +21,6 @@
             </div>
 
             <div class="row gy-4 gx-2 align-items-center">
-                {{-- Detail Barang --}}
                 <div class="col-12 col-md-6 col-lg-4">
                     @foreach ($pengajuan->details as $detail)
                         <div class="d-flex align-items-start mb-3">
@@ -56,9 +55,9 @@
 
             </div>
 
-            {{-- Modals --}}
             @include('admin.modals.approve', ['pengajuan' => $pengajuan])
             @include('admin.modals.reject',  ['pengajuan' => $pengajuan])
+            @include('admin.modals.receive',  ['pengajuan' => $pengajuan])
         </div>
     @empty
         <div class="alert alert-info">Belum ada pengajuan dengan status "{{ $status }}".</div>

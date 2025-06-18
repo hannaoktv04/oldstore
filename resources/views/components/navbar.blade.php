@@ -2,7 +2,7 @@
   <div class="container">
     <a class="navbar-brand fw-bold brand-custom fs-2" href="{{ url('/home') }}">
         @if(Auth::check() && Auth::user()->role === 'admin')
-            PERI <span class="fw-normal text-secondary fs-6">Seller</span>
+            PERI <span class="fw-normal text-secondary fs-6">Admin</span>
         @else
             PERI
         @endif
@@ -42,7 +42,7 @@
             </div>
           </div>
         @else
-        
+
           @if(Auth::user()->role === 'pegawai')
           @php
             $cartItems = \App\Models\Cart::where('user_id', Auth::id())->get();
