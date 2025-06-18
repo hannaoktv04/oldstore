@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container">
-    
     <h3 class="fw-semibold mb-4">Keranjang</h3>
 
     @php
@@ -11,48 +10,46 @@
     @endphp
 
     @if($jumlahKeranjang > 0)
-        <div class="card border-0 mb-3 p-3 shadow-sm">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="form-check">
-                    <input class="form-check-input me-2 border-success"
-                        style="box-shadow: none; width: 1.3em; height: 1.3em;"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault">
-                    <label class="form-check-label fw-semibold" for="flexCheckDefault">
-                        Pilih Semua ({{ $jumlahKeranjang }})
-                    </label>
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 mb-3 p-3 shadow-sm">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="form-check">
+                        <input class="form-check-input me-2 border-success"
+                            style="box-shadow: none; width: 1.3em; height: 1.3em;"
+                            type="checkbox"
+                            value=""
+                            id="flexCheckDefault">
+                        <label class="form-check-label fw-semibold" for="flexCheckDefault">
+                            Pilih Semua <small class="text-secondary">({{ $jumlahKeranjang }})</small>
+                        </label>
+                    </div>
+                    <button id="btnHapusTerpilih" class="btn btn-success btn-sm d-none px-3 py-1"
+                        data-bs-toggle="modal" data-bs-target="#konfirmasiHapusModal">
+                        Hapus
+                    </button>
                 </div>
-                <button id="btnHapusTerpilih" class="btn btn-success btn-sm d-none"
-                    data-bs-toggle="modal" data-bs-target="#konfirmasiHapusModal">
-                    Hapus
-                </button>
             </div>
-        </div>
     @endif
-
-
 
     @forelse($carts as $cart)
     <div class="card border-0 mb-3 p-3 shadow-sm position-relative">
-        <input
-            class="form-check-input position-absolute item-checkbox border-success"
+        <input class="form-check-input position-absolute item-checkbox border-success"
             style="top: 10px; left: 10px; box-shadow: none; width: 1.3em; height: 1.3em;"
             name="cart_ids[]"
             type="checkbox"
-            value="{{ $cart->id }}"
-        >
-
+            value="{{ $cart->id }}">
         <div class="d-flex align-items-center justify-content-between ps-7">
-            <div class="d-flex align-items-center">
-                <img src="{{ $cart->item->photo_url }}"" alt="gambar" width="80" height="80" class="rounded me-3" style="object-fit: cover;">
-                <div>
-                    <div class="text-muted small">{{ $cart->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</div>
-                    <div class="fw-semibold">{{ $cart->item->nama_barang }}</div>
-                    <div class="text-muted small">Stok tersedia : {{ $cart->item->stok_minimum }} {{ $cart->item->satuan }}</div>
+            <a href="{{ route('produk.show', ['id' => $cart->item->id]) }}" class="text-decoration-none">
+                <div class="d-flex align-items-center">
+                    <img src="{{ $cart->item->photo_url }}" alt="gambar" width="80" height="80" class="rounded me-3" style="object-fit: cover;">
+                    <div>
+                        <div class="text-muted small">{{ $cart->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</div>
+                        <div class="fw-semibold text-dark">{{ $cart->item->nama_barang }}</div>
+                        <div class="text-muted small">Stok tersedia : {{ $cart->item->stok_minimum }} {{ $cart->item->satuan }}</div>
+                    </div>
                 </div>
-            </div>
-
+            </a>
             <div class="d-flex align-items-center">
                 <form method="POST" action="{{ route('cart.destroy', $cart->id) }}" class="me-3">
                     @csrf
@@ -61,24 +58,13 @@
                         <i class="bi bi-trash" style="font-size: 1.2rem;"></i>
                     </button>
                 </form>
-
-               <form method="POST" action="{{ route('cart.update', $cart->id) }}" class="d-flex align-items-center">
+                <form method="POST" action="{{ route('cart.update', $cart->id) }}" class="d-flex align-items-center">
                     @csrf
                     @method('PUT')
                     <div class="input-group btn-outline-success" style="width: fit-content; border: 1px solid #198754; border-radius: 50px; overflow: hidden;">
                         <button type="submit" name="action" value="decrease" class="btn btn-outline-success px-2 py-1 border-0 qty-btn">−</button>
-
-                        <input
-                            type="number"
-                            name="manual_qty"
-                            value="{{ $cart->qty }}"
-                            min="1"
-                            max="{{ $cart->item->stok_minimum }}"
-                            class="form-control text-center border-0"
-                            style="max-width: 50px; height: 30px; line-height: 1; padding: 0 0.25rem;"
-
-                        >
-
+                        <input type="number" name="manual_qty" value="{{ $cart->qty }}" min="1" max="{{ $cart->item->stok_minimum }}"
+                            class="form-control text-center border-0" style="max-width: 50px; height: 30px; line-height: 1; padding: 0 0.25rem;">
                         <button type="submit" name="action" value="increase" class="btn btn-outline-success px-2 py-1 border-0 qty-btn">+</button>
                     </div>
                 </form>
@@ -86,21 +72,30 @@
         </div>
     </div>
     @empty
-        <div class="card border-0 mb-3 p-3 shadow-sm">
-            <div class=" align-items-center text-center">
-                <img src="{{ asset('assets/img/cart.png') }}" alt="Cart Image">
-                <h3>Wah, keranjang kamu kosong <br></h3>
-                <p>Yuk, isi dengan barang-barang kebutuhanmu!</p>
-                <a class="btn btn-success" href="{{ url('/home') }}" role="button">Cari Barang</a>
-            </div>
+    <div class="card border-0 mb-3 p-3 shadow-sm">
+        <div class="align-items-center text-center">
+            <img src="{{ asset('assets/img/cart.png') }}" alt="Cart Image">
+            <h3>Wah, keranjang kamu kosong <br></h3>
+            <p>Yuk, isi dengan barang-barang kebutuhanmu!</p>
+            <a class="btn btn-success" href="{{ url('/home') }}" role="button">Cari Barang</a>
         </div>
+    </div>
     @endforelse
 
     @if($carts->count())
-    <div class="text-end mt-4">
-        <button type="button" class="btn btn-success px-4 py-2" data-bs-toggle="modal" data-bs-target="#tanggalModal">
-            Ajukan Permintaan
-        </button>
+        </div> 
+        <div class="col-lg-4">
+            <div class="bg-white rounded shadow-sm p-3">
+                <h5 class="fw-semibold mb-3">Ringkasan Permintaan</h5>
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Total Items</span>
+                    <span class="fw-bold">{{ number_format($carts->sum(fn($c) => $c->item->harga * $c->qty), 0, ',', '.') }}</span>
+                </div>
+                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#tanggalModal">
+                    Ajukan Permintaan
+                </button>
+            </div>
+        </div>
     </div>
     @endif
 
@@ -125,27 +120,27 @@
             </form>
         </div>
     </div>
-</div>
-<div class="modal fade" id="konfirmasiHapusModal" tabindex="-1" aria-labelledby="hapusModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <form method="POST" action="{{ route('cart.bulkDelete') }}">
-            @csrf
-            @method('DELETE')
-            <input type="hidden" name="cart_ids" id="selectedCartIds">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="hapusModalLabel">Konfirmasi Hapus</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+
+    <div class="modal fade" id="konfirmasiHapusModal" tabindex="-1" aria-labelledby="hapusModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="POST" action="{{ route('cart.bulkDelete') }}">
+                @csrf
+                @method('DELETE')
+                <input type="hidden" name="cart_ids" id="selectedCartIds">
+                <div class="modal-content align-items-center">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title fw-semibold" id="hapusModalLabel">Hapus {{ $jumlahKeranjang }} Produk?</h5>
+                    </div>
+                    <div class="modal-body text-secondary">
+                        Item yang kamu pilih akan dihapus dari Keranjang.
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-outline-success px-5 py-2" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success px-5 py-2">Hapus</button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    Apakah kamu yakin ingin menghapus item yang dipilih dari keranjang?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-danger">Hapus</button>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 @endsection

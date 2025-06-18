@@ -56,10 +56,8 @@ class CartController extends Controller
 
     public function update(Request $request, $id)
     {
-    // Pastikan cart ditemukan dan relasi item dimuat
     $cart = Cart::with('item')->findOrFail($id);
 
-<<<<<<< HEAD
         $stokTersedia = $cart->item->stok_minimum;
 
         if ($request->action === 'increase') {
@@ -85,10 +83,9 @@ class CartController extends Controller
         $cart->save();
 
         return redirect()->route('cart.index')->with('success', 'Jumlah diperbarui.');
-=======
+
     if (!$cart->item) {
         return redirect()->route('cart.index')->with('error', 'Item tidak ditemukan.');
->>>>>>> 750c01684ca2829d7ffeabbae4d960587a2bac58
     }
 
     $stokTersedia = $cart->item->stok_minimum;
@@ -180,6 +177,7 @@ class CartController extends Controller
 
         $request->validate([
             'qty' => "required|numeric|min:1|max:{$item->stok_minimum}",
+            'tanggal_pengambilan' => 'required|date|after_or_equal:' . now()->toDateString(),
         ]);
 
         DB::beginTransaction();
@@ -189,6 +187,7 @@ class CartController extends Controller
                 'user_id' => Auth::id(),
                 'status' => 'submitted',
                 'tanggal_permintaan' => now(),
+                'tanggal_pengambilan' => $request->tanggal_pengambilan,
                 'keterangan' => null,
             ]);
 

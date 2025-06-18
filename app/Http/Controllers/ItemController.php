@@ -143,7 +143,12 @@ class ItemController extends Controller
     public function index()
     {
         $categories = Category::orderBy('categori_name')->get();
-        $items = Item::with('category')->get();
+
+        $items = Item::with('category')
+                    ->orderByRaw('stok_minimum <= 0')
+                    ->orderByDesc('stok_minimum')    
+                    ->get();
+
         return view('layouts.kategori', compact('items','categories'));
     }
 
