@@ -63,7 +63,7 @@
 
 
                 <div class="col-12 col-md-2 col-lg-2 d-flex flex-column align-items-center text-center">
-                    <a href="#" class="btn btn-outline-secondary btn-sm" title="TTD Nota">
+                    <a href="#" class="btn btn-outline-secondary btn-sm" title="Bubuhi TTD">
                         <i class="bi bi-pen-fill"></i>
                     </a>
                 </div>
@@ -91,7 +91,7 @@
         </div>
 
         <div class="modal fade" id="statusModal-{{ $request->id }}" tabindex="-1" aria-labelledby="statusModalLabel-{{ $request->id }}" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content rounded-4 p-3">
               <div class="modal-header border-0">
                 <h5 class="modal-title" id="statusModalLabel-{{ $request->id }}">Status Pesanan</h5>
@@ -103,16 +103,10 @@
                     <strong>Pesanan dilakukan</strong><br>
                     {{ \Carbon\Carbon::parse($request->created_at)->format('H:i:s, d M Y') }}
                   </li>
-                  @if(in_array($request->status, ['submitted', 'approved', 'delivered', 'received']))
-                    <li class="mb-3">
-                      <strong>Pesanan sedang ditinjau</strong><br>
-                      {{ \Carbon\Carbon::parse($request->updated_at)->format('H:m:s, d M Y') }}
-                    </li>
-                  @endif
                   @if(in_array($request->status, ['approved', 'delivered', 'received']))
                     <li class="mb-3">
                       <strong>Pesanan disetujui dan segera dikirimkan</strong><br>
-                      {{ \Carbon\Carbon::parse($request->updated_at)->format('H:m:s, d M Y') }}
+                      {{ \Carbon\Carbon::parse($request->updated_at)->format('H:i:s, d M Y') }}
                     </li>
                   @endif
                   @if(in_array($request->status, ['delivered', 'received']) && $request->tanggal_pengambilan)
@@ -129,7 +123,7 @@
                   @endif
                 </ul>
               </div>
-              <div class="modal-footer border-0">
+              <div class="modal-footer border-0 justify-content-center">
                 <a href="#" class="btn btn-outline-success btn-sm">Lihat E-Nota</a>
               </div>
             </div>

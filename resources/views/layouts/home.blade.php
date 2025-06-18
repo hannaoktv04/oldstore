@@ -21,13 +21,30 @@
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-6 g-3">
         @forelse ($items as $item)
             <div class="col">
-                <a href="{{ route('produk.show', ['id' => $item->id]) }}" class="text-decoration-none">
-                    <div class="card h-100 card-3d shadow-sm">
+                @php
+                    $stokHabis = $item->stok_minimum == 0;
+                @endphp
+
+                <a href="{{ route('produk.show', ['id' => $item->id]) }}" class="text-decoration-none {{ $stokHabis ? 'text-muted' : 'text-dark' }}">
+                    <div class="card h-100 card-3d shadow-sm position-relative {{ $stokHabis ? 'bg-light' : '' }}" style="{{ $stokHabis ? 'opacity: 0.6;' : '' }}">
+                        @if($stokHabis)
+                            <div class="position-absolute top-0 end-0 m-2">
+                                <span class="badge bg-danger">Stok Habis</span>
+                            </div>
+                        @endif
+
                         <img src="{{ asset('storage/' . ($item->photo?->image ?? 'placeholder.jpg')) }}" class="card-img-top" style="height: 160px; object-fit: cover;" alt="{{ $item->nama_barang }}">
+
                         <div class="card-body">
                             <h6 class="card-title">{{ $item->nama_barang }}</h6>
                             <p class="card-text small text-muted mb-1">{{ $item->category?->categori_name ?? '-' }}</p>
-                            <p class="card-text"><strong>{{ number_format($item->stok_minimum, 0) }}</strong> Tersisa</p>
+                            <p class="card-text">
+                                @if ($stokHabis)
+                                    <span class="text-danger">0 Tersisa</span>
+                                @else
+                                    <strong>{{ number_format($item->stok_minimum, 0) }}</strong> Tersisa
+                                @endif
+                            </p>
                         </div>
                     </div>
                 </a>

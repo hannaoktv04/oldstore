@@ -29,13 +29,23 @@
         <div class="col-md-9">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
                 @foreach ($items as $item)
+                @php
+                    $stokHabis = $item->stok_minimum == 0;
+                @endphp
                 <div class="col">
-                    <a href="{{ route('produk.show', ['id' => $item->id]) }}" class="text-decoration-none">
-                        <div class="card h-100 card-3d shadow-sm">
+                    <a href="{{ route('produk.show', ['id' => $item->id]) }}"
+                       class="text-decoration-none {{ $stokHabis ? 'text-muted' : 'text-dark' }}">
+                        <div class="card h-100 card-3d shadow-sm position-relative {{ $stokHabis ? 'bg-light' : '' }}" style="{{ $stokHabis ? 'opacity: 0.6;' : '' }}">
+                            @if($stokHabis)
+                                <div class="position-absolute top-0 end-0 m-2">
+                                    <span class="badge bg-danger">Stok Habis</span>
+                                </div>
+                            @endif
+
                             <img src="{{ asset('storage/' . ($item->photo?->image ?? 'placeholder.jpg')) }}"
-                                class="card-img-top"
-                                style="height: 160px; object-fit: cover;"
-                                alt="{{ $item->nama_barang }}">
+                                 class="card-img-top"
+                                 style="height: 160px; object-fit: cover;"
+                                 alt="{{ $item->nama_barang }}">
 
                             <div class="card-body">
                                 <h6 class="card-title">{{ $item->nama_barang }}</h6>
@@ -43,7 +53,11 @@
                                     {{ $item->category?->categori_name ?? '-' }}
                                 </p>
                                 <p class="card-text">
-                                    <strong>{{ number_format($item->stok_minimum, 0) }}</strong> Tersisa
+                                    @if ($stokHabis)
+                                        <span class="text-danger">0 Tersisa</span>
+                                    @else
+                                        <strong>{{ number_format($item->stok_minimum, 0) }}</strong> Tersisa
+                                    @endif
                                 </p>
                             </div>
                         </div>
@@ -52,7 +66,7 @@
                 @endforeach
             </div>
         </div>
-
     </div>
 </div>
+
 @endsection

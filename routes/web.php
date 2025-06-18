@@ -104,12 +104,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    Route::get('/user/setting', function () {
-        return view('user.setting');
-    })->name('user.setting');
-
     Route::get('/riwayat-pengajuan', [ItemRequestController::class, 'history'])->name('user.history');
-    Route::get('/wishlist', [App\Http\Controllers\WishlistController::class, 'index'])->name('user.wishlist');
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('user.wishlist');
+    Route::post('/wishlist/{id}', [WishlistController::class, 'addToWishlist'])->name('user.wishlist.store');
     Route::post('/update-pengambilan/{id}', [ItemRequestController::class, 'updateTanggalPengambilan']);
 });
 

@@ -24,9 +24,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $items = Item::withSum('details', 'qty_requested')
+        $items = Item::with(['category', 'photo'])
+                ->withSum('details', 'qty_requested')
+                ->orderByRaw('stok_minimum = 0')
                 ->orderByDesc('details_sum_qty_requested')
-                ->take(8)
+                ->take(12)
                 ->get();
 
         return view('layouts.home', compact('items'));
