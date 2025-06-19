@@ -7,11 +7,13 @@ use App\Models\Category;
 
 class CategoryController extends Controller
 {
+
     public function index()
     {
-        $category = Category::all();
-        return view('category.index', compact('category'));
+        $categories = Category::withCount('items')->get();
+        return view('category.index', compact('categories'));
     }
+
 
     public function store(Request $request)
     {

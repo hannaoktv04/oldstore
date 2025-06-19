@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const selectedCartIds = document.getElementById('selectedCartIds');
     const checkoutForm = document.getElementById('checkoutForm');
     const checkoutSubmitBtn = document.querySelector('#tanggalModal .btn-success');
+    const jumlahTerpilihEls = document.querySelectorAll('.jumlah-terpilih');
+
 
     if (checkAll && btnHapus && selectedCartIds && checkboxes.length > 0) {
         checkAll.addEventListener('change', function () {
@@ -24,6 +26,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 selectedCartIds.value = '';
             }
             checkAll.checked = checked.length === checkboxes.length;
+
+            jumlahTerpilihEls.forEach(el => {
+                el.textContent = checked.length;
+            });
         }
     }
 

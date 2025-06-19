@@ -4,11 +4,6 @@
 <div class="container">
     <h3 class="fw-semibold mb-4">Keranjang</h3>
 
-    @php
-        $cartItems = \App\Models\Cart::where('user_id', Auth::id())->get();
-        $jumlahKeranjang = $cartItems->count();
-    @endphp
-
     @if($jumlahKeranjang > 0)
     <div class="row g-4">
         <div class="col-lg-8">
@@ -33,20 +28,35 @@
     @endif
 
     @forelse($carts as $cart)
-    <div class="card border-0 mb-3 p-3 shadow-sm position-relative">
-        <input class="form-check-input position-absolute item-checkbox border-success"
-            style="top: 10px; left: 10px; box-shadow: none; width: 1.3em; height: 1.3em;"
-            name="cart_ids[]"
-            type="checkbox"
-            value="{{ $cart->id }}">
-        <div class="d-flex align-items-center justify-content-between ps-7">
-            <a href="{{ route('produk.show', ['id' => $cart->item->id]) }}" class="text-decoration-none">
+    @php
+        $item = $cart->item;
+        $stokHabis = $item->stok_minimum <= 0;
+        $buttonStyle = $stokHabis ? 'btn-outline-secondary' : 'btn-outline-success';
+        $borderColor = $stokHabis ? '#6c757d' : '#198754';
+    @endphp
+
+    <div class="card border-0 mb-3 p-3 shadow-sm position-relative {{ $stokHabis ? 'bg-light' : '' }}">
+        @if($stokHabis)
+            <span class="badge bg-secondary position-absolute" style="top: 10px; left: 10px; z-index: 1;">HABIS</span>
+        @else
+            <input class="form-check-input position-absolute item-checkbox border-success"
+                style="top: 10px; left: 10px; box-shadow: none; width: 1.3em; height: 1.3em;"
+                name="cart_ids[]"
+                type="checkbox"
+                value="{{ $cart->id }}">
+        @endif
+        <div class="d-flex align-items-center justify-content-between ps-7 {{ $stokHabis ? 'text-muted opacity-50' : '' }}">
+            <a href="{{ route('produk.show', ['id' => $item->id]) }}"
+            class="text-decoration-none {{ $stokHabis ? 'pointer-events-none' : '' }}">
                 <div class="d-flex align-items-center">
-                    <img src="{{ $cart->item->photo_url }}" alt="gambar" width="80" height="80" class="rounded me-3" style="object-fit: cover;">
+                    <img src="{{ $item->photo_url }}" alt="gambar" width="80" height="80"
+                        class="rounded me-3" style="object-fit: cover;">
                     <div>
-                        <div class="text-muted small">{{ $cart->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</div>
-                        <div class="fw-semibold text-dark">{{ $cart->item->nama_barang }}</div>
-                        <div class="text-muted small">Stok tersedia : {{ $cart->item->stok_minimum }} {{ $cart->item->satuan }}</div>
+                        <div class="text-muted small">{{ $item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</div>
+                        <div class="fw-semibold text-dark">{{ $item->nama_barang }}</div>
+                        <div class="text-muted small">
+                            Stok tersedia: {{ $item->stok_minimum }} {{ $item->satuan }}
+                        </div>
                     </div>
                 </div>
             </a>
@@ -61,18 +71,30 @@
                 <form method="POST" action="{{ route('cart.update', $cart->id) }}" class="d-flex align-items-center">
                     @csrf
                     @method('PUT')
-                    <div class="input-group btn-outline-success" style="width: fit-content; border: 1px solid #198754; border-radius: 50px; overflow: hidden;">
-                        <button type="submit" name="action" value="decrease" class="btn btn-outline-success px-2 py-1 border-0 qty-btn">−</button>
-                        <input type="number" name="manual_qty" value="{{ $cart->qty }}" min="1" max="{{ $cart->item->stok_minimum }}"
-                            class="form-control text-center border-0" style="max-width: 50px; height: 30px; line-height: 1; padding: 0 0.25rem;">
-                        <button type="submit" name="action" value="increase" class="btn btn-outline-success px-2 py-1 border-0 qty-btn">+</button>
+                    <div class="input-group {{ $buttonStyle }} flex-nowrap flex-md-nowrap w-100"
+                        style=" border: 1px solid {{ $borderColor }}; border-radius: 50px; overflow: hidden; opacity: {{ $stokHabis ? '0.5' : '1' }};">
+                        <button type="submit" name="action" value="decrease"
+                            class="btn {{ $buttonStyle }} px-2 py-1 border-0 qty-btn"
+                            style="min-width: 6px;"
+                            {{ $stokHabis ? 'disabled' : '' }}>−</button>
+
+                        <input type="number" name="manual_qty" value="{{ $cart->qty }}"
+                            min="1" max="{{ $item->stok_minimum }}"
+                            class="form-control text-center border-0"
+                            style="min-width: 20px; height: 32px; padding: 0 0.1rem; width: 43px;"
+                            {{ $stokHabis ? 'disabled' : '' }}>
+
+                        <button type="submit" name="action" value="increase"
+                            class="btn {{ $buttonStyle }} px-2 py-1 border-0 qty-btn"
+                            style="min-width: 6px;"
+                            {{ $stokHabis ? 'disabled' : '' }}>+</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     @empty
-    <div class="card border-0 mb-3 p-3 shadow-sm">
+    <div class="card border-0 mb-3 p-3 shadow-sm bg-white">
         <div class="align-items-center text-center">
             <img src="{{ asset('assets/img/cart.png') }}" alt="Cart Image">
             <h3>Wah, keranjang kamu kosong <br></h3>
@@ -89,7 +111,7 @@
                 <h5 class="fw-semibold mb-3">Ringkasan Permintaan</h5>
                 <div class="d-flex justify-content-between mb-3">
                     <span>Total Items</span>
-                    <span class="fw-bold">{{ number_format($carts->sum(fn($c) => $c->item->harga * $c->qty), 0, ',', '.') }}</span>
+                    <span class="jumlah-terpilih">0</span>
                 </div>
                 <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#tanggalModal">
                     Ajukan Permintaan
@@ -129,7 +151,7 @@
                 <input type="hidden" name="cart_ids" id="selectedCartIds">
                 <div class="modal-content align-items-center">
                     <div class="modal-header border-0">
-                        <h5 class="modal-title fw-semibold" id="hapusModalLabel">Hapus {{ $jumlahKeranjang }} Produk?</h5>
+                        <h5 class="modal-title fw-semibold" id="hapusModalLabel">Hapus <span class="jumlah-terpilih">0</span> Produk?</h5>
                     </div>
                     <div class="modal-body text-secondary">
                         Item yang kamu pilih akan dihapus dari Keranjang.

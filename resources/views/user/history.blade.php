@@ -111,7 +111,7 @@
                   @endif
                   @if(in_array($request->status, ['delivered', 'received']) && $request->tanggal_pengambilan)
                     <li class="mb-3">
-                      <strong>Pesanan sudah diterima sesuai waktu yang dijadwalkan</strong><br>
+                      <strong>Pesanan sedang dalam pengiriman sesuai waktu yang dijadwalkan</strong><br>
                       {{ \Carbon\Carbon::parse($request->tanggal_pengambilan)->format('H:i:s, d M Y') }}
                     </li>
                   @endif

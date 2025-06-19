@@ -98,20 +98,17 @@ class ItemController extends Controller
                 'category_id' => $validated['category_id'],
             ]);
 
-            // Update stok (jika perlu)
             $stock = ItemStock::where('item_id', $item->id)->first();
             if ($stock) {
                 $stock->qty = $validated['stok'];
                 $stock->save();
             } else {
-                // Jika belum ada stok, buat baru
                 ItemStock::create([
                     'item_id' => $item->id,
                     'qty' => $validated['stok'],
                 ]);
             }
 
-            // Update foto jika ada
             if ($request->hasFile('photo_Item')) {
                 $slots = [null, null, null, null, null];
 

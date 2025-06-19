@@ -10,7 +10,6 @@
 
 body {
     font-family: 'Poppins', sans-serif !important;
-    background-color: #dedede5c !important;
 }
 
 .brand-custom {
@@ -239,6 +238,42 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .form-check-input:checked {
-  background-color: #198754 !important; /* Bootstrap success color */
+  background-color: #198754 !important;
   border-color: #198754 !important;
+}
+
+@media (max-width: 767.98px) {
+  .custom-kategori-offcanvas {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 80%; 
+    height: 100vh;
+    background-color: #fff;
+    z-index: 1045;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .custom-kategori-offcanvas.show {
+    transform: translateX(0);
+  }
+
+  .custom-kategori-toggle {
+    position: relative;
+    z-index: 1050;
+  }
+
+  .custom-kategori-overlay {
+    content: '';
+    position: fixed;
+    top: 56px; 
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 56px);
+  }
 }

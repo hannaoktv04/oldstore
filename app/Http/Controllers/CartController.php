@@ -4,19 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Item;
+use App\Models\ItemRequest;
+use App\Models\ItemRequestDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Models\ItemRequest;
-use App\Models\ItemRequestDetail;
-
 
 class CartController extends Controller
 {
     public function index()
     {
-        $carts = Cart::with('item')->where('user_id', Auth::id())->get();
-        return view('cart.index', compact('carts'));
+        $carts = Cart::with('item')
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->get()
+            ->sortBy(fn($cart) => $cart->item->stok_minimum <= 0 ? 1 : 0);
+
+        $cartItems = \App\Models\Cart::where('user_id', Auth::id())->get();
+        $jumlahKeranjang = $cartItems->count();
+        
+        return view('cart.index', compact('carts', 'jumlahKeranjang'));
     }
 
     public function store(Request $request, $id)
@@ -28,27 +35,23 @@ class CartController extends Controller
             'qty' => "required|numeric|min:1|max:{$item->stok_minimum}",
         ]);
 
-        $cart = Cart::where('user_id', Auth::id())
-                    ->where('item_id', $request->item_id)
-                    ->first();
+        $cart = Cart::firstOrNew([
+            'user_id' => Auth::id(),
+            'item_id' => $request->item_id,
+        ]);
 
-        if ($cart) {
-            $cart->qty += $request->qty;
-            $cart->save();
-        } else {
-            Cart::create([
-                'user_id' => Auth::id(),
-                'item_id' => $request->item_id,
-                'qty' => $request->qty,
-            ]);
-        }
+        $cart->qty += $request->qty;
+        $cart->save();
 
         return redirect()->route('cart.index')->with('success', 'Barang berhasil ditambahkan ke keranjang.');
     }
 
     public function destroy($id)
     {
-        $cart = Cart::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $cart = Cart::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
         $cart->delete();
 
         return back()->with('success', 'Item dihapus dari keranjang.');
@@ -56,25 +59,26 @@ class CartController extends Controller
 
     public function update(Request $request, $id)
     {
-    $cart = Cart::with('item')->findOrFail($id);
-
+        $cart = Cart::with('item')->findOrFail($id);
         $stokTersedia = $cart->item->stok_minimum;
+
+        if (!$cart->item) {
+            return redirect()->route('cart.index')->with('error', 'Item tidak ditemukan.');
+        }
 
         if ($request->action === 'increase') {
             if ($cart->qty < $stokTersedia) {
                 $cart->qty += 1;
             } else {
-                return redirect()->route('cart.index');
+                return redirect()->route('cart.index')->with('error', 'Jumlah melebihi stok tersedia.');
             }
         } elseif ($request->action === 'decrease') {
             if ($cart->qty > 1) {
                 $cart->qty -= 1;
             }
         } elseif ($request->filled('qty')) {
-            $qtyBaru = intval($request->qty);
-            if ($qtyBaru < 1) {
-                $qtyBaru = 1;
-            } elseif ($qtyBaru > $stokTersedia) {
+            $qtyBaru = max(1, intval($request->qty));
+            if ($qtyBaru > $stokTersedia) {
                 return redirect()->route('cart.index')->with('error', 'Jumlah melebihi stok tersedia.');
             }
             $cart->qty = $qtyBaru;
@@ -82,41 +86,7 @@ class CartController extends Controller
 
         $cart->save();
 
-        return redirect()->route('cart.index')->with('success', 'Jumlah diperbarui.');
-
-    if (!$cart->item) {
-        return redirect()->route('cart.index')->with('error', 'Item tidak ditemukan.');
-    }
-
-    $stokTersedia = $cart->item->stok_minimum;
-
-    if ($request->action === 'increase') {
-        if ($cart->qty < $stokTersedia) {
-            $cart->qty += 1;
-        } else {
-            return redirect()->route('cart.index')->with('error', 'Jumlah melebihi stok tersedia.');
-        }
-
-    } elseif ($request->action === 'decrease') {
-        if ($cart->qty > 1) {
-            $cart->qty -= 1;
-        }
-
-    } elseif ($request->filled('qty')) {
-        $qtyBaru = intval($request->qty);
-
-        if ($qtyBaru < 1) {
-            $qtyBaru = 1;
-        } elseif ($qtyBaru > $stokTersedia) {
-            return redirect()->route('cart.index')->with('error', 'Jumlah melebihi stok tersedia.');
-        }
-
-        $cart->qty = $qtyBaru;
-    }
-
-    $cart->save();
-
-    return redirect()->route('cart.index')->with('success', 'Jumlah berhasil diperbarui.');
+        return redirect()->route('cart.index')->with('success', 'Jumlah berhasil diperbarui.');
     }
 
     public function checkout(Request $request)
@@ -127,7 +97,7 @@ class CartController extends Controller
             'cart_ids.*' => 'exists:carts,id',
         ]);
 
-        $user = auth()->user();
+        $user = Auth::user();
         $cartIds = $request->cart_ids;
 
         $carts = Cart::with('item')
@@ -145,10 +115,7 @@ class CartController extends Controller
             $itemRequest = ItemRequest::create([
                 'user_id' => $user->id,
                 'status' => 'submitted',
-                'status' => 'submitted',
                 'tanggal_permintaan' => now(),
-                'tanggal_pengambilan' => $request->tanggal_pengambilan,
-                'keterangan' => null,
                 'tanggal_pengambilan' => $request->tanggal_pengambilan,
                 'keterangan' => null,
             ]);
@@ -171,8 +138,6 @@ class CartController extends Controller
             return redirect()->route('user.history')->with('error', 'Gagal mengajukan permintaan.');
         }
     }
-
-
 
     public function pesanLangsung(Request $request, $id)
     {
@@ -212,11 +177,8 @@ class CartController extends Controller
     public function bulkDelete(Request $request)
     {
         $ids = explode(',', $request->cart_ids);
-
         Cart::whereIn('id', $ids)->where('user_id', Auth::id())->delete();
 
         return redirect()->route('cart.index')->with('success', 'Item berhasil dihapus.');
     }
-
-
 }
