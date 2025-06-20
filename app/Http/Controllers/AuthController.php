@@ -15,11 +15,11 @@ class AuthController extends Controller
     public function do_login(Request $request)
     {
         $request->validate([
-            'nip' => 'required|string',
+            'username' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        $credentials = $request->only('nip', 'password');
+        $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
@@ -28,8 +28,8 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'nip' => 'NIP atau password salah.',
-        ])->withInput(['nip' => $request->nip]);
+            'username' => 'Username atau password salah.',
+        ])->withInput(['username' => $request->username]);
     }
 
     public function logout(Request $request)

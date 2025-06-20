@@ -5,20 +5,21 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    use Notifiable;
+    
     protected $fillable = [
-        'nama', 'nip', 'role', 'jabatan', 'email', 'password',
+        'username', 'nama', 'nip', 'role', 'jabatan', 'email', 'password',
     ];
 
-    // Gunakan 'nip' sebagai username
     public function getAuthIdentifierName()
     {
         return 'id';
     }
 
-    // Hash password jika belum ter-hash
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = Str::startsWith($password, '$2y$')
