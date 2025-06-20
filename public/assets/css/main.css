@@ -4,7 +4,13 @@
 }
 
 #cart-icon:hover i::before,
-#user-icon:hover i::before {
+#user-icon:hover i::before{
+  color: #2aa7a7;
+}
+
+#heart-icon:hover i::before {
+  content: "\f415"; 
+  font-weight: bold;
   color: #2aa7a7;
 }
 
@@ -74,7 +80,7 @@ input.form-control {
 
 #cart-popup {
   position: absolute;
-  top: 100%; /* tepat di bawah ikon cart */
+  top: 100%; 
   right: 0;
   min-width: 160px;
   min-height: 150px;
@@ -248,7 +254,7 @@ input[type=number]::-webkit-outer-spin-button {
     top: auto;
     bottom: 0;
     left: 0;
-    width: 80%; 
+    width: 100%; 
     height: 100vh;
     background-color: #fff;
     z-index: 1045;

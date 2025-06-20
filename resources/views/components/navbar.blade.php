@@ -28,45 +28,47 @@
       </button>
 
       @auth
-        @php
-          $cartItems = \App\Models\Cart::where('user_id', Auth::id())->get();
-          $jumlahKeranjang = $cartItems->count();
-        @endphp
-        <div class="position-relative">
-          <button id="cart-icon" class="icon-button text-dark bg-transparent border-0 p-0">
-            <i class="bi bi-bag-fill fs-5"></i>
-            @if($jumlahKeranjang > 0)
-              <span class="badge bg-success rounded-pill position-absolute top-0 start-100 translate-middle">
-                {{ $jumlahKeranjang }}
-              </span>
-            @endif
-          </button>
-          <div id="cart-popup" class="position-absolute text-dark bg-white shadow rounded p-3 mt-2 z-3 d-none"
-               style="min-width: 315px; right: 0px; font-size: 14px;">
-            <h6 class="mb-3">Barang yang ada di Keranjang</h6>
-            @forelse($cartItems as $item)
-              <div class="d-flex align-items-start mb-2">
-                <img src="{{ asset('storage/' . ($item->item->photo->image ?? 'placeholder.jpg')) }}" alt="{{ $item->item->nama_barang }}" width="50" class="me-2 rounded">
-                <div>
-                  <small>{{ $item->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</small><br>
-                  <strong>{{ $item->item->nama_barang }}</strong><br>
-                  <small>Jumlah: {{ $item->qty }} {{ $item->item->satuan }}</small>
+        @if(Auth::user()->role !== 'admin')
+          @php
+            $cartItems = \App\Models\Cart::where('user_id', Auth::id())->get();
+            $jumlahKeranjang = $cartItems->count();
+          @endphp
+          <div class="position-relative">
+            <button id="cart-icon" class="icon-button text-dark bg-transparent border-0 p-0">
+              <i class="bi bi-bag-fill fs-5"></i>
+              @if($jumlahKeranjang > 0)
+                <span class="badge bg-success rounded-pill position-absolute top-0 start-100 translate-middle">
+                  {{ $jumlahKeranjang }}
+                </span>
+              @endif
+            </button>
+            <div id="cart-popup" class="position-absolute text-dark bg-white shadow rounded p-3 mt-2 z-3 d-none"
+                style="min-width: 315px; right: 0px; font-size: 14px;">
+              <h6 class="mb-3">Barang yang ada di Keranjang</h6>
+              @forelse($cartItems as $item)
+                <div class="d-flex align-items-start mb-2">
+                  <img src="{{ asset('storage/' . ($item->item->photo->image ?? 'placeholder.jpg')) }}" alt="{{ $item->item->nama_barang }}" width="50" class="me-2 rounded">
+                  <div>
+                    <small>{{ $item->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</small><br>
+                    <strong>{{ $item->item->nama_barang }}</strong><br>
+                    <small>Jumlah: {{ $item->qty }} {{ $item->item->satuan }}</small>
+                  </div>
                 </div>
+              @empty
+                <p class="text-muted">Keranjang kamu kosong.</p>
+              @endforelse
+              <div class="d-flex justify-content-between mt-3">
+                <a href="{{ route('user.history') }}" class="btn btn-outline-success btn-sm">Status Pengajuan</a>
+                <a href="{{ route('cart.index') }}" class="btn btn-success btn-sm">Lihat Keranjang</a>
               </div>
-            @empty
-              <p class="text-muted">Keranjang kamu kosong.</p>
-            @endforelse
-            <div class="d-flex justify-content-between mt-3">
-              <a href="{{ route('user.history') }}" class="btn btn-outline-success btn-sm">Status Pengajuan</a>
-              <a href="{{ route('cart.index') }}" class="btn btn-success btn-sm">Lihat Keranjang</a>
             </div>
           </div>
-        </div>
+        @endif
       @else
         <a href="{{ route('login') }}" class="text-dark text-decoration-none">
           <i class="bi bi-bag-fill fs-5"></i>
         </a>
-      @endauth
+    @endauth
 
       <div class="dropdown">
         <button id="user-icon" class="icon-button text-dark bg-transparent border-0 pe-3 dropdown-toggle "

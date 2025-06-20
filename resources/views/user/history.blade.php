@@ -108,6 +108,12 @@
                       <strong>Pesanan disetujui dan segera dikirimkan</strong><br>
                       {{ \Carbon\Carbon::parse($request->updated_at)->format('H:i:s, d M Y') }}
                     </li>
+                  @elseif($request->status == 'rejected')
+                    <li class="mb-3">
+                      <strong>Pesanan ditolak</strong><br>
+                      {{ $request->keterangan ?? 'Tidak ada keterangan' }} <br>
+                      {{ \Carbon\Carbon::parse($request->updated_at)->format('H:i:s, d M Y') }}
+                    </li>
                   @endif
                   @if(in_array($request->status, ['delivered', 'received']) && $request->tanggal_pengambilan)
                     <li class="mb-3">

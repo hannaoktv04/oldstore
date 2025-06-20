@@ -9,7 +9,7 @@
             <div class="card-body">
                 <h5 class="card-title">{{ $wishlist->nama_barang }}</h5>
                 <p class="mb-1">{{ $wishlist->deskripsi }}</p>
-                <p class="mb-1">Kategori: {{ $wishlist->category->nama ?? '-' }}</p>
+                <p class="mb-1">Kategori: {{ $wishlist->category->categori_name ?? '-' }}</p>
                 <p class="mb-1">Jumlah Diusulkan: {{ $wishlist->qty_diusulkan }}</p>
                 <p class="mb-1">Pemohon: <strong>{{ $wishlist->user->nama ?? 'Tidak diketahui' }}</strong></p>
                 <p class="mb-1">Status:
