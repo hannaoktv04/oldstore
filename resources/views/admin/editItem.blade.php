@@ -5,6 +5,7 @@
 @section('content')
 <div class="container mt-4">
     <h5 class="mb-4">Edit Item</h5>
+
     @foreach (['success'=>'success','error'=>'danger'] as $k=>$t)
         @if(session($k))
             <div class="alert alert-{{ $t }} alert-dismissible fade show" role="alert">
@@ -16,16 +17,31 @@
 
     <form action="{{ route('admin.items.update', $item->id) }}" method="POST" enctype="multipart/form-data">
         @csrf @method('PUT')
+
         <div class="card shadow-sm p-4 mb-4">
             <h6 class="fw-semibold mb-3">Foto Item</h6>
-            <div class="mb-3 d-flex flex-wrap gap-2">
-                <img src="{{ asset('storage/'.$item->photo_url) }}" class="rounded" style="width:72px;height:72px;object-fit:cover">
-                <label class="upload-box upload-trigger">
-                    <input type="file" name="photo_Item[]" class="d-none" multiple accept="image/*">
-                    <div class="upload-placeholder"><i class="bi bi-image fs-2 text-secondary"></i></div>
-                </label>
+            <div id="imageUploadWrapper" class="d-flex flex-wrap gap-2">
+                @foreach ($item->images as $img)
+                    <div class="upload-box">
+                        <img src="{{ asset('storage/' . $img->image) }}" class="preview">
+                        <div class="tools">
+                            <i class="bi bi-crop" onclick="openCropper(this)"></i>
+                            <i class="bi bi-trash" onclick="removeImage(this)"></i>
+                        </div>
+                        <input type="file" name="photo_Item[]" accept="image/*" style="display: none;">
+                    </div>
+                @endforeach
+
+                <div class="upload-box">
+                    <label class="upload-trigger">
+                        <input type="file" accept="image/*" class="d-none" onchange="handleImageUpload(this)">
+                        <div class="upload-placeholder d-flex flex-column justify-content-center align-items-center h-100">
+                            <i class="bi bi-image fs-2 d-block text-secondary"></i>
+                        </div>
+                    </label>
+                </div>
             </div>
-            <small class="text-muted">Tambah hingga 5 gambar ( JPEG/PNG ≤ 2 MB ).</small>
+            <small class="text-muted">Format JPEG/PNG, maksimal 2MB per gambar.</small>
         </div>
 
         <div class="card shadow-sm p-4 mb-4">

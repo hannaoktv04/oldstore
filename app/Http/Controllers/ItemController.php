@@ -92,66 +92,63 @@ class ItemController extends Controller
         }
     }
 
-    public function update(Request $request, Item $item)
+   public function update(Request $request, Item $item)
     {
         DB::beginTransaction();
         try {
             $validated = $request->validate([
-                'nama_barang' => 'required|string|max:255',
-                'kode_barang' => 'required|string|max:255|unique:items,kode_barang,' . $item->id,
-                'satuan'      => 'required|string',
-                'deskripsi'   => 'required|string',
-                'category_id' => 'nullable|exists:category,id',
-                'photo_Item'   => 'nullable|array|max:5',
-                'photo_Item.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+                'nama_barang'   => 'required|string|max:255',
+                'kode_barang'   => 'required|string|max:255|unique:items,kode_barang,' . $item->id,
+                'satuan'        => 'required|string',
+                'deskripsi'     => 'required|string',
+                'category_id'   => 'nullable|exists:category,id',
+                'photo_Item'    => 'nullable|array|max:5',
+                'photo_Item.*'  => 'image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
             $item->update([
-                'nama_barang'   => $validated['nama_barang'],
-                'kode_barang'   => $validated['kode_barang'],
-                'satuan'        => $validated['satuan'],
-                'deskripsi'     => $validated['deskripsi'],
-                'category_id'   => $validated['category_id'],
+                'nama_barang' => $validated['nama_barang'],
+                'kode_barang' => $validated['kode_barang'],
+                'satuan'      => $validated['satuan'],
+                'deskripsi'   => $validated['deskripsi'],
+                'category_id' => $validated['category_id'],
             ]);
 
-            $stock = ItemStock::where('item_id', $item->id)->first();
-            if ($stock) {
-                $stock->qty = $validated['stok'];
-                $stock->save();
-            } else {
-                ItemStock::create([
-                    'item_id' => $item->id,
-                    'qty' => $validated['stok'],
-                ]);
-            }
-
             if ($request->hasFile('photo_Item')) {
-                $firstImageId = null;
-
                 foreach ($request->file('photo_Item') as $index => $file) {
                     $path = $file->store('images', 'public');
-                    $image = ItemImage::create([
+                    $img = ItemImage::create([
                         'item_id' => $item->id,
                         'image'   => $path,
                     ]);
 
-                    if ($index === 0) {
-                        $firstImageId = $image->id;
+                    if (!$item->photo_id && $index === 0) {
+                        $item->update(['photo_id' => $img->id]);
                     }
                 }
-                if ($firstImageId) {
-                    $item->update(['photo_id' => $firstImageId]);
-                }
             }
-
             DB::commit();
             return redirect()->route('admin.items')->with('success', 'Item berhasil diperbarui!');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
-            return redirect()->back()->with('error', 'Gagal memperbarui item.');
+            return redirect()->back()->with('error', 'Gagal memperbarui item: ' . $e->getMessage());
         }
     }
+
+    public function deleteImage(ItemImage $image)
+    {
+        if ($image->id === optional($image->item)->photo_id) {
+            return back()->with('error', 'Gambar utama tidak boleh dihapus langsung.');
+        }
+
+        Storage::disk('public')->delete($image->image);
+        $image->delete();
+
+        return back()->with('success', 'Gambar berhasil dihapus.');
+    }
+
+
 
     public function index()
     {
@@ -171,7 +168,7 @@ class ItemController extends Controller
     public function itemList()
     {
         $items = Item::with(['images', 'category'])
-                    ->withCount('images as variant_count') // <-- sesuaikan dengan relasi 'images'
+                    ->withCount('images as variant_count') 
                     ->withSum('stocks as total_stok', 'qty')
                     ->orderBy('nama_barang')
                     ->get();
@@ -192,17 +189,19 @@ class ItemController extends Controller
     }
 
 
-public function toggleState(Item $item)
-{
-    if (!$item->state) {
-        $item->state()->create(['is_archived' => false]);
+    public function toggleState(Item $item)
+    {
+        if (!$item->state) {
+            $item->state()->create(['is_archived' => false]);
+            $item->load('state');
+        }
+        $current = $item->state->is_archived;
+        $item->state->update([
+            'is_archived' => !$current
+        ]);
+
+        return back()->with('status', 'Status item berhasil diperbarui.');
     }
-    $current = $item->state->is_archived;
-    $item->state->update([
-        'is_archived' => !$current
-    ]);
-    return back()->with('status', 'Status item berhasil diperbarui.');
-}
 
     public function bulkAction(Request $request)
     {

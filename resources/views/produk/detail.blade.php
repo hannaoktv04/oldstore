@@ -72,7 +72,7 @@
                 @if ($produk->stok_minimum > 0)
                 <form method="POST" action="{{ route('user.wishlist', ['id' => $produk->id]) }}">
                     @csrf
-                    <button type="button" id="cart-icon" class="icon-button text-dark bg-transparent border-0 p-1 "
+                    <button type="button" id="heart-icon" class="icon-button text-dark bg-transparent border-0 p-1 "
                         data-bs-toggle="modal" data-bs-target="#wishlistModal">
                         <i class="bi bi-heart fs-4"></i>
                     </button>

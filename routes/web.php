@@ -32,10 +32,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/produk/{id}/pesanLangsung', [CartController::class, 'pesanLangsung'])->name('produk.pesanLangsung');
     Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::get('/kategori/{id}', [CategoryController::class, 'show'])->name('kategori.show');
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-    Route::get('/kategori/{id}', [App\Http\Controllers\CategoryController::class, 'show'])->name('kategori.show');
     Route::post('/pengajuan/{id}/konfirmasi', [ItemRequestController::class, 'konfirmasiUser'])->name('pengajuan.konfirmasiUser');
-    Route::get('/pengajuan/enota/{id}', [\App\Http\Controllers\ItemRequestController::class, 'showENota'])->name('pengajuan.enota');
+    Route::get('/pengajuan/enota/{id}', [ItemRequestController::class, 'showENota'])->name('pengajuan.enota');
 });
 
 
@@ -103,6 +103,7 @@ Route::middleware(['auth', 'can:isAdmin'])->group(function () {
     Route::put('/admin/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
     Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
     Route::post('/admin/categories/bulk-delete', [CategoryController::class, 'bulkDelete'])->name('admin.categories.bulkDelete');
+    Route::delete('/admin/items/images/{image}', [ItemController::class, 'deleteImage'])->name('admin.items.images.destroy');
 
 });
 
@@ -123,7 +124,7 @@ Route::middleware(['auth'])->group(function () {
 // -------------------------
 // PUBLIC ROUTES (NO LOGIN REQUIRED)
 // -------------------------
-Route::get('/kategori', [ItemController::class, 'index'])->name('kategori.index');
+Route::get('/kategori', [CategoryController::class, 'index'])->name('kategori.index');
 
 Route::controller(ProductController::class)->group(function () {
     Route::get('/produk/{id}', 'show')->name('produk.show');

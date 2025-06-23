@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Item;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -11,8 +12,19 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::withCount('items')->get();
-        return view('admin.categoryItem', compact('categories'));
+
+        if (auth()->user()->role === 'admin') {
+            return view('admin.categoryItem', compact('categories'));
+        } else {
+            $items = Item::with(['category', 'photo'])
+            ->orderByRaw('stok_minimum = 0') 
+            ->orderBy('stok_minimum', 'desc')
+            ->get();
+
+            return view('layouts.kategori', compact('categories', 'items'));
+        }
     }
+
 
 
     public function store(Request $request)
@@ -32,14 +44,14 @@ class CategoryController extends Controller
         ]);
 
         $category->update($validated);
-        return redirect()->route('admin.category.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Kategori berhasil diubah!');
     }
 
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect()->route('admin.category.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Kategori berhasil dihapus!');
     }
 
@@ -67,8 +79,12 @@ class CategoryController extends Controller
     public function show($id)
     {
         $categories = Category::withCount('items')->get();
-        $selectedCategory = Category::with('items.photo')->findOrFail($id);
-        $items = $selectedCategory->items;
+        $selectedCategory = Category::findOrFail($id);
+        $items = Item::with(['category', 'photo'])
+            ->where('category_id', $id)
+            ->orderByRaw('stok_minimum = 0')
+            ->orderBy('stok_minimum', 'desc')
+            ->get();
 
         return view('layouts.kategori', compact('categories', 'items', 'selectedCategory'));
     }
