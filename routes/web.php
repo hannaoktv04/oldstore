@@ -69,43 +69,40 @@ Route::get('/', function () {
 // -------------------------
 // ADMIN ROUTES (ADMIN-ONLY)
 // -------------------------
-Route::middleware(['auth', 'can:isAdmin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/pengajuan/status/{status}', [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
-    Route::post('/pengajuan/{pengajuan}/approve', [AdminPengajuanController::class, 'approve'])->name('pengajuan.approve');
-    Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('pengajuan.reject');
-    Route::post('/pengajuan/{pengajuan}/deliver', [AdminPengajuanController::class, 'deliver'])->name('pengajuan.deliver');
-    Route::post('/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])->name('pengajuan.received');
-     Route::post('/admin/pengajuan/{pengajuan}/deliver',  [AdminPengajuanController::class, 'deliver'])
-        ->name('admin.pengajuan.deliver');
+Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
-    Route::post('/admin/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])
-        ->name('admin.pengajuan.received');   
-    Route::get('/admin/pengajuan/{pengajuan}/nota',      [AdminPengajuanController::class, 'nota'])
-        ->name('admin.pengajuan.nota');
-    Route::get('/pengajuan/{pengajuan}/nota', [AdminPengajuanController::class, 'nota'])->name('pengajuan.nota');
-    Route::get('/admin/add-item', [ItemController::class, 'create'])->name('admin.addItem');
-    Route::post('/admin/add-item', [ItemController::class, 'store'])->name('admin.storeItem');
-    Route::get('/admin/wishlist', [AdminWishlistController::class, 'index'])->name('admin.wishlist.index');
-    Route::post('/admin/wishlist/{id}/akomodasi', [AdminWishlistController::class, 'akomodasi'])->name('admin.wishlist.akomodasi');
-    Route::post('/admin/wishlist/{id}/tolak', [AdminWishlistController::class, 'tolak'])->name('admin.wishlist.tolak');
-    Route::get('/admin/items', [ItemController::class, 'itemList'])->name('admin.items');
-    Route::get('/admin/items/{item}/edit', [ItemController::class, 'edit'])->name('admin.items.edit');
-    Route::put('/admin/items/{item}', [ItemController::class, 'update'])->name('admin.items.update');
-    Route::post('/admin/items/bulk-action', [ItemController::class, 'bulkAction'])->name('admin.items.bulkAction');
-    Route::post('admin/items/toggle/{item}', [ItemController::class, 'toggleState'])->name('admin.items.toggle');
-    Route::delete('/admin/items/{item}', [ItemController::class, 'destroy'])->name('admin.items.destroy');
-    Route::get('/admin/stok/koreksi', [StockAdjustmentController::class, 'create'])->name('admin.stok.koreksi');
-    Route::post('/admin/stok/koreksi', [StockAdjustmentController::class, 'store'])->name('admin.stok.koreksi.store');
+    Route::get('/pengajuan/status/{status}', [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
+    Route::get('/pengajuan/{pengajuan}/nota', [AdminPengajuanController::class, 'nota'])->name('admin.pengajuan.nota');
+    Route::post('/pengajuan/{pengajuan}/deliver', [AdminPengajuanController::class, 'deliver'])->name('admin.pengajuan.deliver');
+    Route::post('/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])->name('admin.pengajuan.received');
+    Route::post('/pengajuan/{pengajuan}/approve', [AdminPengajuanController::class, 'approve'])->name('admin.pengajuan.approve');
+    Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('admin.pengajuan.reject');
 
-    Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
-    Route::post('/admin/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
-    Route::put('/admin/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
-    Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
-    Route::post('/admin/categories/bulk-delete', [CategoryController::class, 'bulkDelete'])->name('admin.categories.bulkDelete');
-    Route::delete('/admin/items/images/{image}', [ItemController::class, 'deleteImage'])->name('admin.items.images.destroy');
+    Route::get('/add-item', [ItemController::class, 'create'])->name('admin.addItem');
+    Route::post('/add-item', [ItemController::class, 'store'])->name('admin.storeItem');
+    Route::get('/items', [ItemController::class, 'itemList'])->name('admin.items');
+    Route::get('/items/{item}/edit', [ItemController::class, 'edit'])->name('admin.items.edit');
+    Route::put('/items/{item}', [ItemController::class, 'update'])->name('admin.items.update');
+    Route::delete('/items/{item}', [ItemController::class, 'destroy'])->name('admin.items.destroy');
+    Route::post('/items/bulk-action', [ItemController::class, 'bulkAction'])->name('admin.items.bulkAction');
+    Route::post('/items/toggle/{item}', [ItemController::class, 'toggleState'])->name('admin.items.toggle');
+    Route::delete('/items/images/{image}', [ItemController::class, 'deleteImage'])->name('admin.items.images.destroy');
 
+    Route::get('/wishlist', [AdminWishlistController::class, 'index'])->name('admin.wishlist.index');
+    Route::post('/wishlist/{id}/akomodasi', [AdminWishlistController::class, 'akomodasi'])->name('admin.wishlist.akomodasi');
+    Route::post('/wishlist/{id}/tolak', [AdminWishlistController::class, 'tolak'])->name('admin.wishlist.tolak');
+
+    Route::get('/stok/koreksi', [StockAdjustmentController::class, 'create'])->name('admin.stok.koreksi');
+    Route::post('/stok/koreksi', [StockAdjustmentController::class, 'store'])->name('admin.stok.koreksi.store');
+
+    Route::get('/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
+    Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
+    Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
+    Route::post('/categories/bulk-delete', [CategoryController::class, 'bulkDelete'])->name('admin.categories.bulkDelete');
 });
+
 
 // -------------------------
 // USER ROUTES (LOGGED-IN USERS)
@@ -118,7 +115,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('user.wishlist');
     Route::post('/wishlist/{id}', [WishlistController::class, 'addToWishlist'])->name('user.wishlist.store');
     Route::post('/update-pengambilan/{id}', [ItemRequestController::class, 'updateTanggalPengambilan']);
-    
+
 });
 
 // -------------------------

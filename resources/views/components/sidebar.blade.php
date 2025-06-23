@@ -7,7 +7,6 @@
 <div class="sidebar-admin">
     <h6 class="text-uppercase fw-bold mb-3">Dashboard</h6>
 
-    {{-- Produk --}}
     <ul class="nav flex-column mb-2">
         <li class="nav-item">
             <a id="toggleProduk" class="nav-link d-flex justify-content-between text-dark" data-bs-toggle="collapse"
@@ -28,6 +27,7 @@
             </div>
         </li>
     </ul>
+
 
     <ul class="nav flex-column mb-2">
         <li class="nav-item">
@@ -71,10 +71,10 @@
                    class="nav-link d-flex py-1 {{ request()->routeIs('admin.stok.koreksi') ? 'active' : 'text-dark' }}">
                     Koreksi Stok
                 </a>
-                <a href="#"
-                   class="nav-link d-flex py-1 text-dark">
+                {{-- <a href="{{ route('admin.stokOpname') }}"
+                   class="nav-link d-flex py-1 text-dark {{ request()->routeIs('admin.stokOpname') ? 'active' : 'text-dark' }}">
                     Stok Opname
-                </a>
+                </a> --}}
             </div>
         </li>
     </ul>

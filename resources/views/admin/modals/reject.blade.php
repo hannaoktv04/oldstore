@@ -2,7 +2,7 @@
 
 <div class="modal fade" id="rejectModal-{{ $pengajuan->id }}" tabindex="-1">
     <div class="modal-dialog">
-        <form method="POST" action="{{ route('pengajuan.reject', $pengajuan->id) }}">
+        <form method="POST" action="{{ route('admin.pengajuan.reject', $pengajuan->id) }}">
             @csrf
             <div class="modal-content border-0 shadow-lg rounded-4">
                 <div class="modal-header bg-danger text-white rounded-top-4">

@@ -2,7 +2,7 @@
 
 <div class="modal fade" id="approveModal-{{ $pengajuan->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-        <form method="POST" action="{{ route('pengajuan.approve', $pengajuan->id) }}">
+        <form method="POST" action="{{ route('admin.pengajuan.approve', $pengajuan->id) }}">
             @csrf
             <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
                 <div class="modal-header bg-success text-white py-3">

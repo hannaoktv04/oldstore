@@ -13,19 +13,13 @@ class CategoryController extends Controller
     {
         $categories = Category::withCount('items')->get();
 
-        if (auth()->user()->role === 'admin') {
-            return view('admin.categoryItem', compact('categories'));
-        } else {
-            $items = Item::with(['category', 'photo'])
-            ->orderByRaw('stok_minimum = 0') 
+        $items = Item::with(['category', 'photo'])
+            ->orderByRaw('stok_minimum = 0')
             ->orderBy('stok_minimum', 'desc')
             ->get();
 
             return view('layouts.kategori', compact('categories', 'items'));
-        }
     }
-
-
 
     public function store(Request $request)
     {
