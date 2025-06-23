@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Item_images;
+use App\Models\ItemStock;
 
 class Item extends Model
 {
@@ -17,25 +19,41 @@ class Item extends Model
         'photo_id',
     ];
 
-    public function photos()
+    public function images()
     {
-        return $this->hasMany(Photo::class);
+        return $this->hasMany(ItemImage::class);
     }
 
-    public function photo()
+     public function photo()
     {
-        return $this->belongsTo(Photo::class, 'photo_id');
+        return $this->belongsTo(ItemImage::class, 'photo_id');
     }
+
 
     public function getPhotoUrlAttribute()
-    {
-        $filename = $this->photo->image ?? 'default.jpg';
-        return asset('storage/' . $filename);
-    }
+{
+    return $this->gallery->first() ?? 'assets/img/default.png';
+}
 
+    public function getGalleryAttribute()
+    {
+        $gallery = collect();
+        if ($this->photo && $this->photo->image) {
+            $gallery->push($this->photo->image);
+        }
+        foreach ($this->images as $image) {
+            if ((!$this->photo || $image->id !== $this->photo->id) && $image->image) {
+                $gallery->push($image->image);
+            }
+        }
+        if ($gallery->isEmpty()) {
+            $gallery->push('assets/img/default.png');
+        }
+        return $gallery;
+    }
     public function stocks()
     {
-        return $this->hasMany(ItemStock::class);
+        return $this->hasOne(ItemStock::class);
     }
     public function getTotalStokAttribute()
     {
@@ -54,6 +72,10 @@ class Item extends Model
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
+    }
+    public function state()
+    {
+        return $this->hasOne(ItemState::class);
     }
 
 }

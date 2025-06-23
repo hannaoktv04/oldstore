@@ -55,8 +55,7 @@
             <a href="{{ route('produk.show', ['id' => $item->id]) }}"
                class="text-decoration-none {{ $stokHabis ? 'pointer-events-none' : '' }}">
                 <div class="d-flex align-items-center">
-                    <img src="{{ $item->photo_url }}" alt="gambar" width="80" height="80"
-                         class="rounded me-3" style="object-fit: cover;">
+                    <img src="{{ asset('storage/' . $cart->item->photo_url) }}" alt="gambar" width="80" height="80" class="rounded me-3" style="object-fit: cover;">
                     <div>
                         <div class="text-muted small">{{ $item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</div>
                         <div class="fw-semibold text-dark">{{ $item->nama_barang }}</div>

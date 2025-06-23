@@ -17,7 +17,7 @@ return new class extends Migration
             $table->double('qty_sebelum', 15, 2);
             $table->double('qty_fisik', 15, 2);
             $table->double('qty_selisih', 15, 2);
-            $table->enum('tipe_adjustment', ['opname', 'koreksi', 'lainnya']);
+            $table->enum('tipe_adjustment', ['opname', 'koreksi', 'stok awal']);
             $table->text('keterangan')->nullable();
             $table->foreignId('adjusted_by')->constrained('users')->onDelete('cascade');
             $table->timestamp('adjusted_at');
