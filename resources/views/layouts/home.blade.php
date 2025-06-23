@@ -2,10 +2,10 @@
 
 @section('content')
 
-<div class="container">
+<div class="container py-10">
     <div class="position-relative mb-5 overflow-hidden rounded-4 hero-wrapper" style="height: 400px;">
         <img src="{{ asset('assets/img/hero.jpg') }}" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="Hero Image">
-        
+
         <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50"></div>
 
         <div class="position-absolute top-50 start-0 translate-middle-y ps-8 text-white hero-content fade-in">
@@ -33,8 +33,7 @@
                             </div>
                         @endif
 
-                        <img src="{{ asset('storage/' . ($item->photo?->image ?? 'placeholder.jpg')) }}" class="card-img-top" style="height: 160px; object-fit: cover;" alt="{{ $item->nama_barang }}">
-
+                        <img src="{{ asset('storage/' . ($item->gallery->first() ?? 'assets/img/default.png')) }}" class="card-img-top" style="height: 160px; object-fit: cover;" alt="{{ $item->nama_barang }}">
                         <div class="card-body">
                             <h6 class="card-title">{{ $item->nama_barang }}</h6>
                             <p class="card-text small text-muted mb-1">{{ $item->category?->categori_name ?? '-' }}</p>

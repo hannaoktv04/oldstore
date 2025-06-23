@@ -42,7 +42,7 @@
         <div class="d-flex align-items-center justify-content-between ps-7">
             <a href="{{ route('produk.show', ['id' => $cart->item->id]) }}" class="text-decoration-none">
                 <div class="d-flex align-items-center">
-                    <img src="{{ $cart->item->photo_url }}" alt="gambar" width="80" height="80" class="rounded me-3" style="object-fit: cover;">
+                    <img src="{{ asset('storage/' . $cart->item->photo_url) }}" alt="gambar" width="80" height="80" class="rounded me-3" style="object-fit: cover;">
                     <div>
                         <div class="text-muted small">{{ $cart->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</div>
                         <div class="fw-semibold text-dark">{{ $cart->item->nama_barang }}</div>
@@ -83,7 +83,7 @@
     @endforelse
 
     @if($carts->count())
-        </div> 
+        </div>
         <div class="col-lg-4">
             <div class="bg-white rounded shadow-sm p-3">
                 <h5 class="fw-semibold mb-3">Ringkasan Permintaan</h5>

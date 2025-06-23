@@ -17,6 +17,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AdminWishlistController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\StockAdjustmentController;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/purchase-orders', [PurchaseOrderController::class, 'index'])->name('admin.purchase_orders.index');
@@ -72,30 +73,30 @@ Route::middleware(['auth', 'can:isAdmin'])->group(function () {
     Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('pengajuan.reject');
     Route::post('/pengajuan/{pengajuan}/deliver', [AdminPengajuanController::class, 'deliver'])->name('pengajuan.deliver');
     Route::post('/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])->name('pengajuan.received');
-     Route::post('/admin/pengajuan/{pengajuan}/deliver',  [AdminPengajuanController::class, 'deliver'])
-        ->name('admin.pengajuan.deliver');
-
-    Route::post('/admin/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])
-        ->name('admin.pengajuan.received');   // ← inilah yang dicari Blade!
-
-    // Nota
-    Route::get('/admin/pengajuan/{pengajuan}/nota',      [AdminPengajuanController::class, 'nota'])
-        ->name('admin.pengajuan.nota');
+    Route::post('/admin/pengajuan/{pengajuan}/deliver', [AdminPengajuanController::class, 'deliver'])->name('admin.pengajuan.deliver');
+    Route::post('/admin/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])->name('admin.pengajuan.received');
+    Route::get('/admin/pengajuan/{pengajuan}/nota', [AdminPengajuanController::class, 'nota'])->name('admin.pengajuan.nota');
     Route::get('/pengajuan/{pengajuan}/nota', [AdminPengajuanController::class, 'nota'])->name('pengajuan.nota');
-
     Route::get('/admin/add-item', [ItemController::class, 'create'])->name('admin.addItem');
     Route::post('/admin/add-item', [ItemController::class, 'store'])->name('admin.storeItem');
-    Route::resource('categories', CategoryController::class);
     Route::get('/admin/wishlist', [AdminWishlistController::class, 'index'])->name('admin.wishlist.index');
     Route::post('/admin/wishlist/{id}/akomodasi', [AdminWishlistController::class, 'akomodasi'])->name('admin.wishlist.akomodasi');
     Route::post('/admin/wishlist/{id}/tolak', [AdminWishlistController::class, 'tolak'])->name('admin.wishlist.tolak');
     Route::get('/admin/items', [ItemController::class, 'itemList'])->name('admin.items');
     Route::get('/admin/items/{item}/edit', [ItemController::class, 'edit'])->name('admin.items.edit');
     Route::put('/admin/items/{item}', [ItemController::class, 'update'])->name('admin.items.update');
+    Route::post('/admin/items/bulk-action', [ItemController::class, 'bulkAction'])->name('admin.items.bulkAction');
+    Route::post('admin/items/toggle/{item}', [ItemController::class, 'toggleState'])->name('admin.items.toggle');
     Route::delete('/admin/items/{item}', [ItemController::class, 'destroy'])->name('admin.items.destroy');
-    Route::post('/admin/items/{item}/toggle', [ItemController::class, 'toggle'])->name('admin.items.toggle');
-});
+    Route::get('/admin/stok/koreksi', [StockAdjustmentController::class, 'create'])->name('admin.stok.koreksi');
+    Route::post('/admin/stok/koreksi', [StockAdjustmentController::class, 'store'])->name('admin.stok.koreksi.store');
 
+    Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+    Route::post('/admin/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
+    Route::put('/admin/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
+    Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
+    Route::post('/admin/categories/bulk-delete', [CategoryController::class, 'bulkDelete'])->name('admin.categories.bulkDelete');
+});
 
 // -------------------------
 // USER ROUTES (LOGGED-IN USERS)

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 <div class="container py-4">
@@ -24,12 +24,9 @@
                 <div class="col-12 col-md-6 col-lg-4">
                     @foreach ($pengajuan->details as $detail)
                         <div class="d-flex align-items-start mb-3">
-                            <img
-                                src="{{ $detail->item->photo_url }}"
-                                class="me-3 rounded"
-                                width="80" height="80"
-                                style="object-fit: cover;"
-                            >
+                        <img
+                            src="{{ asset('storage/' . ($detail->item->gallery->first() ?? 'assets/img/default.png')) }}"
+                            class="me-3 rounded" width="80" height="80" style="object-fit: cover;" alt="{{ $detail->item->nama_barang }}">
                             <div>
                                 <strong>{{ $detail->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</strong><br>
                                 {{ $detail->item->nama_barang }}<br>
@@ -66,7 +63,6 @@
     <a href="{{ route('admin.dashboard') }}" class="btn btn-success">Kembali ke Dashboard</a>
 </div>
 
-{{-- Alerts --}}
 @if (session('success'))
     <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
         {{ session('success') }}
