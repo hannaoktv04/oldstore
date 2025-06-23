@@ -12,28 +12,31 @@
       <p class="lead mb-0">PERI / Kategori Barang</p>
     </div>
   </div>
+
   <div class="d-block d-md-none mb-3 position-relative z-3">
     <button class="btn border-0 fw-bold px-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#kategoriMobile" aria-controls="kategoriMobile">
-        Kategori <i class="bi bi-chevron-right"></i>
+      Kategori <i class="bi bi-chevron-right"></i>
     </button>
-    </div>
+  </div>
 
-    <div class="offcanvas offcanvas-start custom-kategori-offcanvas" tabindex="-1" id="kategoriMobile" aria-labelledby="kategoriMobileLabel">
+  <div class="offcanvas offcanvas-start custom-kategori-offcanvas" tabindex="-1" id="kategoriMobile" aria-labelledby="kategoriMobileLabel">
     <div class="offcanvas-header py-2 px-3 border-bottom">
-        <h6 class="offcanvas-title fw-bold mb-0" id="kategoriMobileLabel">Kategori</h6>
-        <button type="button" class="btn border-0" data-bs-dismiss="offcanvas" aria-label="Close">
+      <h6 class="offcanvas-title fw-bold mb-0" id="kategoriMobileLabel">Kategori</h6>
+      <button type="button" class="btn border-0" data-bs-dismiss="offcanvas" aria-label="Close">
         <i class="bi bi-chevron-left fs-5"></i>
-        </button>
+      </button>
     </div>
     <div class="offcanvas-body p-0 overflow-auto">
-        <ul class="list-group list-group-flush">
+      <ul class="list-group list-group-flush">
         @foreach ($categories as $category)
-            <li class="list-group-item d-flex justify-content-between align-items-center small px-3 py-2">
-            {{ $category->categori_name }}
-            <span class="badge bg-success rounded-pill">{{ $category->items->count() }}</span>
-            </li>
+          <li class="list-group-item small px-3 py-2">
+            <a href="{{ route('kategori.show', $category->id) }}" class="text-decoration-none d-flex justify-content-between align-items-center w-100">
+              {{ $category->categori_name }}
+              <span class="badge bg-success rounded-pill">{{ $category->items_count }}</span>
+            </a>
+          </li>
         @endforeach
-        </ul>
+      </ul>
     </div>
   </div>
 
@@ -42,9 +45,11 @@
       <h5 class="fw-bold mb-3">Kategori Barang</h5>
       <ul class="list-group list-group-flush">
         @foreach ($categories as $category)
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            {{ $category->categori_name }}
-            <span class="badge bg-success rounded-pill">{{ $category->items->count() }}</span>
+          <li class="list-group-item px-3 py-2">
+            <a href="{{ route('kategori.show', $category->id) }}" class="text-decoration-none d-flex justify-content-between align-items-center w-100">
+              {{ $category->categori_name }}
+              <span class="badge bg-success rounded-pill">{{ $category->items_count }}</span>
+            </a>
           </li>
         @endforeach
       </ul>
@@ -52,11 +57,11 @@
 
     <div class="col-md-9">
       <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
-        @foreach ($items as $item)
+        @forelse ($items as $item)
           @php $stokHabis = $item->stok_minimum == 0; @endphp
           <div class="col">
             <a href="{{ route('produk.show', ['id' => $item->id]) }}" class="text-decoration-none {{ $stokHabis ? 'text-muted' : 'text-dark' }}">
-              <div class="card h-100 card-3d shadow-sm position-relative {{ $stokHabis ? 'bg-light' : '' }}" style="{{ $stokHabis ? 'opacity: 0.6;' : '' }}">
+              <div class="card card-3d h-100 shadow-sm position-relative {{ $stokHabis ? 'bg-light' : '' }}" style="{{ $stokHabis ? 'opacity: 0.6;' : '' }}">
                 @if($stokHabis)
                   <div class="position-absolute top-0 end-0 m-2">
                     <span class="badge bg-danger">Stok Habis</span>
@@ -77,7 +82,11 @@
               </div>
             </a>
           </div>
-        @endforeach
+        @empty
+          <div class="col-12">
+            <div class="alert alert-info">Belum ada produk dalam kategori ini.</div>
+          </div>
+        @endforelse
       </div>
     </div>
   </div>

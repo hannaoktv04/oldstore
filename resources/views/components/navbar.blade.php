@@ -1,16 +1,16 @@
 <nav class="navbar navbar-expand-lg bg-white shadow-sm py-2 sticky-top">
   <div class="container d-flex justify-content-between align-items-center">
 
-    <div class="d-flex align-items-center gap-3">
-      <a class="navbar-brand fw-bold brand-custom fs-3" href="{{ url('/') }}">
+    <div class="d-flex align-items-center gap-2">
+      <a class="navbar-brand brand-custom d-flex align-items-center gap-2" href="{{ url('/') }}">
+        <img src="{{ asset('assets/img/peri.png') }}" alt="PERI Logo" style="height: 50px;">
         @if(Auth::check() && Auth::user()->role === 'admin')
-          PERI <span class="fw-normal text-secondary fs-6">Admin</span>
-        @else
-          PERI
+          <span class="fw-normal text-secondary fs-6">Admin</span>
         @endif
       </a>
       <a class="nav-link fw-medium" href="{{ url('/kategori') }}">Kategori</a>
     </div>
+
 
     <form class="d-none d-lg-flex me-3 flex-grow-1 mx-3" role="search" method="GET" action="{{ route('search') }}">
       <div class="input-group position-relative w-100 align-items-center">

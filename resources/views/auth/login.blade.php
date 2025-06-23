@@ -1,60 +1,42 @@
 @extends('layouts.auth')
 
 @section('content')
-<div class="container position-relative d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-  
-  <img src="{{ asset('assets/img/hello.png') }}" alt="Maskot" class="mascot d-none d-md-block">
+<div class="auth-wrapper d-flex align-items-stretch justify-content-center vh-100 vw-100">
+  <div class="auth-card d-flex flex-wrap flex-md-nowrap w-100">
 
-  <div class="login-box bg-white p-4 p-md-5 rounded-4 shadow w-100">
-    <div class="text-end mb-2">
-      <a href="{{ route('register') }}" class="text-decoration-none text-dark"><small>Register →</small></a>
+    <div class="image-section d-none d-md-flex align-items-center justify-content-center" style="width: 60%;">
+      <img src="{{ asset('assets/img/login.png') }}" alt="Login Illustration" class="img-fluid" style="max-height: 450px;">
     </div>
 
-    <h1 class="text-center fw-bold brand-custom mb-2" style="font-size: 3.5rem;">PERI</h1>
-    <p class="text-center text-muted mb-4"><small>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac tortor volutpat, vulputate massa non.
-    </small></p>
-
-    <form method="POST" action="{{ route('login') }}">
-      @csrf
-      <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" 
-              class="form-control @error('username') is-invalid @enderror" 
-              id="username" 
-              name="username" 
-              placeholder="Masukkan Username" 
-              required 
-              autofocus
-              value="{{ old('username') }}">
-        @error('username')
-          <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-      </div>
-
-      <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" 
-               class="form-control @error('password') is-invalid @enderror" 
-               id="password" 
-               name="password" 
-               placeholder="**************" 
-               required>
-        @error('password')
-          <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-      </div>
-
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-          <label class="form-check-label" for="remember">Remember me</label>
+    <div class="form-container d-flex align-items-center justify-content-center w-100" style="min-height: 100vh;">
+      <div class="card w-100 p-4 p-md-5 rounded-4 shadow mx-3 mx-md-0" style="max-width: 420px;">
+        <div class="text-end">
+          <a href="{{ route('register') }}" class="text-decoration-none text-success small">Register →</a>
         </div>
-        <a href="{{ route('password.request') }}" class="text-decoration-none small">Forgot Password?</a>
-      </div>
 
-      <button type="submit" class="btn btn-primary w-100 rounded-pill">Login</button>
-    </form>
+        <div class="text-center mb-1">
+          <img src="{{ asset('assets/img/peri.png') }}" alt="Logo" style="height: 70px;">
+        </div>
+
+        <form method="POST" action="{{ route('login') }}">
+          @csrf
+          <h4 class="mb-5 text-secondary text-center">Login</h4>
+
+          <input type="text" name="username" class="form-control mb-3" placeholder="Username" required>
+          <input type="password" name="password" class="form-control mb-5" placeholder="Password" required>
+
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="remember" id="remember">
+              <label class="form-check-label" for="remember">Remember me</label>
+            </div>
+            <a href="{{ route('password.request') }}" class="small text-success">Forget Password?</a>
+          </div>
+
+          <button type="submit" class="btn btn-success w-100 rounded-pill">Login</button>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 @endsection

@@ -65,4 +65,13 @@ class CategoryController extends Controller
 
         return redirect()->route('category.index')->with('success', 'Category deleted successfully!');
     }
+
+    public function show($id)
+    {
+        $categories = Category::withCount('items')->get();
+        $selectedCategory = Category::with('items.photo')->findOrFail($id);
+        $items = $selectedCategory->items;
+
+        return view('layouts.kategori', compact('categories', 'items', 'selectedCategory'));
+    }
 }

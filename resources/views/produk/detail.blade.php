@@ -66,7 +66,7 @@
                 <label for="qty " class="form-label fw-bold">Jumlah</label>
                 <div class="input-group btn-outline-success" style="width: fit-content; border: 1px solid #198754; border-radius: 50px; overflow: hidden;">
                     <button type="button" class="btn btn-outline-success px-3 py-1 border-0 qty-btn bg-white" onclick="ubahQty(-1)">-</button>
-                    <input type="number" id="qty" value="1" min="1" max="{{ $produk->stok_minimum }}" class="form-control text-center border-0 bg-white" style="max-width: 45px; height: 40px; line-height: 1; padding: 0 0.25rem;">
+                    <input type="number" id="qty" value="1" min="1" max="{{ $produk->stok_minimum }}" class="form-control text-center border-0 bg-white" style="max-width: 47px; height: 40px; line-height: 1; padding: 0 0.25rem;">
                     <button type="button" class="btn btn-outline-success px-3 py-1 border-0 qty-btn bg-white" onclick="ubahQty(1)">+</button>
                 </div>
                 <div id="qtyAlertContainer" class="mt-2"></div>

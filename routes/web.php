@@ -32,6 +32,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    Route::get('/kategori/{id}', [App\Http\Controllers\CategoryController::class, 'show'])->name('kategori.show');
+    Route::post('/pengajuan/{id}/konfirmasi', [ItemRequestController::class, 'konfirmasiUser'])->name('pengajuan.konfirmasiUser');
+    Route::get('/pengajuan/enota/{id}', [\App\Http\Controllers\ItemRequestController::class, 'showENota'])->name('pengajuan.enota');
 });
 
 
@@ -76,9 +79,7 @@ Route::middleware(['auth', 'can:isAdmin'])->group(function () {
         ->name('admin.pengajuan.deliver');
 
     Route::post('/admin/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])
-        ->name('admin.pengajuan.received');   // ← inilah yang dicari Blade!
-
-    // Nota
+        ->name('admin.pengajuan.received');   
     Route::get('/admin/pengajuan/{pengajuan}/nota',      [AdminPengajuanController::class, 'nota'])
         ->name('admin.pengajuan.nota');
     Route::get('/pengajuan/{pengajuan}/nota', [AdminPengajuanController::class, 'nota'])->name('pengajuan.nota');
@@ -94,6 +95,7 @@ Route::middleware(['auth', 'can:isAdmin'])->group(function () {
     Route::put('/admin/items/{item}', [ItemController::class, 'update'])->name('admin.items.update');
     Route::delete('/admin/items/{item}', [ItemController::class, 'destroy'])->name('admin.items.destroy');
     Route::post('/admin/items/{item}/toggle', [ItemController::class, 'toggle'])->name('admin.items.toggle');
+
 });
 
 
@@ -108,6 +110,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('user.wishlist');
     Route::post('/wishlist/{id}', [WishlistController::class, 'addToWishlist'])->name('user.wishlist.store');
     Route::post('/update-pengambilan/{id}', [ItemRequestController::class, 'updateTanggalPengambilan']);
+    
 });
 
 // -------------------------

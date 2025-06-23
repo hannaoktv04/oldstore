@@ -11,10 +11,14 @@ class ItemRequestController extends Controller
 {
     public function history()
     {
-        $requests = \App\Models\ItemRequest::with(['details.item'])
-            ->where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $requests = ItemRequest::with([
+            'details.item.category',
+            'details.item.photo',
+            'itemDelivery'
+        ])
+        ->where('user_id', auth()->id())
+        ->orderBy('created_at', 'desc')
+        ->get();
 
         return view('user.history', compact('requests'));
     }
@@ -38,6 +42,31 @@ class ItemRequestController extends Controller
         $itemRequest->save();
 
         return response()->json(['message' => 'Tanggal pengambilan diperbarui']);
+    }
+
+    public function konfirmasiUser($id)
+    {
+        $request = ItemRequest::findOrFail($id);
+
+        if ($request->status !== 'received') {
+            return back()->with('error', 'Pesanan belum bisa dikonfirmasi.');
+        }
+
+        $request->user_confirmed = true;
+        $request->save();
+
+        return back()->with('success', 'Pesanan telah dikonfirmasi.');
+    }
+
+    public function showENota($id)
+    {
+        $request = ItemRequest::with(['user', 'details.item.category', 'itemDelivery.operator'])->findOrFail($id);
+        
+        if ($request->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        return view('user.enota', compact('request'));
     }
 
 }

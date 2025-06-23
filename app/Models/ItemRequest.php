@@ -27,8 +27,7 @@ class ItemRequest extends Model
     }
     public function itemDelivery()
     {
-        return $this->hasOne(ItemDelivery::class);
-     }
-
+        return $this->hasOne(ItemDelivery::class, 'item_request_id');
+    }
 
 }
