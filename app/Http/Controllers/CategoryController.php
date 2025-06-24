@@ -83,4 +83,16 @@ class CategoryController extends Controller
         return view('layouts.kategori', compact('categories', 'items', 'selectedCategory'));
     }
 
+    public function publicView()
+    {
+        $categories = Category::withCount('items')->get();
+
+        $items = Item::with(['category', 'photo'])
+            ->orderByRaw('stok_minimum = 0')
+            ->orderBy('stok_minimum', 'desc')
+            ->get();
+
+        return view('admin.categoryItem', compact('categories', 'items'));
+    }
+
 }
