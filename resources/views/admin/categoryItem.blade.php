@@ -67,7 +67,6 @@
         </div>
     </form>
 </div>
-@endsection
 
 <div class="modal fade" id="modalTambahKategori" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
@@ -154,6 +153,7 @@
         </form>
     </div>
 </div>
+@endsection
 
 @push('scripts')
 <script src="{{ asset('assets/js/category-table.js') }}"></script>

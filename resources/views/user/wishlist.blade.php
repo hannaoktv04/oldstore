@@ -23,8 +23,7 @@
                 <tbody>
                     @foreach($wishlists as $item)
                     <tr>
-                        <td><img src="{{ asset('storage/' . ($item->photo->image ?? 'placeholder.jpg')) }}" width="80" height="80"
-                        class="rounded me-3" style="object-fit: cover;">{{ $item->nama_barang }}</td>
+                        <td>{{ $item->nama_barang }}</td>
                         <td>{{ $item->category->categori_name ?? '-' }}</td>
                         <td class="text-center">{{ $item->qty_diusulkan }}</td>
                         <td>

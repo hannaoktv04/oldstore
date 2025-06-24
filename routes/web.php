@@ -18,6 +18,7 @@ use App\Http\Controllers\AdminWishlistController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\StockAdjustmentController;
+use App\Http\Controllers\PengajuanController;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/purchase-orders', [PurchaseOrderController::class, 'index'])->name('admin.purchase_orders.index');
@@ -36,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
     Route::post('/pengajuan/{id}/konfirmasi', [ItemRequestController::class, 'konfirmasiUser'])->name('pengajuan.konfirmasiUser');
     Route::get('/pengajuan/enota/{id}', [ItemRequestController::class, 'showENota'])->name('pengajuan.enota');
+    Route::get('/pengajuan/{id}/download', [PengajuanController::class, 'downloadNota'])->name('pengajuan.downloadNota');
 });
 
 
@@ -96,7 +98,7 @@ Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
     Route::get('/stok/koreksi', [StockAdjustmentController::class, 'create'])->name('admin.stok.koreksi');
     Route::post('/stok/koreksi', [StockAdjustmentController::class, 'store'])->name('admin.stok.koreksi.store');
 
-    Route::get('/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+    Route::get('/categories', [CategoryController::class, 'publicView'])->name('admin.categories.index');
     Route::post('/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
     Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');

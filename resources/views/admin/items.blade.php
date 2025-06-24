@@ -88,7 +88,6 @@
         </div>
     </form>
 </div>
-@endsection
 
 <div class="modal fade" id="hapusModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
@@ -135,7 +134,7 @@
         </form>
     </div>
 </div>
-
+@endsection
 
 
 @push('scripts')
