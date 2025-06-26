@@ -10,4 +10,4 @@ import './sidebar.js';
 import './imageUploader.js';
 import './item-table.js';
 import './purchase_order.js';
-import './createPO.js';
+import './category-table.js';

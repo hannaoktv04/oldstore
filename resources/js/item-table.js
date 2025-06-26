@@ -1,86 +1,96 @@
-$(function () {
-    const table = $("#itemTable").DataTable({
-        columnDefs: [{ orderable: false, targets: [0, 3, 4] }],
-        order: [[1, "asc"]],
-    });
+if (!window.__itemTableInitialized) {
+    window.__itemTableInitialized = true;
 
-    const bar = $("#actionBar");
-    const bulk = $("#bulkActionForm");
+    $(function () {
+        let table;
+        if ($.fn.DataTable.isDataTable("#itemTable")) {
+            table = $("#itemTable").DataTable(); // pakai instance lama
+        } else {
+            table = $("#itemTable").DataTable({
+                columnDefs: [{ orderable: false, targets: [0, 3, 4] }],
+                order: [[1, "asc"]],
+            });
+        }
 
-    function syncHidden() {
-        bulk.find('input[name="selected_items[]"]').remove();
-        $(".item-checkbox:checked").each(function () {
-            $("<input>", {
-                type: "hidden",
-                name: "selected_items[]",
-                value: this.value,
-            }).appendTo(bulk);
-        });
-    }
+        const bar = $("#actionBar");
+        const bulk = $("#bulkActionForm");
 
-    function updateBar() {
-        const n = $(".item-checkbox:checked").length;
-        $("#selectedCount").text(`${n} produk dipilih`);
-        bar.toggleClass("d-none", n === 0);
-        if (n) checkFloating();
-        syncHidden();
-    }
+        function syncHidden() {
+            bulk.find('input[name="selected_items[]"]').remove();
+            $(".item-checkbox:checked").each(function () {
+                $("<input>", {
+                    type: "hidden",
+                    name: "selected_items[]",
+                    value: this.value,
+                }).appendTo(bulk);
+            });
+        }
 
-    function checkFloating() {
-        const info = document.getElementById("itemTable_info");
-        if (!info || bar.hasClass("d-none")) return;
-        const show =
-            info.getBoundingClientRect().bottom >
-            window.innerHeight - bar[0].offsetHeight;
-        bar.toggleClass("action-bar-fixed", show);
-    }
+        function updateBar() {
+            const n = $(".item-checkbox:checked").length;
+            $("#selectedCount").text(`${n} produk dipilih`);
+            bar.toggleClass("d-none", n === 0);
+            if (n) checkFloating();
+            syncHidden();
+        }
 
-    $(window).on("scroll resize", checkFloating);
+        function checkFloating() {
+            const info = document.getElementById("itemTable_info");
+            if (!info || bar.hasClass("d-none")) return;
+            const show =
+                info.getBoundingClientRect().bottom >
+                window.innerHeight - bar[0].offsetHeight;
+            bar.toggleClass("action-bar-fixed", show);
+        }
 
-    $("#selectAll").on("click", function () {
-        $(".item-checkbox").prop("checked", this.checked);
-        updateBar();
-    });
+        $(window).on("scroll resize", checkFloating);
 
-    $("#itemTable").on("change", ".item-checkbox", function () {
-        if (!this.checked) $("#selectAll").prop("checked", false);
-        updateBar();
-    });
-
-    $("#floatingSelectAll").on("click", function () {
-        $(".item-checkbox").prop("checked", this.checked);
-        $("#selectAll").prop("checked", this.checked);
-        updateBar();
-    });
-    table.on("draw", updateBar);
-
-    document.querySelectorAll(".btnHapusItem").forEach((btn) => {
-        btn.addEventListener("click", () => {
-            document
-                .getElementById("formHapusItem")
-                .setAttribute("action", btn.dataset.action);
-            document.getElementById("namaItemDihapus").textContent =
-                btn.dataset.nama;
+        $("#selectAll").on("click", function () {
+            $(".item-checkbox").prop("checked", this.checked);
+            updateBar();
         });
 
-        const bulkModal = document.getElementById("modalHapusBulk");
-        bulkModal.addEventListener("show.bs.modal", () => {
-            const selected = document.querySelectorAll(
-                ".item-checkbox:checked"
-            );
-            const container = bulkModal.querySelector("#bulkItemIds");
-            const label = bulkModal.querySelector("#jumlahItemDihapus");
+        $("#itemTable").on("change", ".item-checkbox", function () {
+            if (!this.checked) $("#selectAll").prop("checked", false);
+            updateBar();
+        });
 
-            container.innerHTML = "";
-            label.textContent = selected.length;
+        $("#floatingSelectAll").on("click", function () {
+            $(".item-checkbox").prop("checked", this.checked);
+            $("#selectAll").prop("checked", this.checked);
+            updateBar();
+        });
 
-            selected.forEach((cb) => {
-                const h = document.createElement("input");
-                h.type = "hidden";
-                h.name = "selected_items[]";
-                h.value = cb.value;
-                container.appendChild(h);
+        table.on("draw", updateBar);
+
+        document.querySelectorAll(".btnHapusItem").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                document
+                    .getElementById("formHapusItem")
+                    .setAttribute("action", btn.dataset.action);
+                document.getElementById("namaItemDihapus").textContent =
+                    btn.dataset.nama;
+            });
+
+            const bulkModal = document.getElementById("modalHapusBulk");
+            bulkModal.addEventListener("show.bs.modal", () => {
+                const selected = document.querySelectorAll(
+                    ".item-checkbox:checked"
+                );
+                const container = bulkModal.querySelector("#bulkItemIds");
+                const label = bulkModal.querySelector("#jumlahItemDihapus");
+
+                container.innerHTML = "";
+                label.textContent = selected.length;
+
+                selected.forEach((cb) => {
+                    const h = document.createElement("input");
+                    h.type = "hidden";
+                    h.name = "selected_items[]";
+                    h.value = cb.value;
+                    container.appendChild(h);
+                });
             });
         });
     });
-});
+}

@@ -4,8 +4,6 @@
 <div class="container mt-4">
     <div class="row">
         <div class="col-lg-12">
-
-            {{-- Kartu Status Pengajuan --}}
             <div class="row g-3">
                 @php
                     $cards = [
@@ -32,7 +30,6 @@
                 </div>
             </div>
 
-            {{-- Grafik Barang Keluar Bulanan --}}
             <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
                 <h5 class="fw-bold">Grafik Barang Keluar Per Bulan</h5>
                 <form method="GET">
@@ -46,7 +43,6 @@
 
             <canvas id="barangKeluarChart" height="100"></canvas>
 
-            {{-- Grafik Harian Barang Keluar --}}
             <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
                 <h5 class="fw-bold">Statistik Harian Barang Keluar</h5>
                 <form method="GET">
@@ -70,23 +66,20 @@
 
             <canvas id="statistikHarianChart" height="100"></canvas>
 
-            {{-- Produk Paling Banyak Diminta --}}
             <div class="mt-5">
                 <h5 class="fw-bold mb-3">Produk Paling Banyak Diminta - {{ $tahunDipilih }}</h5>
-                <div class="row">
+                <div class="d-flex gap-3 no-horizontal-scroll pb-9 flex-nowrap">
                     @forelse ($topProduk->take(12) as $produk)
-                        <div class="col-6 col-md-4 col-lg-3 mb-4">
-                            <div class="card shadow-sm border-0 h-100">
-                                <div class="card-body text-center d-flex flex-column">
-                                    <img src="{{ asset('storage/' . ($produk->item->photo->image ?? 'placeholder.jpg')) }}"
-                                        alt="{{ $produk->item->nama_barang }}"
-                                        class="img-fluid mb-2 rounded mx-auto"
-                                        style="max-height: 130px; object-fit: cover;">
-                                    <h6 class="mb-1 text-truncate">{{ $produk->item->nama_barang }}</h6>
-                                    <small class="text-muted mb-2">{{ $produk->item->category->categori_name ?? 'Tanpa Kategori' }}</small>
-                                    <div class="mt-auto">
-                                        <span class="badge bg-success">Total: {{ $produk->total }} {{ $produk->item->satuan }}</span>
-                                    </div>
+                        <div class="card shadow-sm border-0 h-100 bg-light mt-4" style="min-width: 230px; flex: 0 0 auto;">
+                            <div class="card-body hover-3d text-center d-flex flex-column">
+                                <img src="{{ asset('storage/' . ($produk->item->photo->image ?? 'placeholder.jpg')) }}"
+                                    alt="{{ $produk->item->nama_barang }}"
+                                    class="img-fluid mb-2 rounded mx-auto"
+                                    style="max-height: 130px; object-fit: cover;">
+                                <h6 class="mb-1 text-truncate">{{ $produk->item->nama_barang }}</h6>
+                                <small class="text-muted mb-2">{{ $produk->item->category->categori_name ?? 'Tanpa Kategori' }}</small>
+                                <div class="mt-auto">
+                                    <span class="badge bg-success">Total: {{ $produk->total }} {{ $produk->item->satuan }}</span>
                                 </div>
                             </div>
                         </div>
