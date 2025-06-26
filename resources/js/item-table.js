@@ -63,33 +63,29 @@ if (!window.__itemTableInitialized) {
 
         table.on("draw", updateBar);
 
-        document.querySelectorAll(".btnHapusItem").forEach((btn) => {
-            btn.addEventListener("click", () => {
-                document
-                    .getElementById("formHapusItem")
-                    .setAttribute("action", btn.dataset.action);
-                document.getElementById("namaItemDihapus").textContent =
-                    btn.dataset.nama;
-            });
+        $("#itemTable").on("click", ".btnHapusItem", function () {
+            const action = $(this).data("action");
+            const nama = $(this).data("nama");
 
-            const bulkModal = document.getElementById("modalHapusBulk");
-            bulkModal.addEventListener("show.bs.modal", () => {
-                const selected = document.querySelectorAll(
-                    ".item-checkbox:checked"
-                );
-                const container = bulkModal.querySelector("#bulkItemIds");
-                const label = bulkModal.querySelector("#jumlahItemDihapus");
+            $("#formHapusItem").attr("action", action);
+            $("#namaItemDihapus").text(nama);
+        });
 
-                container.innerHTML = "";
-                label.textContent = selected.length;
+        const bulkModal = document.getElementById("modalHapusBulk");
+        bulkModal.addEventListener("show.bs.modal", () => {
+            const selected = document.querySelectorAll(".item-checkbox:checked");
+            const container = bulkModal.querySelector("#bulkItemIds");
+            const label = bulkModal.querySelector("#jumlahItemDihapus");
 
-                selected.forEach((cb) => {
-                    const h = document.createElement("input");
-                    h.type = "hidden";
-                    h.name = "selected_items[]";
-                    h.value = cb.value;
-                    container.appendChild(h);
-                });
+            container.innerHTML = "";
+            label.textContent = selected.length;
+
+            selected.forEach((cb) => {
+                const h = document.createElement("input");
+                h.type = "hidden";
+                h.name = "selected_items[]";
+                h.value = cb.value;
+                container.appendChild(h);
             });
         });
     });

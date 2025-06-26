@@ -63,7 +63,6 @@ if (!window.__categoryTableInitialized) {
 
         table.on("draw", updateBar);
 
-        // ✅ Delegasi untuk tombol edit kategori
         $("#categoryTable").on("click", ".btnEditKategori", function () {
             const form = $("#formEditKategori");
             const input = $("#editCategoryName");
@@ -72,7 +71,6 @@ if (!window.__categoryTableInitialized) {
             input.val($(this).data("name"));
         });
 
-        // ✅ Delegasi untuk tombol hapus kategori
         $("#categoryTable").on("click", ".btnHapusKategori", function () {
             const action = $(this).data("action");
             const nama = $(this).data("nama");
