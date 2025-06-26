@@ -154,7 +154,3 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script src="{{ asset('assets/js/category-table.js') }}"></script>
-@endpush
