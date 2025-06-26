@@ -136,8 +136,3 @@
     </div>
 </div>
 
-
-
-@push('scripts')
-<script src="{{ asset('assets/js/item-table.js') }}"></script>
-@endpush
