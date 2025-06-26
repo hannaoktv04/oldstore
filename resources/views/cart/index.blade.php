@@ -116,7 +116,7 @@
                     @csrf
                     <input type="hidden" name="tanggal_pengambilan" id="tanggal_pengambilan">
                     <div class="mb-3">
-                        <label for="tanggal_pengambilan_input" class="form-label">Tanggal Pengambilan</label>
+                        <label for="tanggal_pengambilan_input" class="form-label">Tanggal Pengiriman</label>
                         <input type="date" id="tanggal_pengambilan_input" class="form-control"
                                min="{{ \Carbon\Carbon::today()->toDateString() }}" required>
                     </div>

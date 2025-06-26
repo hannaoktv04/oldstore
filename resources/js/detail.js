@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
         formPesanLangsung.addEventListener('submit', function (e) {
             if (!tanggalInput.value) {
                 e.preventDefault();
-                alert("Silakan pilih tanggal pengambilan terlebih dahulu.");
+                alert("Silakan pilih Tanggal Pengiriman terlebih dahulu.");
                 return;
             }
             tanggalHidden.value = tanggalInput.value;

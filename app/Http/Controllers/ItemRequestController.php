@@ -41,7 +41,7 @@ class ItemRequestController extends Controller
         $itemRequest->tanggal_pengambilan = $request->tanggal_pengambilan;
         $itemRequest->save();
 
-        return response()->json(['message' => 'Tanggal pengambilan diperbarui']);
+        return response()->json(['message' => 'Tanggal Pengiriman diperbarui']);
     }
 
     public function konfirmasiUser($id)

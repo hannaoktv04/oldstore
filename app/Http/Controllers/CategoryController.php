@@ -16,7 +16,7 @@ class CategoryController extends Controller
         $items = Item::with(['category', 'photo'])
             ->orderByRaw('stok_minimum = 0')
             ->orderBy('stok_minimum', 'desc')
-            ->get();
+            ->paginate(20);
 
             return view('layouts.kategori', compact('categories', 'items'));
     }
@@ -78,7 +78,7 @@ class CategoryController extends Controller
             ->where('category_id', $id)
             ->orderByRaw('stok_minimum = 0')
             ->orderBy('stok_minimum', 'desc')
-            ->get();
+            ->paginate(20);
 
         return view('layouts.kategori', compact('categories', 'items', 'selectedCategory'));
     }

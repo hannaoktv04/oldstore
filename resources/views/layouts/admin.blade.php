@@ -47,16 +47,13 @@
     {{-- Navbar (tetap di atas) --}}
     @include('components.navbar')
 
-    {{-- Wrapper isi halaman --}}
     <div class="container-fluid mt-2">
         <div class="row">
-            {{-- Sidebar --}}
             <div class="col-md-3">
                 @include('components.sidebar')
             </div>
 
-            {{-- Konten --}}
-            <div class="col-md-9 mt-4">
+            <div class="col-md-9">
                 @yield('content')
             </div>
         </div>
@@ -69,7 +66,7 @@
     <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/hammer/hammer.js') }}"></script>
     <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
     <script src="{{ asset('assets/js/main.js') }}"></script>

@@ -8,24 +8,20 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('items', function (Blueprint $table) {
-            $table->unsignedBigInteger('category_id')->nullable()->after('nama_barang');
-            $table->unsignedBigInteger('photo_product')->nullable()->after('deskripsi');
-            $table->dropColumn('image');
+            if (!Schema::hasColumn('items', 'category_id')) {
+                $table->unsignedBigInteger('category_id')->nullable()->after('nama_barang');
+                $table->foreign('category_id')->references('id')->on('category')->onDelete('set null');
+            }
 
-            $table->foreign('category_id')->references('id')->on('category')->onDelete('set null');
-            $table->foreign('photo_product')->references('id')->on('photo')->onDelete('set null');
+            if (!Schema::hasColumn('items', 'photo_product')) {
+                $table->unsignedBigInteger('photo_product')->nullable()->after('deskripsi');
+                $table->foreign('photo_product')->references('id')->on('item_images')->onDelete('set null');
+            }
+
+            if (Schema::hasColumn('items', 'image')) {
+                $table->dropColumn('image');
+            }
         });
     }
 
-    public function down()
-    {
-        Schema::table('items', function (Blueprint $table) {
-
-            $table->dropForeign(['category_id']);
-            $table->dropForeign(['photo_product']);
-            $table->dropColumn('category_id');
-            $table->dropColumn('photo_product');
-            $table->string('image')->nullable();
-        });
-    }
 };

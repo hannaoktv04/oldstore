@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::table('items', function (Blueprint $table) {
             $table->dropForeign(['photo_product']);
             $table->dropColumn('photo_product');
-            $table->foreignId('photo_id')->nullable()->constrained('photos')->nullOnDelete();
+            $table->foreignId('photo_id')->nullable()->constrained('item_images')->nullOnDelete();
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->dropColumn('photo_id');
 
             $table->unsignedBigInteger('photo_product')->nullable();
-            $table->foreign('photo_product')->references('id')->on('photos')->nullOnDelete();
+            $table->foreign('photo_product')->references('id')->on('item_images')->nullOnDelete();
         });
     }
 };
