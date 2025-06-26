@@ -468,3 +468,57 @@ td:first-child {
     order: -1;
   }
 }
+
+.page-item.active .page-link {
+    background-color: #198754; 
+    border-color: #198754;
+    border-radius: 100%;
+}
+.page-item.active .page-link:hover {
+    background-color: #198754;
+    border-color: #198754;
+    border-radius: 100%;
+}
+.page-link {
+    border-radius: 100%;
+}
+.page-link:hover {
+    border-radius: 100%;
+}
+
+.sidebar-admin {
+    font-size: 14px;
+}
+.sidebar-admin .nav-link {
+    padding: 0.4rem 0.75rem;
+}
+.sidebar-admin .nav-link.active {
+    font-weight: 600;
+    color: #198754 !important;
+}
+.sidebar-admin i.bi {
+    width: 20px;
+}
+
+.navbar {
+  z-index: 1055 !important;
+  position: sticky; /* atau fixed jika kamu ingin selalu di atas saat scroll */
+  top: 0;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.navbar {
+  position: fixed;
+}
+
+.no-horizontal-scroll {
+    overflow-x: auto;
+    scrollbar-width: none;           
+    -ms-overflow-style: none;  
+    -webkit-overflow-scrolling: touch; 
+}
+
+.no-horizontal-scroll::-webkit-scrollbar {
+    display: none;                   
+}

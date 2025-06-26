@@ -6,5 +6,6 @@ import './cart.js';
 import './detail.js';
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
-import './sidebar.js'
-import './imageUploader.js'
+import './sidebar.js';
+import './imageUploader.js';
+import './item-table.js';

@@ -113,7 +113,7 @@
             <input type="hidden" name="tanggal_pengambilan" id="tanggalPengambilanLangsung">
             <div class="modal-content">
                 <div class="modal-header border-0 justify-content-center">
-                    <h5 class="modal-title" id="modalTanggalLabel">Pilih Tanggal Pengambilan</h5>
+                    <h5 class="modal-title" id="modalTanggalLabel">Pilih Tanggal Pengiriman</h5>
                 </div>
                 <div class="modal-body border-0">
                     <input type="date" class="form-control" id="tanggalPickerLangsung" min="{{ date('Y-m-d') }}"

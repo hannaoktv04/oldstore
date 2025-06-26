@@ -1,8 +1,13 @@
 <nav class="navbar navbar-expand-lg bg-white shadow-sm py-2 sticky-top">
   <div class="container d-flex justify-content-between align-items-center">
 
-    <div class="d-flex align-items-center gap-2">
-      <a class="navbar-brand brand-custom d-flex align-items-center gap-2" href="{{ url('/') }}">
+    <div class="d-flex align-items-center">
+      @if(Auth::check() && Auth::user()->role === 'admin')
+        <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+          <i class="bi bi-list fs-4"></i>
+        </button>
+      @endif
+      <a class="navbar-brand brand-custom d-flex align-items-center" href="{{ url('/') }}">
         <img src="{{ asset('assets/img/peri.png') }}" alt="PERI Logo" style="height: 50px;">
         @if(Auth::check() && Auth::user()->role === 'admin')
           <span class="fw-normal text-secondary fs-6">Admin</span>

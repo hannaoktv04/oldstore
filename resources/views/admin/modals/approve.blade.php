@@ -23,7 +23,7 @@
                                     <div class="fw-semibold">{{ $detail->item->nama_barang }}</div>
                                     <div class="text-muted small">
                                         Diminta: {{ $detail->qty_requested }} |
-                                        Stok tersedia: {{ $detail->item->stocks->sum('qty') }}
+                                        Stok tersedia: {{ $detail->item->stocks->qty }}
                                     </div>
                                 </div>
                                 <div class="form-check text-nowrap">

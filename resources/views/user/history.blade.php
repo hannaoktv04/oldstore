@@ -42,7 +42,7 @@
               @endif
           @elseif($request->status == 'submitted')
               <a href="#" class="text-dark btn-calendar" data-request-id="{{ $request->id }}">
-                <em>Atur Tanggal Pengambilan</em> <i class="bi bi-calendar"></i>
+                <em>Atur Tanggal Pengiriman</em> <i class="bi bi-calendar"></i>
               </a>
           @elseif($request->status == 'rejected')
               <strong class="text-danger"><em>Permintaan ditolak</em></strong>
