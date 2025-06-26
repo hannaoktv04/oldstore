@@ -5,20 +5,22 @@
     <style>
         body { font-family: sans-serif; font-size: 12px; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #000; padding: 6px; text-align: center; }
-        .kop { text-align: center; }
-        .kop img { height: 80px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-<div class="kop">
-    <img src="{{ public_path('assets/img/logo-komdigi.png') }}" alt="Logo">
-    <h4 style="margin: 0;">KEMENTERIAN KOMUNIKASI DAN DIGITAL RI</h4>
-    <p style="margin: 0;">SEKRETARIAT JENDERAL - BIRO SUMBER DAYA MANUSIA DAN ORGANISASI</p>
-    <small>Jl. Medan Merdeka Barat No. 9, Jakarta 10110 | www.komdigi.go.id</small>
-    <hr>
-    <h4>MEMO - DINAS</h4>
+<div class="text-center mb-4">
+    <div class="d-flex align-items-center justify-content-center">
+        <img src="{{ public_path('assets/img/logo-komdigi.png') }}" alt="Kop KOMDIGI" class="me-3" style="height: 100px;">
+        <div class="text-start">
+            <h5 class="mb-0 fw-bold">KEMENTERIAN KOMUNIKASI DAN DIGITAL RI</h5>
+            <h6 class="mb-0">SEKRETARIAT JENDERAL</h6>
+            <h6 class="mb-1">BIRO SUMBER DAYA MANUSIA DAN ORGANISASI</h6>
+            <small>Jl. Medan Merdeka Barat No. 9, Jakarta 10110 Telp. (021) 3865189 www.komdigi.go.id</small>
+        </div>
+    </div>
+    <hr class="my-3">
+    <h5 class="fw-bold text-decoration-underline">MEMO - DINAS</h5>
 </div>
 
 <p>Jakarta, {{ now()->format('d M Y') }}<br>

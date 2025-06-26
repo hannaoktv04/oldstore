@@ -103,6 +103,11 @@ Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
     Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
     Route::post('/categories/bulk-delete', [CategoryController::class, 'bulkDelete'])->name('admin.categories.bulkDelete');
+
+    Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('admin.purchase_orders.index');
+    Route::get('/purchase-orders/create', [PurchaseOrderController::class, 'create'])->name('admin.purchase_orders.createPO');
+    Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('admin.purchase_orders.store');
+    Route::get('/purchase-orders/{id}', [PurchaseOrderController::class, 'show'])->name('admin.purchase_orders.showPO');
 });
 
 

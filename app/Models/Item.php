@@ -77,5 +77,9 @@ class Item extends Model
     {
         return $this->hasOne(ItemState::class);
     }
+    public function purchaseOrderDetails()
+    {
+        return $this->hasMany(PurchaseOrderDetail::class);
+    }
 
 }
