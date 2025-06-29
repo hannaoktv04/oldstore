@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('carts', function (Blueprint $table) {
-            $table->string('user_id')->change(); // sekarang aman
+            $table->string('user_id')->change(); 
         });
     }
 

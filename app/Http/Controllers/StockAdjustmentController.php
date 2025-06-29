@@ -30,14 +30,13 @@ class StockAdjustmentController extends Controller
             $qtySebelum = $stock->qty ?? 0;
             $qtySelisih = $qtyFisik - $qtySebelum;
 
-            // Buat adjustment terlebih dahulu
             $adjustment = StockAdjustment::create([
                 'item_id' => $itemId,
                 'qty_sebelum' => $qtySebelum,
                 'qty_fisik' => $qtyFisik,
                 'qty_selisih' => $qtySelisih,
                 'tipe_adjustment' => 'koreksi',
-                'keterangan' => $request->input('keterangan'),
+                'keterangan' => 'koreksi stok manual',
                 'adjusted_by' => Auth::id(),
                 'adjusted_at' => now(),
             ]);

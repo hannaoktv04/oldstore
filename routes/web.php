@@ -20,10 +20,6 @@ use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\StockAdjustmentController;
 use App\Http\Controllers\PengajuanController;
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/purchase-orders', [PurchaseOrderController::class, 'index'])->name('admin.purchase_orders.index');
-});
-
 Route::delete('/cart/bulk-delete', [CartController::class, 'bulkDelete'])->name('cart.bulkDelete');
 
 
@@ -107,7 +103,13 @@ Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
     Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('admin.purchase_orders.index');
     Route::get('/purchase-orders/create', [PurchaseOrderController::class, 'create'])->name('admin.purchase_orders.createPO');
     Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('admin.purchase_orders.store');
-    Route::get('/purchase-orders/{id}', [PurchaseOrderController::class, 'show'])->name('admin.purchase_orders.showPO');
+    Route::get('/purchase-orders/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('admin.purchase_orders.showPO');
+    Route::post('/purchase-orders/{purchaseOrder}/submit', [PurchaseOrderController::class, 'submit'])->name('admin.purchase_orders.submit');
+    Route::delete('/purchase-orders/{purchaseOrder}', [PurchaseOrderController::class, 'destroy'])->name('admin.purchase_orders.destroy');
+    Route::get('/purchase-orders/{purchaseOrder}/receive', [PurchaseOrderController::class, 'receiveForm'])->name('admin.purchase_orders.receive');
+    Route::post('/purchase-orders/{purchaseOrder}/receive', [PurchaseOrderController::class, 'processReceive'])->name('admin.purchase_orders.processReceive');
+    Route::get('/purchase_orders/{purchase_order}/edit', [PurchaseOrderController::class, 'edit'])->name('admin.purchase_orders.edit');
+    Route::put('/purchase_orders/{purchase_order}', [PurchaseOrderController::class, 'update'])->name('admin.purchase_orders.update');
 });
 
 
@@ -122,7 +124,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('user.wishlist');
     Route::post('/wishlist/{id}', [WishlistController::class, 'addToWishlist'])->name('user.wishlist.store');
     Route::post('/update-pengambilan/{id}', [ItemRequestController::class, 'updateTanggalPengambilan']);
-
 });
 
 // -------------------------

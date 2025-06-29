@@ -1,0 +1,45 @@
+@extends('layouts.admin')
+
+@section('title', 'Receive PO')
+
+@section('content')
+<div class="card px-2 py-3">
+    <div class="card-header">
+        <h4 class="card-title">Receive PO - {{ $purchaseOrder->nomor_po }}</h4>
+    </div>
+    <div class="card-body">
+        <form action="{{ route('admin.purchase_orders.processReceive', $purchaseOrder->id) }}" method="POST">
+            @csrf
+
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>Item</th>
+                        <th>Satuan</th>
+                        <th>Qty PO</th>
+                        <th>Qty Diterima</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($details as $detail)
+                    <tr>
+                        <td>{{ $detail->item->nama_barang }}</td>
+                        <td>{{ $detail->item->satuan }}</td>
+                        <td>{{ $detail->qty }}</td>
+                        <td>
+                            <input type="number" name="details[{{ $detail->id }}]" class="form-control"
+                                value="{{ $detail->qty }}" min="0.01" step="0.01" required>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-success">Simpan & Tambah ke Stok</button>
+                <a href="{{ route('admin.purchase_orders.index') }}" class="btn btn-secondary">Batal</a>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection

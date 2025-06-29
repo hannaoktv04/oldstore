@@ -85,6 +85,12 @@
                 <span><i class="bi bi-folder2-open me-2"></i> Kategori</span>
             </a>
         </li>
+        <li class="nav flex-column mb-2">
+            <a href="{{ route('admin.purchase_orders.index') }}"
+               class="nav-link d-flex align-items-center {{ request()->routeIs('admin.purchase_orders.*') ? 'active' : 'text-dark' }}">
+                <span><i class="bi bi-file-earmark-text me-2"></i> Purchase Order</span>
+        </a>
+        </li>
         <li class="nav-item">
             <a href="{{ route('admin.wishlist.index') }}"
                class="nav-link d-flex align-items-center {{ request()->routeIs('admin.wishlist.index') ? 'active' : 'text-dark' }}">
