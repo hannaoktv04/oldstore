@@ -9,7 +9,7 @@
                 <img src="{{ asset('assets/img/logo-komdigi.png') }}" alt="Kop KOMDIGI" class="me-3" style="height: 100px;">
                 <div class="text-start">
                     <h5 class="mb-0 fw-bold">KEMENTERIAN KOMUNIKASI DAN DIGITAL RI</h5>
-                    <h6 class="mb-0">SEKRETARIAT JENDERAL</h6>
+                    <h6 clas`s="mb-0">SEKRETARIAT JENDERAL</h6>
                     <h6 class="mb-1">BIRO SUMBER DAYA MANUSIA DAN ORGANISASI</h6>
                     <small>Jl. Medan Merdeka Barat No. 9, Jakarta 10110 Telp. (021) 3865189 www.komdigi.go.id</small>
                 </div>

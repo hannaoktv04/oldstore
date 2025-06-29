@@ -8,6 +8,7 @@ use App\Models\ItemRequest;
 use App\Models\ItemRequestDetail;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\ItemWishlist;
 
 class AdminController extends Controller
 {
@@ -45,10 +46,19 @@ class AdminController extends Controller
             ->with('item.category', 'item.photo')
             ->take(12)
             ->get();
+        
+        $topWishlist = ItemWishlist::whereYear('created_at', $tahunDipilih)
+            ->selectRaw('nama_barang, category_id, COUNT(*) as total')
+            ->groupBy('nama_barang', 'category_id')
+            ->orderByDesc('total')
+            ->with('category')
+            ->take(12)
+            ->get();
+
 
         return view('admin.dashboard', compact(
             'pengajuanBaru', 'perluDikirim', 'pengajuanSelesai', 'pembatalan',
-            'barangKeluarPerBulan', 'barangKeluarHarian', 'tahunDipilih', 'bulanDipilih', 'topProduk'
+            'barangKeluarPerBulan', 'barangKeluarHarian', 'tahunDipilih', 'bulanDipilih', 'topProduk', 'topWishlist'
         ));
     }
 
