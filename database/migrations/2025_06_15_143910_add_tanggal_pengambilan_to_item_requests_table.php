@@ -9,14 +9,14 @@ return new class extends Migration
     public function up()
     {
         Schema::table('item_requests', function (Blueprint $table) {
-            $table->date('tanggal_pengambilan')->nullable();
+            $table->date('tanggal_pengiriman')->nullable();
         });
     }
 
     public function down()
     {
         Schema::table('item_requests', function (Blueprint $table) {
-            $table->dropColumn('tanggal_pengambilan');
+            $table->dropColumn('tanggal_pengiriman');
         });
     }
 

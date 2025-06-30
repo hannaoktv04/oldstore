@@ -7,15 +7,16 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
-        Schema::table('carts', function (Blueprint $table) {
-            $table->string('user_id')->change();
+        Schema::table('item_requests', function (Blueprint $table) {
+            $table->dateTime('tanggal_pengiriman')->change();
         });
     }
 
     public function down()
     {
-        Schema::table('carts', function (Blueprint $table) {
-            $table->integer('user_id')->change(); 
+        Schema::table('item_requests', function (Blueprint $table) {
+            $table->date('tanggal_pengiriman')->change();
         });
     }
 };
+

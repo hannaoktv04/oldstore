@@ -21,9 +21,19 @@ class AdminPengajuanController extends Controller
             'details.item.photo',
             'details.item.category',
         ])
-        ->where('status', $status)
-        ->orderByDesc('created_at')
-        ->get();
+        ->where('status', $status);
+
+        if ($status === 'submitted') {
+            $pengajuans->orderBy('created_at', 'asc');
+        } elseif ($status === 'approved') {
+            $pengajuans->orderBy('tanggal_pengiriman', 'asc')
+                       ->orderBy('id', 'asc');
+        } else {
+            $pengajuans->orderBy('created_at', 'desc');
+        }
+
+        $pengajuans = $pengajuans->get();
+        
 
         return view('admin.pengajuan-status', compact('pengajuans', 'status'));
     }

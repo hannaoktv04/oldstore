@@ -31,7 +31,7 @@
             </div>
 
             <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
-                <h5 class="fw-bold">Grafik Barang Keluar (Bulanan & Harian)</h5>
+                <h5 class="fw-bold">Grafik Barang Keluar</h5>
                 <form method="GET">
                     <div class="d-flex gap-2">
                         <select name="bulan" class="form-select form-select-sm" onchange="this.form.submit()">

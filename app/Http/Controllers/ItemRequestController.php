@@ -27,7 +27,7 @@ class ItemRequestController extends Controller
     {
         dd($request->all());
          $validator = Validator::make($request->all(), [
-            'tanggal_pengambilan' => 'required|date|after_or_equal:today',
+            'tanggal_pengiriman' => 'required|date|after_or_equal:today',
         ]);
 
         if ($validator->fails()) {
@@ -38,7 +38,7 @@ class ItemRequestController extends Controller
         }
 
         $itemRequest = ItemRequest::findOrFail($id);
-        $itemRequest->tanggal_pengambilan = $request->tanggal_pengambilan;
+        $itemRequest->tanggal_pengiriman = $request->tanggal_pengiriman;
         $itemRequest->save();
 
         return response()->json(['message' => 'Tanggal Pengiriman diperbarui']);

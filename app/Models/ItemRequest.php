@@ -10,7 +10,7 @@ class ItemRequest extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'status', 'keterangan', 'tanggal_permintaan','tanggal_pengambilan',
+        'user_id', 'status', 'keterangan', 'tanggal_permintaan','tanggal_pengiriman',
         'approved_by', 'approved_at'
     ];
 
@@ -28,6 +28,15 @@ class ItemRequest extends Model
     public function itemDelivery()
     {
         return $this->hasOne(ItemDelivery::class, 'item_request_id');
+    }
+
+    public function scopeAutoConfirmable($query)
+    {
+        return $query->where('status', 'received')
+            ->where('user_confirmed', false)
+            ->whereHas('itemDelivery', function ($q) {
+                $q->where('updated_at', '<=', now()->subDays(3));
+            });
     }
 
 }

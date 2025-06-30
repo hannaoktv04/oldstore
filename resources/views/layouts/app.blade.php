@@ -82,6 +82,7 @@
 
   <script src="{{ asset('assets/js/hero.js') }}"></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
   <!-- Page JS -->
   @stack('scripts')

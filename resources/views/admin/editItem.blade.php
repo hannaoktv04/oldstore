@@ -18,12 +18,16 @@
     <form action="{{ route('admin.items.update', $item->id) }}" method="POST" enctype="multipart/form-data">
         @csrf @method('PUT')
 
+        <input type="hidden" name="thumbnail_index" id="thumbnail_index" value="0">
+
         <div class="card shadow-sm p-4 mb-4">
             <h6 class="fw-semibold mb-3">Foto Item</h6>
             <div id="imageUploadWrapper" class="d-flex flex-wrap gap-2">
-                @foreach ($item->images as $img)
+                @foreach ($item->images as $index => $img)
                     <div class="upload-box">
-                        <img src="{{ asset('storage/' . $img->image) }}" class="preview">
+                        <img src="{{ asset('storage/' . $img->image) }}"
+                             class="preview {{ $item->photo_id == $img->id ? 'border border-primary' : '' }}"
+                             style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;">
                         <div class="tools">
                             <i class="bi bi-crop" onclick="openCropper(this)"></i>
                             <i class="bi bi-trash" onclick="removeImage(this)"></i>
@@ -41,7 +45,7 @@
                     </label>
                 </div>
             </div>
-            <small class="text-muted">Format JPEG/PNG, maksimal 2MB per gambar.</small>
+            <small class="text-muted d-block mt-2">Klik gambar untuk memilih thumbnail. Format JPEG/PNG max 2MB.</small>
         </div>
 
         <div class="card shadow-sm p-4 mb-4">

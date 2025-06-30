@@ -15,11 +15,12 @@ window.handleImageUpload = function (input) {
         const box = document.createElement('div');
         box.className = 'upload-box';
         box.innerHTML = `
-            <img src="${e.target.result}" class="preview">
+            <img src="${e.target.result}" class="preview" onclick="setThumbnail(this)">
             <div class="tools">
                 <i class="bi bi-crop" onclick="openCropper(this)"></i>
                 <i class="bi bi-trash" onclick="removeImage(this)"></i>
             </div>
+            <span class="badge bg-success position-absolute top-0 start-0 m-1 d-none">Thumbnail</span>
             <input type="file" name="photo_Item[]" accept="image/*" style="display:none;">
         `;
 
@@ -29,7 +30,7 @@ window.handleImageUpload = function (input) {
         hiddenInput.files = dt.files;
 
         wrapper.insertBefore(box, wrapper.lastElementChild);
-        input.value = ''; 
+        input.value = '';
 
         if (!wrapper.querySelector('.upload-trigger')) {
             const newBox = document.createElement('div');
@@ -50,7 +51,27 @@ window.handleImageUpload = function (input) {
 };
 
 window.removeImage = function (el) {
-    el.closest('.upload-box').remove();
+    const box = el.closest('.upload-box');
+    const wrapper = document.getElementById('imageUploadWrapper');
+    box.remove();
+
+    const index = Array.from(wrapper.children).findIndex(b => b.classList.contains('selected-thumbnail'));
+    document.getElementById('thumbnail_index').value = index !== -1 ? index : 0;
+};
+
+window.setThumbnail = function (imgEl) {
+    const allBoxes = document.querySelectorAll('#imageUploadWrapper .upload-box');
+    allBoxes.forEach(box => {
+        box.classList.remove('selected-thumbnail');
+        box.querySelector('.badge')?.classList.add('d-none');
+    });
+
+    const box = imgEl.closest('.upload-box');
+    box.classList.add('selected-thumbnail');
+    box.querySelector('.badge').classList.remove('d-none');
+
+    const index = Array.from(document.getElementById('imageUploadWrapper').children).indexOf(box);
+    document.getElementById('thumbnail_index').value = index;
 };
 
 window.openCropper = function (icon) {

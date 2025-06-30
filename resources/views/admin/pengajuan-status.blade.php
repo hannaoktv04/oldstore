@@ -37,9 +37,9 @@
                 </div>
 
                 <div class="col-12 col-md-4 col-lg-5 justify-content-md-center flex-column text-center text-md-center">
-                    <small class="text-muted">Jadwal Pengambilan</small><br>
-                    @if($pengajuan->tanggal_pengambilan)
-                        <strong>{{ \Carbon\Carbon::parse($pengajuan->tanggal_pengambilan)->format('d F Y') }}</strong>
+                    <small class="text-muted">Jadwal Pengiriman</small><br>
+                    @if($pengajuan->tanggal_pengiriman)
+                        <strong>{{ \Carbon\Carbon::parse($pengajuan->tanggal_pengiriman)->format('d F Y, H:i') }}</strong>
                     @else
                         <strong class="text-danger">Belum Dijadwalkan</strong>
                     @endif

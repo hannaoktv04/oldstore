@@ -15,7 +15,6 @@ return new class extends Migration {
     public function down()
     {
         Schema::table('carts', function (Blueprint $table) {
-            // Ubah kembali ke tipe sebelumnya kalau perlu, misal varchar
             $table->string('user_id')->change();
         });
     }

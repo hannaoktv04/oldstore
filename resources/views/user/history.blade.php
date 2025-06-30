@@ -33,8 +33,8 @@
         </div>
 
         <div class="col-12 col-md-4 col-lg-3 text-center">
-          @if($request->tanggal_pengambilan)
-              <em>{{ \Carbon\Carbon::parse($request->tanggal_pengambilan)->format('d F Y') }}</em>
+          @if($request->tanggal_pengiriman)
+              <em>{{ \Carbon\Carbon::parse($request->tanggal_pengiriman)->format('d F Y') }}</em>
               @if($request->status == 'submitted')
                 <a href="#" class="text-dark ms-2 btn-calendar" data-request-id="{{ $request->id }}">
                   <i class="bi bi-calendar"></i>
@@ -107,15 +107,15 @@
 
               @if(in_array($request->status, ['approved', 'delivered', 'received']) && $request->itemDelivery)
               <li class="mb-3">
-                <strong>📦 Disetujui & Dikirim</strong><br>
+                <strong>📦 Disetujui</strong><br>
                 {{ \Carbon\Carbon::parse($request->itemDelivery->created_at)->format('H:i:s, d M Y') }}
               </li>
               @endif
 
-              @if($request->tanggal_pengambilan)
+              @if($request->tanggal_pengiriman)
               <li class="mb-3">
-                <strong>📅 Jadwal Pengambilan</strong><br>
-                {{ \Carbon\Carbon::parse($request->tanggal_pengambilan)->format('d M Y') }}
+                <strong>📅 Dikirimkan sesuai jadwal pengiriman</strong><br>
+                {{ \Carbon\Carbon::parse($request->tanggal_pengiriman)->format('H:i, d M Y') }}
               </li>
               @endif
 
@@ -167,7 +167,12 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body text-center">
-            <img src="{{ asset('storage/' . $request->itemDelivery->bukti_foto) }}" alt="Bukti Pengiriman" class="img-fluid rounded shadow-sm">
+            <img 
+              src="{{ asset('storage/' . $request->itemDelivery->bukti_foto) }}" 
+              alt="Bukti Pengiriman"
+              class="img-thumbnail"
+              style="max-width: 100%; width: 100%; max-height: 300px; object-fit: contain;"
+            >
           </div>
         </div>
       </div>
