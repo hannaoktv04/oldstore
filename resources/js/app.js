@@ -11,3 +11,5 @@ import './imageUploader.js';
 import './item-table.js';
 import './purchase_order.js';
 import './category-table.js';
+import './formPO.js';
+import './showPO.js';
