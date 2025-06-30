@@ -22,35 +22,37 @@ class ItemController extends Controller
     {
         return view('admin.addItem');
     }
+    
     public function store(Request $request)
     {
         DB::beginTransaction();
 
         try {
             $validated = $request->validate([
-                'nama_barang' => 'required|string|max:255',
-                'kode_barang' => 'required|string|max:255|unique:items,kode_barang',
-                'stok_awal'   => 'required|numeric|min:0',
-                'satuan'      => 'required|string',
-                'deskripsi'   => 'required|string',
-                'category_id' => 'required|exists:category,id',
-                'photo_Item'   => 'required|array',
-                'photo_Item.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-
+                'nama_barang'    => 'required|string|max:255',
+                'kode_barang'    => 'required|string|max:255|unique:items,kode_barang',
+                'stok_awal'      => 'required|numeric|min:0',
+                'satuan'         => 'required|string',
+                'deskripsi'      => 'required|string',
+                'category_id'    => 'required|exists:category,id',
+                'photo_Item'     => 'required|array',
+                'photo_Item.*'   => 'image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
             $item = Item::create([
                 'nama_barang'   => $validated['nama_barang'],
                 'kode_barang'   => $validated['kode_barang'],
-                'stok_minimum'  => $validated['stok_awal'] ?? 0,
+                'stok_minimum'  => $validated['stok_awal'],
                 'satuan'        => $validated['satuan'],
                 'deskripsi'     => $validated['deskripsi'],
                 'category_id'   => $validated['category_id'],
             ]);
+
             ItemStock::create([
                 'item_id' => $item->id,
                 'qty'     => $validated['stok_awal'],
             ]);
+
             $adjustment = StockAdjustment::create([
                 'item_id'         => $item->id,
                 'qty_sebelum'     => 0,
@@ -61,6 +63,7 @@ class ItemController extends Controller
                 'adjusted_by'     => auth()->id(),
                 'adjusted_at'     => now(),
             ]);
+
             ItemLog::create([
                 'item_id'   => $item->id,
                 'tipe'      => 'in',
@@ -70,20 +73,31 @@ class ItemController extends Controller
                 'deskripsi' => 'Stok awal saat pembuatan item',
             ]);
 
-            $firstImageId = null;
+            $thumbnailIndex = $request->input('thumbnail_index', 0);
+            if (!is_numeric($thumbnailIndex) || $thumbnailIndex < 0) {
+                $thumbnailIndex = 0;
+            }
+
+            $uploadedImages = [];
+
             foreach ($request->file('photo_Item') as $index => $file) {
                 $path = $file->store('images', 'public');
                 $img = ItemImage::create([
                     'item_id' => $item->id,
                     'image'   => $path,
                 ]);
-                if ($index === 0) {
+
+                $uploadedImages[] = $img;
+
+                if ($index == $thumbnailIndex) {
                     $item->update(['photo_id' => $img->id]);
                 }
             }
-            if ($firstImageId) {
-                $item->update(['photo_id' => $firstImageId]);
+
+            if (!$item->photo_id && count($uploadedImages)) {
+                $item->update(['photo_id' => $uploadedImages[0]->id]);
             }
+
             DB::commit();
             return redirect()->back()->with('success', 'Item berhasil ditambahkan!');
         } catch (\Exception $e) {
@@ -115,18 +129,31 @@ class ItemController extends Controller
             ]);
 
             if ($request->hasFile('photo_Item')) {
+                $thumbnailIndex = $request->input('thumbnail_index', 0);
+                if (!is_numeric($thumbnailIndex) || $thumbnailIndex < 0) {
+                    $thumbnailIndex = 0;
+                }
+
+                $uploadedImages = [];
+
                 foreach ($request->file('photo_Item') as $index => $file) {
                     $path = $file->store('images', 'public');
                     $img = ItemImage::create([
                         'item_id' => $item->id,
                         'image'   => $path,
                     ]);
+                    $uploadedImages[] = $img;
 
-                    if (!$item->photo_id && $index === 0) {
+                    if ($index == $thumbnailIndex) {
                         $item->update(['photo_id' => $img->id]);
                     }
                 }
+
+                if (!$item->photo_id && count($uploadedImages)) {
+                    $item->update(['photo_id' => $uploadedImages[0]->id]);
+                }
             }
+
             DB::commit();
             return redirect()->route('admin.items')->with('success', 'Item berhasil diperbarui!');
         } catch (\Exception $e) {

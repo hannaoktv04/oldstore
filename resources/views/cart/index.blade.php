@@ -114,11 +114,14 @@
 
                 <form method="POST" action="{{ route('cart.checkout') }}" id="checkoutForm">
                     @csrf
-                    <input type="hidden" name="tanggal_pengambilan" id="tanggal_pengambilan">
+                    @php
+                        $now = \Carbon\Carbon::now()->format('Y-m-d\TH:i');
+                    @endphp
+                    <input type="hidden" name="tanggal_pengiriman" id="tanggal_pengiriman">
                     <div class="mb-3">
-                        <label for="tanggal_pengambilan_input" class="form-label">Tanggal Pengiriman</label>
-                        <input type="date" id="tanggal_pengambilan_input" class="form-control"
-                               min="{{ \Carbon\Carbon::today()->toDateString() }}" required>
+                        <label for="tanggal_pengiriman_input" class="form-label">Tanggal Pengiriman</label>
+                        <input type="text" id="tanggal_pengiriman_input" class="form-control"
+                                placeholder="Pilih tanggal & waktu" required>
                     </div>
                     <button type="submit" class="btn btn-success w-100">Ajukan Permintaan</button>
                 </form>
@@ -150,3 +153,4 @@
     </div>
 </div>
 @endsection
+

@@ -106,4 +106,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     syncQty(); 
+
+    flatpickr("#tanggalPickerLangsung", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        minuteIncrement: 5,
+        defaultHour: 9,
+        defaultMinute: 0,
+        minDate: "today",
+        onChange: function(selectedDates, dateStr, instance) {
+            document.getElementById("tanggalPengambilanLangsung").value = dateStr;
+        }
+    });
 });

@@ -16,6 +16,7 @@
     <form action="{{ route('admin.storeItem') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
+        <input type="hidden" name="thumbnail_index" id="thumbnail_index" value="0">
         <div class="card shadow-sm p-4 mb-4">
             <h6 class="fw-semibold mb-3">Foto Item <span class="text-danger">*</span></h6>
             <div id="imageUploadWrapper" class="d-flex flex-wrap gap-2">
@@ -36,20 +37,17 @@
 
             <div class="mb-3">
                 <label for="nama_barang" class="form-label">Nama Item <span class="text-danger">*</span></label>
-                <input type="text" name="nama_barang" id="nama_barang"
-                       class="form-control" maxlength="100" required>
+                <input type="text" name="nama_barang" id="nama_barang" class="form-control" maxlength="100" required>
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="kode_barang" class="form-label">Kode Item <span class="text-danger">*</span></label>
-                    <input type="text" name="kode_barang" id="kode_barang"
-                           class="form-control text-uppercase" maxlength="30" required>
+                    <input type="text" name="kode_barang" id="kode_barang" class="form-control text-uppercase" maxlength="30" required>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="stok_awal" class="form-label">Stok Awal <span class="text-danger">*</span></label>
-                    <input type="number" name="stok_awal" id="stok_awal"
-                           class="form-control" min="0" required>
+                    <input type="number" name="stok_awal" id="stok_awal" class="form-control" min="0" required>
                 </div>
             </div>
 
@@ -76,9 +74,7 @@
 
             <div class="mb-3">
                 <label for="deskripsi" class="form-label">Deskripsi <span class="text-danger">*</span></label>
-                <textarea name="deskripsi" id="deskripsi"
-                          class="form-control" rows="4"
-                          maxlength="500" placeholder="Tuliskan deskripsi item..." required></textarea>
+                <textarea name="deskripsi" id="deskripsi" class="form-control" rows="4" maxlength="500" required placeholder="Tuliskan deskripsi item..."></textarea>
                 <small class="text-muted">Maksimal 500 karakter.</small>
             </div>
         </div>
@@ -93,6 +89,30 @@
         </div>
     </form>
 
-    @include('admin.modals.cropperImg')
+    <div class="modal fade" id="cropperModal" tabindex="-1" aria-labelledby="cropperModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Crop Gambar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body row g-3">
+                    <div class="col-md-8">
+                        <img id="cropperImage" class="img-fluid" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Preview:</label>
+                        <div class="border rounded" style="height: 200px; overflow: hidden;">
+                            <img id="cropPreview" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button class="btn btn-primary" id="saveCropBtn">Simpan Gambar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection

@@ -92,7 +92,7 @@ class CartController extends Controller
     public function checkout(Request $request)
     {
         $request->validate([
-            'tanggal_pengambilan' => 'required|date|after_or_equal:' . now()->toDateString(),
+            'tanggal_pengiriman' => 'required|date|after_or_equal:' . now()->toDateString(),
             'cart_ids' => 'required|array|min:1',
             'cart_ids.*' => 'exists:carts,id',
         ]);
@@ -116,7 +116,7 @@ class CartController extends Controller
                 'user_id' => $user->id,
                 'status' => 'submitted',
                 'tanggal_permintaan' => now(),
-                'tanggal_pengambilan' => $request->tanggal_pengambilan,
+                'tanggal_pengiriman' => $request->tanggal_pengiriman,
                 'keterangan' => null,
             ]);
 
@@ -145,7 +145,7 @@ class CartController extends Controller
 
         $request->validate([
             'qty' => "required|numeric|min:1|max:{$item->stok_minimum}",
-            'tanggal_pengambilan' => 'required|date|after_or_equal:' . now()->toDateString(),
+            'tanggal_pengiriman' => 'required|date|after_or_equal:' . now()->toDateString(),
         ]);
 
         DB::beginTransaction();
@@ -155,7 +155,7 @@ class CartController extends Controller
                 'user_id' => Auth::id(),
                 'status' => 'submitted',
                 'tanggal_permintaan' => now(),
-                'tanggal_pengambilan' => $request->tanggal_pengambilan,
+                'tanggal_pengiriman' => $request->tanggal_pengiriman,
                 'keterangan' => null,
             ]);
 

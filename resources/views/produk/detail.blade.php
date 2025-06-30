@@ -109,14 +109,17 @@
     <div class="modal-dialog">
         <form method="POST" action="{{ route('produk.pesanLangsung', ['id' => $produk->id]) }}" id="formPesanLangsung">
             @csrf
+            @php
+                $now = \Carbon\Carbon::now()->format('Y-m-d\TH:i');
+            @endphp
             <input type="hidden" name="qty" id="formPesanQtyFinal">
-            <input type="hidden" name="tanggal_pengambilan" id="tanggalPengambilanLangsung">
+            <input type="hidden" name="tanggal_pengiriman" id="tanggalPengambilanLangsung">
             <div class="modal-content">
                 <div class="modal-header border-0 justify-content-center">
                     <h5 class="modal-title" id="modalTanggalLabel">Pilih Tanggal Pengiriman</h5>
                 </div>
                 <div class="modal-body border-0">
-                    <input type="date" class="form-control" id="tanggalPickerLangsung" min="{{ date('Y-m-d') }}"
+                    <input type="text" class="form-control" id="tanggalPickerLangsung" value="{{ $now }}"
                         required>
                 </div>
                 <div class="modal-footer border-0 justify-content-center">

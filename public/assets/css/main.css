@@ -502,7 +502,7 @@ td:first-child {
 
 .navbar {
   z-index: 1055 !important;
-  position: sticky; /* atau fixed jika kamu ingin selalu di atas saat scroll */
+  position: sticky; 
   top: 0;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -521,4 +521,10 @@ td:first-child {
 
 .no-horizontal-scroll::-webkit-scrollbar {
     display: none;                   
+}
+
+.flatpickr-calendar {
+    max-height: 320px !important;
+    overflow-y: auto !important;
+    z-index: 9999 !important;
 }
