@@ -19,23 +19,21 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\StockAdjustmentController;
 use App\Http\Controllers\PengajuanController;
+use App\Http\Controllers\StockOpnameController;
 
 Route::delete('/cart/bulk-delete', [CartController::class, 'bulkDelete'])->name('cart.bulkDelete');
 
-
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'block.opname'])->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/produk/{id}/add-to-cart', [CartController::class, 'store'])->name('produk.addToCart');
     Route::post('/produk/{id}/pesanLangsung', [CartController::class, 'pesanLangsung'])->name('produk.pesanLangsung');
     Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
-    Route::get('/kategori/{id}', [CategoryController::class, 'show'])->name('kategori.show');
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
     Route::post('/pengajuan/{id}/konfirmasi', [ItemRequestController::class, 'konfirmasiUser'])->name('pengajuan.konfirmasiUser');
     Route::get('/pengajuan/enota/{id}', [ItemRequestController::class, 'showENota'])->name('pengajuan.enota');
     Route::get('/pengajuan/{id}/download', [PengajuanController::class, 'downloadNota'])->name('pengajuan.downloadNota');
 });
-
 
 // -------------------------
 // AUTHENTICATION ROUTES
@@ -110,20 +108,32 @@ Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
     Route::post('/purchase-orders/{purchaseOrder}/receive', [PurchaseOrderController::class, 'processReceive'])->name('admin.purchase_orders.processReceive');
     Route::get('/purchase_orders/{purchase_order}/edit', [PurchaseOrderController::class, 'edit'])->name('admin.purchase_orders.edit');
     Route::put('/purchase_orders/{purchase_order}', [PurchaseOrderController::class, 'update'])->name('admin.purchase_orders.update');
+
+    Route::prefix('stock-opname')->name('admin.stock_opname.')->group(function () {
+    Route::get('/', [StockOpnameController::class, 'index'])->name('index');
+    Route::get('/create', [StockOpnameController::class, 'create'])->name('create');
+    Route::post('/', [StockOpnameController::class, 'store'])->name('store');
+
+    // jangan prefix nested lagi
+    Route::get('/{opname}/edit', [StockOpnameController::class, 'edit'])->name('edit');
+    Route::put('/{opname}', [StockOpnameController::class, 'update'])->name('update');
+
+    Route::post('/{opname}/end', [StockOpnameController::class, 'endSession'])->name('end');
+    Route::get('/{opname}', [StockOpnameController::class, 'show'])->name('show');
 });
 
+});
 
 // -------------------------
 // USER ROUTES (LOGGED-IN USERS)
 // -------------------------
 Route::middleware(['auth'])->group(function () {
-
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-
     Route::get('/riwayat-pengajuan', [ItemRequestController::class, 'history'])->name('user.history');
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('user.wishlist');
     Route::post('/wishlist/{id}', [WishlistController::class, 'addToWishlist'])->name('user.wishlist.store');
     Route::post('/update-pengambilan/{id}', [ItemRequestController::class, 'updateTanggalPengambilan']);
+    Route::get('/kategori/{id}', [CategoryController::class, 'show'])->name('kategori.show');
 });
 
 // -------------------------

@@ -2,10 +2,31 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class StockOpname extends Model
+class StockOpname extends Pivot
 {
-    use HasFactory;
+    protected $table = 'stock_opnames';
+
+    protected $casts = [
+        'qty_sistem' => 'decimal:2',
+        'qty_fisik' => 'decimal:2',
+        'selisih' => 'decimal:2',
+        'tanggal_opname' => 'date'
+    ];
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
+
+    public function session()
+    {
+        return $this->belongsTo(OpnameSession::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'dilakukan_oleh');
+    }
 }

@@ -12,3 +12,4 @@ import './item-table.js';
 import './purchase_order.js';
 import './formPO.js';
 import './showPO.js';
+import './stock_opname.js';
