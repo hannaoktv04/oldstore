@@ -88,6 +88,5 @@
   @stack('scripts')
   <script src="{{ asset('assets/js/produk-detail.js') }}"></script>
 
-
 </body>
 </html>
