@@ -34,14 +34,6 @@
                 <h5 class="fw-bold">Grafik Barang Keluar</h5>
                 <form method="GET">
                     <div class="d-flex gap-2">
-                        <select name="bulan" class="form-select form-select-sm" onchange="this.form.submit()">
-                            @foreach(range(1, 12) as $b)
-                                <option value="{{ str_pad($b, 2, '0', STR_PAD_LEFT) }}"
-                                    {{ $bulanDipilih == str_pad($b, 2, '0', STR_PAD_LEFT) ? 'selected' : '' }}>
-                                    {{ DateTime::createFromFormat('!m', $b)->format('F') }}
-                                </option>
-                            @endforeach
-                        </select>
                         <select name="tahun" class="form-select form-select-sm" onchange="this.form.submit()">
                             @for ($i = date('Y'); $i >= 2020; $i--)
                                 <option value="{{ $i }}" {{ $tahunDipilih == $i ? 'selected' : '' }}>{{ $i }}</option>

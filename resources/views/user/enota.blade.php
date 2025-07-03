@@ -16,8 +16,10 @@
             </div>
             <hr class="my-3">
             <h5 class="fw-bold text-decoration-underline">MEMO - DINAS</h5>
+            <div class="text-end">
+                <span>Jakarta, {{ now()->format('d M Y') }}</span>
+            </div>
             <div class="text-start">
-                <span>Jakarta, {{ now()->format('d M Y') }}</span><br>
                 <span>Nomor: {{ str_pad($request->id, 3, '0', STR_PAD_LEFT) }}/NNNN/{{ now()->year }}</span>
             </div>
         </div>

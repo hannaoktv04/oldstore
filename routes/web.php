@@ -20,6 +20,22 @@ use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\StockAdjustmentController;
 use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\StockOpnameController;
+use Picqer\Barcode\BarcodeGeneratorPNG;
+use App\Http\Controllers\StaffPengirimanController;
+
+Route::get('/tes-barcode', function () {
+    $generator = new BarcodeGeneratorPNG();
+    $barcode = base64_encode($generator->getBarcode('1234567890', $generator::TYPE_CODE_128));
+
+    return '
+        <h2>Barcode dari Picqer</h2>
+        <img src="data:image/png;base64,' . $barcode . '" />
+    ';
+});
+
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
 
 Route::delete('/cart/bulk-delete', [CartController::class, 'bulkDelete'])->name('cart.bulkDelete');
 
@@ -74,6 +90,7 @@ Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
     Route::post('/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])->name('admin.pengajuan.received');
     Route::post('/pengajuan/{pengajuan}/approve', [AdminPengajuanController::class, 'approve'])->name('admin.pengajuan.approve');
     Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('admin.pengajuan.reject');
+    Route::get('/admin/pengajuan/{id}/resi', [PengajuanController::class, 'cetakResi'])->name('pengajuan.resi');
 
     Route::get('/add-item', [ItemController::class, 'create'])->name('admin.addItem');
     Route::post('/add-item', [ItemController::class, 'store'])->name('admin.storeItem');
@@ -145,3 +162,10 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('/produk/{id}', 'show')->name('produk.show');
     Route::get('/search', 'search')->name('search');
 });
+
+Route::middleware(['auth', 'role:staff_pengiriman'])->prefix('staff-pengiriman')->group(function () {
+    Route::get('/dashboard', [StaffPengirimanController::class, 'index'])->name('staff-pengiriman.dashboard');
+    Route::get('/konfirmasi/{kodeResi}', [StaffPengirimanController::class, 'show'])->name('staff-pengiriman.konfirmasi');
+    Route::post('/konfirmasi/{kodeResi}', [StaffPengirimanController::class, 'submit'])->name('staff-pengiriman.konfirmasi.submit');
+});
+

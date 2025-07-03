@@ -22,7 +22,7 @@ class RegisterController extends Controller
             'nama' => 'required|string|max:255',
             'nip' => 'required|string|max:50|unique:users',
             'jabatan' => 'required|string|max:100',
-            'role' => 'required|in:admin,pegawai',
+            'role' => 'required|in:admin,pegawai,staff_pengiriman',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|confirmed|min:6',
         ]);
@@ -39,8 +39,10 @@ class RegisterController extends Controller
 
         Auth::login($user);
 
-        if ($user->role === 'admin') {
+       if ($user->role === 'admin') {
             return redirect()->route('admin.dashboard');
+        } elseif ($user->role === 'staff_pengiriman') {
+            return redirect()->route('staff-pengiriman.dashboard');
         } else {
             return redirect()->route('home');
         }
