@@ -16,8 +16,8 @@
 
 @elseif ($status === 'approved')
     <div class="d-flex justify-content-center justify-content-md-end gap-3">
-        <a href="{{ route('admin.pengajuan.nota', $pengajuan->id) }}" class="btn btn-sm btn-outline-primary">
-            <i class="bi bi-printer" title="Cetak Nota"></i>
+        <a href="" class="btn btn-sm btn-outline-primary">
+            <i class="bi bi-printer" title="Cetak Resi"></i>
         </a>
         <form action="{{ route('admin.pengajuan.deliver', $pengajuan->id) }}" method="POST">
             @csrf
@@ -35,7 +35,7 @@
     </a>
 
 @elseif ($status === 'received')
-    <a href="{{ route('pengajuan.enota', $request->id) }}"
+    <a href="#', $request->id) }}"
        class="btn btn-sm btn-outline-primary">
         <i class="bi bi-printer" title="Cetak Nota"></i>
     </a>
@@ -45,3 +45,4 @@
         Ditolak: {{ $pengajuan->keterangan ?? 'Tidak ada keterangan' }}
     </div>
 @endif
+

@@ -22,7 +22,7 @@ class StockOpname extends Pivot
 
     public function session()
     {
-        return $this->belongsTo(OpnameSession::class);
+        return $this->belongsTo(OpnameSession::class, 'session_id');
     }
 
     public function user()

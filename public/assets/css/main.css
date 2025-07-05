@@ -9,7 +9,7 @@
 }
 
 #heart-icon:hover i::before {
-  content: "\f415"; 
+  content: "\f415";
   font-weight: bold;
     color: #2aa7a7;
 }
@@ -88,7 +88,7 @@ input.form-control {
 
 #cart-popup {
   position: absolute;
-  top: 100%; 
+  top: 100%;
   right: 0;
   min-width: 160px;
   min-height: 150px;
@@ -393,7 +393,7 @@ td:first-child {
     top: auto;
     bottom: 0;
     left: 0;
-    width: 100%; 
+    width: 100%;
     height: 100vh;
     background-color: #fff;
     z-index: 1045;
@@ -416,7 +416,7 @@ td:first-child {
   .custom-kategori-overlay {
     content: '';
     position: fixed;
-    top: 56px; 
+    top: 56px;
     left: 0;
     width: 100%;
     height: calc(100vh - 56px);
@@ -470,7 +470,7 @@ td:first-child {
 }
 
 .page-item.active .page-link {
-    background-color: #198754; 
+    background-color: #198754;
     border-color: #198754;
     border-radius: 100%;
 }
@@ -502,7 +502,7 @@ td:first-child {
 
 .navbar {
   z-index: 1055 !important;
-  position: sticky; 
+  position: sticky;
   top: 0;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -514,17 +514,27 @@ td:first-child {
 
 .no-horizontal-scroll {
     overflow-x: auto;
-    scrollbar-width: none;           
-    -ms-overflow-style: none;  
-    -webkit-overflow-scrolling: touch; 
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
 }
 
 .no-horizontal-scroll::-webkit-scrollbar {
-    display: none;                   
+    display: none;
 }
 
 .flatpickr-calendar {
     max-height: 320px !important;
     overflow-y: auto !important;
     z-index: 9999 !important;
+}
+
+@media (min-width: 992px) {
+    .table-wrapper::-webkit-scrollbar {
+        display: none;
+    }
+    .table-wrapper {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
 }

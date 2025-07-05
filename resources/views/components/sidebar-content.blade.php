@@ -91,6 +91,12 @@
                 <span><i class="bi bi-file-earmark-text me-2"></i> Purchase Order</span>
         </a>
         </li>
+        <li>
+            <a href="{{ route('admin.stock_opname.index') }}"
+            class="nav-link d-flex align-items-center {{ request()->routeIs('admin.stock_opname.*') ? 'active' : 'text-dark' }}">
+            <span><i class="bi bi-list-ul me-2"></i> Stock Opname</span>
+            </a>
+        </li>
         <li class="nav-item">
             <a href="{{ route('admin.wishlist.index') }}"
                class="nav-link d-flex align-items-center {{ request()->routeIs('admin.wishlist.index') ? 'active' : 'text-dark' }}">
