@@ -14,6 +14,17 @@ class StockOpname extends Pivot
         'selisih' => 'decimal:2',
         'tanggal_opname' => 'date'
     ];
+     protected $fillable = [
+        'item_id',
+        'session_id',
+        'qty_sistem',
+        'qty_fisik',
+        'selisih',
+        'status',
+        'dilakukan_oleh',
+        'tanggal_opname',
+        'catatan'
+    ];
 
     public function item()
     {
@@ -28,5 +39,13 @@ class StockOpname extends Pivot
     public function user()
     {
         return $this->belongsTo(User::class, 'dilakukan_oleh');
+    }
+     public function scopeDraft($query)
+    {
+        return $query->where('status', 'draft');
+    }
+    public function scopeWithDifference($query)
+    {
+        return $query->where('selisih', '!=', 0);
     }
 }

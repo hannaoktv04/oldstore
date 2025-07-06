@@ -61,7 +61,7 @@ class Item extends Model
 
     public function logs()
     {
-        return $this->hasMany(ItemLog::class);
+        return $this->hasMany(ItemLog::class, 'item_id');
     }
     public function getGalleryAttribute()
     {
@@ -96,8 +96,11 @@ class Item extends Model
         return $this->stocks?->qty ?? 0;
     }
     public function stockOpnames()
-{
-    return $this->hasMany(StockOpname::class, 'item_id');
-}
-
+    {
+        return $this->hasMany(StockOpname::class, 'item_id');
+    }
+    public function adjustments()
+    {
+        return $this->hasMany(StockAdjustment::class, 'item_id');
+    }
 }

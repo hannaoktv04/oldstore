@@ -69,6 +69,19 @@ Route::get('/', function () {
 // ADMIN ROUTES (ADMIN-ONLY)
 // -------------------------
 Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
+     Route::controller(OpnameSessionController::class)->prefix('stock-opname')->name('admin.stock_opname.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('{stock_opname}/end', 'endSession')->name('endSession');
+    });
+
+    Route::controller(StockOpnameController::class)->prefix('stock-opname')->name('admin.stock_opname.')->group(function () {
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{stock_opname}/edit', 'edit')->name('edit');
+        Route::put('/{stock_opname}', 'update')->name('update');
+    });
+
+
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
     Route::get('/pengajuan/status/{status}', [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
@@ -102,27 +115,59 @@ Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
     Route::post('/categories/bulk-delete', [CategoryController::class, 'bulkDelete'])->name('admin.categories.bulkDelete');
 
     Route::resource('purchase-orders', PurchaseOrderController::class)
-    ->names('admin.purchase_orders');
+        ->names('admin.purchase_orders');
     Route::prefix('purchase-orders')->name('admin.purchase_orders.')->group(function () {
-    Route::post('{purchaseOrder}/submit', [PurchaseOrderController::class, 'submit'])->name('submit');
-    Route::get('{purchaseOrder}/receive', [PurchaseOrderController::class, 'receiveForm'])->name('receive');
-    Route::post('{purchaseOrder}/receive', [PurchaseOrderController::class, 'processReceive'])->name('processReceive');
-    Route::get('{id}/pdf', [PurchaseOrderController::class, 'downloadPdf'])->name('downloadPdf');
+        Route::post('{purchaseOrder}/submit', [PurchaseOrderController::class, 'submit'])->name('submit');
+        Route::get('{purchaseOrder}/receive', [PurchaseOrderController::class, 'receiveForm'])->name('receive');
+        Route::post('{purchaseOrder}/receive', [PurchaseOrderController::class, 'processReceive'])->name('processReceive');
+        Route::get('{id}/pdf', [PurchaseOrderController::class, 'downloadPdf'])->name('downloadPdf');
     });
 
-    Route::resource('stock-opname', OpnameSessionController::class)
-        ->names('admin.stock_opname')
-        ->except(['show']);
-    Route::post('stock-opname/{stock_opname}/end', [OpnameSessionController::class, 'endSession'])
-        ->name('admin.stock_opname.endSession');
+    Route::controller(OpnameSessionController::class)->prefix('stock-opname')->name('admin.stock_opname.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('{stock_opname}/end', 'endSession')->name('endSession');
+    });
 
-    // Route::get('/{opname}/input', [StockOpnameController::class, 'formInput'])->name('input.form');
-    // Route::post('/{opname}/input', [StockOpnameController::class, 'storeInput'])->name('input');
-    // Route::put('/{opname}', [StockOpnameController::class, 'update'])->name('update');
-    // Route::put('/{session}', [StockOpnameController::class, 'update'])->name('admin.stock_opname.update');
-    // Route::post('/{opname}/close', [StockOpnameController::class, 'endSession'])->name('end');
-    // Route::get('/{opname}', [StockOpnameController::class, 'show'])->name('show');
+    Route::controller(StockOpnameController::class)->prefix('stock-opname')->name('admin.stock_opname.')->group(function () {
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{stock_opname}/edit', 'edit')->name('edit');
+        Route::put('/{stock_opname}', 'update')->name('update');
+    });
 
+    // You might also want a delete route for sessions if OpnameSessionController handles it.
+    // If OpnameSessionController has a destroy method, you'd add:
+    // Route::delete('stock-opname/{opnameSession}', [OpnameSessionController::class, 'destroy'])->name('admin.stock_opname.destroy');
+
+
+
+
+
+
+    // Route::controller(StockOpnameController::class)->prefix('stock-opname')->name('admin.stock_opname.')
+    //     ->group(function () {
+    //         Route::get('/create', 'create')->name('create');
+    //         Route::post('/', 'store')->name('store');
+    //         Route::put('/{stock_opname}', 'update')->name('update');
+    //         Route::delete('/{stock_opname}', 'destroy')->name('destroy');
+    //     });
+
+
+
+    // Route::post('/stock-opname', [OpnameSessionController::class, 'index'])
+    //     ->name('admin.stock_opname.index');
+    // Route::post('stock-opname/{stock_opname}/end', [OpnameSessionController::class, 'endSession'])
+    //     ->name('admin.stock_opname.endSession');
+
+    // Route::prefix('/stock-opname')->name('admin.stock_opname.')->controller(StockOpnameController::class)->group(function () {
+    //     Route::get('/create', 'create')->name('create');
+    //     Route::post('/', 'store')->name('store');
+    //     Route::put('/{stock_opname}', 'update')->name('update');
+    //     Route::delete('/{stock_opname}', 'destroy')->name('destroy');
+    // });
+
+    // Route::put('stock-opname/{stock_opname}/combined-update', [StockOpnameController::class, 'update'])
+    //     ->name('admin.stock_opname.update');
 });
 
 

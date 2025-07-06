@@ -30,22 +30,15 @@ class OpnameSession extends Model
     {
         return $this->belongsTo(User::class, 'dibuka_oleh');
     }
-    public function items()
+
+       public function stockOpnames()
     {
-        return $this->belongsToMany(Item::class, 'stock_opnames','session_id', 'item_id')
-            ->using(StockOpname::class)
-            ->withPivot([
-                'qty_sistem',
-                'qty_fisik',
-                'selisih',
-                'status',
-                'dilakukan_oleh',
-                'tanggal_opname',
-                'catatan'
-            ]);
+        return $this->hasMany(StockOpname::class, 'session_id');
     }
-    public function scopeActive($query)
+
+
+     public function canBeEnded()
     {
-        return $query->where('status', 'aktif');
+        return $this->status === 'aktif';
     }
 }
