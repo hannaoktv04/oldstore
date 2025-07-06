@@ -133,41 +133,9 @@ Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
         Route::post('/', 'store')->name('store');
         Route::get('/{stock_opname}/edit', 'edit')->name('edit');
         Route::put('/{stock_opname}', 'update')->name('update');
+        Route::delete('/{stock_opname}', 'destroy')->name('destroy');
+
     });
-
-    // You might also want a delete route for sessions if OpnameSessionController handles it.
-    // If OpnameSessionController has a destroy method, you'd add:
-    // Route::delete('stock-opname/{opnameSession}', [OpnameSessionController::class, 'destroy'])->name('admin.stock_opname.destroy');
-
-
-
-
-
-
-    // Route::controller(StockOpnameController::class)->prefix('stock-opname')->name('admin.stock_opname.')
-    //     ->group(function () {
-    //         Route::get('/create', 'create')->name('create');
-    //         Route::post('/', 'store')->name('store');
-    //         Route::put('/{stock_opname}', 'update')->name('update');
-    //         Route::delete('/{stock_opname}', 'destroy')->name('destroy');
-    //     });
-
-
-
-    // Route::post('/stock-opname', [OpnameSessionController::class, 'index'])
-    //     ->name('admin.stock_opname.index');
-    // Route::post('stock-opname/{stock_opname}/end', [OpnameSessionController::class, 'endSession'])
-    //     ->name('admin.stock_opname.endSession');
-
-    // Route::prefix('/stock-opname')->name('admin.stock_opname.')->controller(StockOpnameController::class)->group(function () {
-    //     Route::get('/create', 'create')->name('create');
-    //     Route::post('/', 'store')->name('store');
-    //     Route::put('/{stock_opname}', 'update')->name('update');
-    //     Route::delete('/{stock_opname}', 'destroy')->name('destroy');
-    // });
-
-    // Route::put('stock-opname/{stock_opname}/combined-update', [StockOpnameController::class, 'update'])
-    //     ->name('admin.stock_opname.update');
 });
 
 

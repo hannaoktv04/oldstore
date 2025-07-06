@@ -109,4 +109,21 @@ class StockOpnameController extends Controller
             return back()->with('error', 'Gagal menyimpan data: ' . $e->getMessage());
         }
     }
+    public function destroy(OpnameSession $stock_opname)
+    {
+
+        try {
+            DB::beginTransaction();
+            StockOpname::where('session_id', $stock_opname->id)->delete();
+            $stock_opname->delete();
+
+            DB::commit();
+
+            return redirect()->route('admin.stock_opname.index')
+                ->with('success', 'Sesi berhasil dihapus.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal menghapus sesi: ' . $e->getMessage());
+        }
+    }
 }

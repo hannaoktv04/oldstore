@@ -36,37 +36,53 @@
                     <td>{{ $session->catatan }}</td>
                     <td>
                         @if ($session->status === 'aktif')
-                        <a href="{{ route('admin.stock_opname.edit', $session) }}"
-                            class="btn btn-sm btn-warning me-1">Edit</a>
+                        <a href="{{ route('admin.stock_opname.edit', $session) }}" class="btn btn-sm btn-warning me-1"
+                            title="Edit">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
 
                         <form action="{{ route('admin.stock_opname.endSession', $session) }}" method="POST"
                             class="d-inline">
                             @csrf
                             <input type="hidden" name="tanggal_selesai" value="{{ now()->toDateString() }}">
-                            <button type="submit" class="btn btn-sm btn-dark me-1">Close</button>
+                            <button type="submit" class="btn btn-sm btn-dark me-1" title="Tutup Sesi">
+                                <i class="bi bi-lock-fill"></i>
+                            </button>
                         </form>
 
-                        {{-- <form action="{{ route('admin.stock_opname.destroy', $session) }}" method="POST"
+                        <form action="{{ route('admin.stock_opname.destroy', $session) }}" method="POST"
                             class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-sm btn-danger me-1"
-                                onclick="return confirm('Akhiri sesi ini?')">Hapus</button>
-                        </form> --}}
+                            <button type="submit" class="btn btn-sm btn-danger me-1"
+                                onclick="return confirm('Akhiri sesi ini?')" title="Hapus">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+
                         @elseif ($session->status === 'menunggu')
-                        <a href="{{ route('admin.stock_opname.edit', $session) }}"
-                            class="btn btn-sm btn-warning me-1">Edit</a>
-                        {{-- <form action="{{ route('admin.stock_opname.destroy', $session) }}" method="POST"
+                        <a href="{{ route('admin.stock_opname.edit', $session) }}" class="btn btn-sm btn-warning me-1"
+                            title="Edit">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+
+                        <form action="{{ route('admin.stock_opname.destroy', $session) }}" method="POST"
                             class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-sm btn-danger me-1"
-                                onclick="return confirm('Hapus sesi ini?')">Hapus</button>
-                        </form> --}}
+                            <button type="submit" class="btn btn-sm btn-danger me-1"
+                                onclick="return confirm('Hapus sesi ini?')" title="Hapus">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+
                         @else
-                        <a href="{{ route('admin.stock_opname.index') }}" class="btn btn-sm btn-info">Lihat</a>
+                        <a href="{{ route('admin.stock_opname.index') }}" class="btn btn-sm btn-info me-1" title="Lihat">
+                            <i class="bi bi-eye"></i>
+                        </a>
                         @endif
                     </td>
+
                 </tr>
                 @endforeach
             </tbody>
