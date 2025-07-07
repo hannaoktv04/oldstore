@@ -19,12 +19,12 @@
     </div>
 
     <div class="judul-dokumen">DAFTAR PENGAJUAN PEMBELIAN</div>
-
-    <div class="text-start">
-        <span>Jakarta, {{ \Carbon\Carbon::parse($purchaseOrder->tanggal_po)->format('d M Y') }}</span><br>
+    <div style="text-align: right">
+        <span>Jakarta, {{ \Carbon\Carbon::parse($purchaseOrder->tanggal_po)->format('d M Y') }}</span>
+    </div>
+    <div style="text-align: left">
         <span>Nomor: {{ $purchaseOrder->nomor_po }}</span>
     </div>
-
     <div class="mb-3">
         <p>Kepada Yth. <br> Vendor/Penyedia Barang</p>
         <p>
@@ -46,13 +46,13 @@
         </thead>
         <tbody>
             @foreach ($purchaseOrder->details as $index => $detail)
-            <tr>
-                <td class="text-center">{{ $index + 1 }}</td>
-                <td>{{ $detail->item->kode_barang ?? '-' }}</td>
-                <td>{{ $detail->item->nama_barang ?? '-' }}</td>
-                <td class="text-center">{{ $detail->item->satuan ?? '-' }}</td>
-                <td class="text-right">{{ number_format($detail->qty) }}</td>
-            </tr>
+                <tr>
+                    <td class="text-center">{{ $index + 1 }}</td>
+                    <td>{{ $detail->item->kode_barang ?? '-' }}</td>
+                    <td>{{ $detail->item->nama_barang ?? '-' }}</td>
+                    <td class="text-center">{{ $detail->item->satuan ?? '-' }}</td>
+                    <td class="text-right">{{ number_format($detail->qty) }}</td>
+                </tr>
             @endforeach
         </tbody>
         <tfoot>
@@ -66,7 +66,8 @@
     <div class="mt-4">
         <div class="mb-3">
             <label class="fw-bold">Status:</label>
-            <span class="badge
+            <span
+                class="badge
                 @switch($purchaseOrder->status)
                     @case('draft') bg-secondary @break
                     @case('submitted') bg-primary @break
@@ -85,14 +86,14 @@
     <div class="ttd-area">
         <div class="ttd-box">
             <p>Menyetujui,</p>
-            <br><br><br><br>
+            <br><br><br>
             <p>_________________________</p>
             <p>(Nama & Tanda Tangan)</p>
         </div>
         <div class="ttd-box">
             <p>Pemohon,</p>
-            <p>{{ Auth::user()->jabatan ?? 'Admin Purchasing' }}</p>
-            <br><br>
+            {{-- <p>{{ Auth::user()->jabatan ?? 'Admin Purchasing' }}</p> --}}
+            <br><br><br>
             <p>_________________________</p>
             <p>{{ Auth::user()->nama }}</p>
         </div>
@@ -103,4 +104,5 @@
         Dicetak pada: {{ now()->format('d-m-Y H:i:s') }}
     </div>
 </body>
+
 </html>

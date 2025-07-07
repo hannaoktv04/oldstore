@@ -54,7 +54,7 @@ body {
 }
 .header-text {
     overflow: hidden;
-    text-align: center;
+    text-align: start;
 }
 .judul-dokumen {
     text-align: center;

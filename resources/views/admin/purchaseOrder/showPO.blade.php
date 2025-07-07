@@ -7,21 +7,23 @@
     <div class="card-body">
         <div class="container-fluid" id="print_out">
             <div class="text-center mb-4">
-                <div class="d-flex align-items-center justify-content-center">
+                <div class="d-flex align-items-center justify-content-space-between">
                     <img src="{{ asset('assets/img/logo-komdigi.png') }}" alt="Kop KOMDIGI" class="me-3"
-                        style="height: 100px;">
-                    <div class="text-center">
-                        <h5 class="mb-0 fw-bold">KEMENTERIAN KOMUNIKASI DAN DIGITAL RI</h5>
-                        <h6 class="mb-0">SEKRETARIAT JENDERAL</h6>
-                        <h6 class="mb-1">BIRO SUMBER DAYA MANUSIA DAN ORGANISASI</h6>
-                        <small>Jl. Medan Merdeka Barat No. 9, Jakarta 10110 Telp. (021) 3865189
-                            www.komdigi.go.id</small>
+                        style="height: 80px;">
+                    <div class="text-start px-10">
+                        <h4 class="mb-0 fw-bold">KEMENTERIAN KOMUNIKASI DAN DIGITAL RI</h4>
+                        <h5 class="mb-0">SEKRETARIAT JENDERAL</h5>
+                        <h5 class="mb-1">BIRO SUMBER DAYA MANUSIA DAN ORGANISASI</h5>
+                        <p>Jl. Medan Merdeka Barat No. 9, Jakarta 10110 Telp. (021) 3865189
+                            www.komdigi.go.id</p>
                     </div>
                 </div>
-                <hr class="my-3">
+                <hr style="border: 1px solid black;">
                 <h5 class="fw-bold text-decoration-underline">DAFTAR PENGAJUAN PEMBELIAN</h5>
+                <div class="text-end">
+                    <span>Jakarta, {{ \Carbon\Carbon::parse($purchaseOrder->tanggal_po)->format('d M Y') }}</span>
+                </div>
                 <div class="text-start">
-                    <span>Jakarta, {{ \Carbon\Carbon::parse($purchaseOrder->tanggal_po)->format('d M Y') }}</span><br>
                     <span>Nomor: {{ $purchaseOrder->nomor_po }}</span>
                 </div>
             </div>
@@ -95,8 +97,9 @@
                 </div>
                 <div class="col text-center">
                     <p>Pemohon,</p>
-                    <p>{{ Auth::user()->jabatan ?? 'Admin' }}</p>
+                    {{-- <p>{{ Auth::user()->jabatan ?? 'Admin' }}</p> --}}
                     <br><br><br>
+                    <p>_________________________</p>
                     <p>{{ Auth::user()->nama }}</p>
                 </div>
             </div>
