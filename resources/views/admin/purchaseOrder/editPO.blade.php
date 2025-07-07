@@ -4,11 +4,12 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h4 class="card-title">Input Stok Fisik - {{ $session->periode_bulan }}</h4>
+        <h4 class="card-title">Input Stok Fisik - {{ $purchaseOrder->periode_bulan }}</h4>
     </div>
     <div class="card-body">
-        <form action="{{ route('admin.stock_opname.items.add', $session->id) }}" method="POST">
+        <form action="{{ route('admin.purchase-order.edit', $purchaseOrder->id) }}" method="POST">
             @csrf
+            @method('PUT')
             <div class="row mb-4">
                 <div class="col-md-6">
                     <label>Pilih Item</label>
@@ -41,7 +42,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($session->items as $item)
+                @foreach($purchaseOrder->items as $item)
                 <tr>
                     <td>{{ $item->kode_barang }}</td>
                     <td>{{ $item->nama_barang }}</td>
@@ -59,7 +60,7 @@
         </table>
 
         <div class="mt-3">
-            <form action="{{ route('admin.stock_opname.submit', $session->id) }}" method="POST">
+            <form action="{{ route('admin.stock_opname.submit', $purchaseOrder->id) }}" method="POST">
                 @csrf
                 <button type="submit" class="btn btn-success">Ajukan Approval</button>
             </form>

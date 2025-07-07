@@ -11,7 +11,7 @@ use App\Models\StockAdjustment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PurchaseOrderController extends Controller
 {
@@ -113,12 +113,6 @@ class PurchaseOrderController extends Controller
             $itemStock = ItemStock::firstOrNew(['item_id' => $detail->item_id]);
             $itemStock->qty = ($itemStock->qty ?? 0) + $newQty;
             $itemStock->save();
-
-            $item = Item::find($detail->item_id);
-            if ($item) {
-                $item->stok_minimum += $newQty;
-                $item->save();
-            }
         }
 
         $purchaseOrder->status = 'received';
@@ -161,5 +155,12 @@ class PurchaseOrderController extends Controller
 
         return redirect()->route('admin.purchase_orders.index')
             ->with('success', 'Purchase Order updated successfully');
+    }
+    public function downloadPdf($id)
+    {
+        $purchaseOrder = PurchaseOrder::with('details.item')->findOrFail($id);
+        $pdf = Pdf::loadView('admin.purchaseOrder.pdf', compact('purchaseOrder'));
+        $pdf->setPaper('A4', 'portrait');
+        return $pdf->stream('PO-'.$purchaseOrder->nomor_po.'.pdf');
     }
 }

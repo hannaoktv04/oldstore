@@ -1,5 +1,6 @@
 <?php
 
+use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminPengajuanController;
@@ -19,7 +20,9 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\StockAdjustmentController;
 use App\Http\Controllers\PengajuanController;
+use App\Http\Controllers\OpnameSessionController;
 use App\Http\Controllers\StockOpnameController;
+use App\Models\OpnameSession;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 use App\Http\Controllers\StaffPengirimanController;
 use App\Http\Controllers\NotifikasiController;
@@ -84,6 +87,19 @@ Route::get('/', function () {
 // ADMIN ROUTES (ADMIN-ONLY)
 // -------------------------
 Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
+     Route::controller(OpnameSessionController::class)->prefix('stock-opname')->name('admin.stock_opname.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('{stock_opname}/end', 'endSession')->name('endSession');
+    });
+
+    Route::controller(StockOpnameController::class)->prefix('stock-opname')->name('admin.stock_opname.')->group(function () {
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{stock_opname}/edit', 'edit')->name('edit');
+        Route::put('/{stock_opname}', 'update')->name('update');
+    });
+
+
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
     Route::get('/pengajuan/status/{status}', [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
@@ -116,31 +132,30 @@ Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
     Route::post('/categories/bulk-delete', [CategoryController::class, 'bulkDelete'])->name('admin.categories.bulkDelete');
 
-    Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('admin.purchase_orders.index');
-    Route::get('/purchase-orders/create', [PurchaseOrderController::class, 'create'])->name('admin.purchase_orders.createPO');
-    Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('admin.purchase_orders.store');
-    Route::get('/purchase-orders/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('admin.purchase_orders.showPO');
-    Route::post('/purchase-orders/{purchaseOrder}/submit', [PurchaseOrderController::class, 'submit'])->name('admin.purchase_orders.submit');
-    Route::delete('/purchase-orders/{purchaseOrder}', [PurchaseOrderController::class, 'destroy'])->name('admin.purchase_orders.destroy');
-    Route::get('/purchase-orders/{purchaseOrder}/receive', [PurchaseOrderController::class, 'receiveForm'])->name('admin.purchase_orders.receive');
-    Route::post('/purchase-orders/{purchaseOrder}/receive', [PurchaseOrderController::class, 'processReceive'])->name('admin.purchase_orders.processReceive');
-    Route::get('/purchase_orders/{purchase_order}/edit', [PurchaseOrderController::class, 'edit'])->name('admin.purchase_orders.edit');
-    Route::put('/purchase_orders/{purchase_order}', [PurchaseOrderController::class, 'update'])->name('admin.purchase_orders.update');
+    Route::resource('purchase-orders', PurchaseOrderController::class)
+        ->names('admin.purchase_orders');
+    Route::prefix('purchase-orders')->name('admin.purchase_orders.')->group(function () {
+        Route::post('{purchaseOrder}/submit', [PurchaseOrderController::class, 'submit'])->name('submit');
+        Route::get('{purchaseOrder}/receive', [PurchaseOrderController::class, 'receiveForm'])->name('receive');
+        Route::post('{purchaseOrder}/receive', [PurchaseOrderController::class, 'processReceive'])->name('processReceive');
+        Route::get('{id}/pdf', [PurchaseOrderController::class, 'downloadPdf'])->name('downloadPdf');
+    });
 
-    Route::prefix('stock-opname')->name('admin.stock_opname.')->group(function () {
-    Route::get('/', [StockOpnameController::class, 'index'])->name('index');
-    Route::get('/create', [StockOpnameController::class, 'create'])->name('create');
-    Route::post('/', [StockOpnameController::class, 'store'])->name('store');
+    Route::controller(OpnameSessionController::class)->prefix('stock-opname')->name('admin.stock_opname.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('{stock_opname}/end', 'endSession')->name('endSession');
+    });
 
-    // jangan prefix nested lagi
-    Route::get('/{opname}/edit', [StockOpnameController::class, 'edit'])->name('edit');
-    Route::put('/{opname}', [StockOpnameController::class, 'update'])->name('update');
+    Route::controller(StockOpnameController::class)->prefix('stock-opname')->name('admin.stock_opname.')->group(function () {
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{stock_opname}/edit', 'edit')->name('edit');
+        Route::put('/{stock_opname}', 'update')->name('update');
+        Route::delete('/{stock_opname}', 'destroy')->name('destroy');
 
-    Route::post('/{opname}/end', [StockOpnameController::class, 'endSession'])->name('end');
-    Route::get('/{opname}', [StockOpnameController::class, 'show'])->name('show');
+    });
 });
 
-});
 
 // -------------------------
 // USER ROUTES (LOGGED-IN USERS)
