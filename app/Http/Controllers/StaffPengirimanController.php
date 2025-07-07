@@ -28,10 +28,19 @@ class StaffPengirimanController extends Controller
         $id = (int) str_replace('KP', '', $kodeResi);
         $pengajuan = ItemRequest::with(['user', 'details.item'])->findOrFail($id);
 
-        // Cek apakah sudah dikonfirmasi
         if ($pengajuan->status === 'received') {
             return redirect()->route('staff-pengiriman.dashboard')
                 ->with('info', 'Barang sudah dikonfirmasi dan diterima.');
+        }
+
+        $delivery = ItemDelivery::firstOrNew(['item_request_id' => $pengajuan->id]);
+
+        if (!$delivery->staff_pengiriman) {
+            $delivery->staff_pengiriman = auth()->user()->nama;
+            $delivery->operator_id = auth()->id();
+            $delivery->tanggal_kirim = now();
+            $delivery->status = 'in_progress';
+            $delivery->save();
         }
 
         return view('staff-pengiriman.konfirmasi', compact('pengajuan', 'kodeResi'));
@@ -61,6 +70,7 @@ class StaffPengirimanController extends Controller
                 'bukti_foto' => $path,
                 'status' => 'completed',
                 'catatan' => $request->catatan,
+                'staff_pengiriman' => auth()->user()->nama,
             ]
         );
 

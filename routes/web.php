@@ -22,6 +22,8 @@ use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\StockOpnameController;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 use App\Http\Controllers\StaffPengirimanController;
+use App\Http\Controllers\NotifikasiController;
+
 
 Route::get('/tes-barcode', function () {
     $generator = new BarcodeGeneratorPNG();
@@ -33,9 +35,9 @@ Route::get('/tes-barcode', function () {
     ';
 });
 
-Route::get('/phpinfo', function () {
-    phpinfo();
-});
+Route::post('/notifikasi/mark-seen', [NotifikasiController::class, 'markSeen'])
+    ->name('notifikasi.markSeen')
+    ->middleware('auth');
 
 Route::delete('/cart/bulk-delete', [CartController::class, 'bulkDelete'])->name('cart.bulkDelete');
 
@@ -86,7 +88,6 @@ Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
 
     Route::get('/pengajuan/status/{status}', [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
     Route::get('/pengajuan/{pengajuan}/nota', [AdminPengajuanController::class, 'nota'])->name('admin.pengajuan.nota');
-    Route::post('/pengajuan/{pengajuan}/deliver', [AdminPengajuanController::class, 'deliver'])->name('admin.pengajuan.deliver');
     Route::post('/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])->name('admin.pengajuan.received');
     Route::post('/pengajuan/{pengajuan}/approve', [AdminPengajuanController::class, 'approve'])->name('admin.pengajuan.approve');
     Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('admin.pengajuan.reject');

@@ -47,10 +47,10 @@
                    class="nav-link d-flex py-1 {{ request()->fullUrlIs('*approved*') ? 'active' : 'text-dark' }}">
                     Perlu Dikirim
                 </a>
-                <a href="{{ route('admin.pengajuan.status', 'delivered') }}"
+                {{-- <a href="{{ route('admin.pengajuan.status', 'delivered') }}"
                    class="nav-link d-flex py-1 {{ request()->fullUrlIs('*delivered*') ? 'active' : 'text-dark' }}">
                     Sedang Dikirim
-                </a>
+                </a> --}}
                 <a href="{{ route('admin.pengajuan.status', 'received') }}"
                    class="nav-link d-flex py-1 {{ request()->fullUrlIs('*received*') ? 'active' : 'text-dark' }}">
                     Selesai

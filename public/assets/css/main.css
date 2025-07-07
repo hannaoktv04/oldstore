@@ -8,6 +8,12 @@
   color: #2aa7a7;
 }
 
+.icon-button:hover .bi-bell-fill {
+    color: #2aa7a7; 
+    transform: scale(1.15);
+    transition: all 0.2s ease-in-out;
+}
+
 #heart-icon:hover i::before {
   content: "\f415"; 
   font-weight: bold;
@@ -527,4 +533,12 @@ td:first-child {
     max-height: 320px !important;
     overflow-y: auto !important;
     z-index: 9999 !important;
+}
+
+.grayscale-card {
+    filter: grayscale(100%);
+}
+.disabled-link {
+  pointer-events: none;
+  cursor: not-allowed;
 }

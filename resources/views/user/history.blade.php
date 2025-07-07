@@ -7,6 +7,11 @@
   @forelse ($requests as $request)
     @php
       $pengajuanNumber = str_pad($requests->count() - $loop->index, 3, '0', STR_PAD_LEFT);
+      $statusPengajuan = $request->status;
+
+      if ($request->itemDelivery && $request->itemDelivery->status === 'in_progress') {
+          $statusPengajuan = 'in_progress';
+      }
     @endphp
 
     <div class="card border-0 mb-3 p-3 shadow-sm">
@@ -59,16 +64,19 @@
 
         <div class="col-12 col-md-3 col-lg-3 d-flex flex-column justify-content-center align-items-center text-center">
           <div>
-            @switch($request->status)
+            @switch($statusPengajuan)
               @case('submitted') 
                 <em class="fw-semibold text-primary"><i class="bi bi-hourglass-split me-1"></i> Diproses</em> 
                 @break
+
               @case('approved') 
                 <em class="fw-semibold text-warning"><i class="bi bi-check2-square me-1"></i> Disetujui</em> 
                 @break
-              @case('delivered') 
+
+              @case('in_progress')
                 <em class="fw-semibold text-info"><i class="bi bi-truck me-1"></i> Dikirim</em> 
                 @break
+
               @case('received') 
                 @if($request->user_confirmed)
                   <em class="fw-semibold text-success"><i class="bi bi-check-circle-fill me-1"></i> Selesai</em>
@@ -76,11 +84,13 @@
                   <em class="fw-semibold text-success"><i class="bi bi-box-seam me-1"></i> Diterima</em>
                 @endif
                 @break
+
               @case('rejected') 
                 <em class="fw-semibold text-danger"><i class="bi bi-x-circle me-1"></i> Ditolak</em> 
                 @break
+
               @default 
-                <em class="text-muted">{{ ucfirst($request->status) }}</em>
+                <em class="text-muted">{{ ucfirst($statusPengajuan) }}</em>
             @endswitch
             <br>
             <a href="#" class="text-success" data-bs-toggle="modal" data-bs-target="#statusModal-{{ $request->id }}">
@@ -119,12 +129,21 @@
               </li>
               @endif
 
+              @if($request->itemDelivery && $request->itemDelivery->status === 'in_progress')
+              <li class="mb-3">
+                <strong>🚚 Dalam Pengiriman</strong><br>
+                Sedang diantar oleh <strong>{{ $request->itemDelivery->staff_pengiriman }}</strong><br>
+                {{ \Carbon\Carbon::parse($request->itemDelivery->tanggal_kirim)->format('H:i:s, d M Y') }}
+              </li>
+              @endif
+
               @if($request->status === 'received' && $request->itemDelivery && $request->itemDelivery->bukti_foto)
               <li class="mb-3">
-                <strong>📥 Diterima & Dikonfirmasi</strong><br>
+                <strong>📥 Diterima</strong><br>
                 <a href="#" data-bs-toggle="modal" data-bs-target="#buktiModal-{{ $request->id }}">
                   Lihat Bukti Pengiriman
                 </a><br>
+                Diantar oleh <strong>{{ $request->itemDelivery->staff_pengiriman }}</strong><br>
                 {{ \Carbon\Carbon::parse($request->itemDelivery->updated_at)->format('H:i:s, d M Y') }}
               </li>
               @endif

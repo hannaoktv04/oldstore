@@ -20,13 +20,15 @@
                         <input class="form-check-input me-2 border-success"
                                style="box-shadow: none; width: 1.3em; height: 1.3em;"
                                type="checkbox"
-                               id="flexCheckDefault">
+                               id="flexCheckDefault"
+                               {{ $opnameAktif ? 'disabled' : '' }}>
                         <label class="form-check-label fw-semibold" for="flexCheckDefault">
                             Pilih Semua <small class="text-secondary">({{ $jumlahKeranjang }})</small>
                         </label>
                     </div>
                     <button id="btnHapusTerpilih" class="btn btn-success btn-sm d-none px-3 py-1"
-                            data-bs-toggle="modal" data-bs-target="#konfirmasiHapusModal">
+                            data-bs-toggle="modal" data-bs-target="#konfirmasiHapusModal"
+                            {{ $opnameAktif ? 'disabled' : '' }}>
                         Hapus
                     </button>
                 </div>
@@ -37,27 +39,31 @@
     @php
         $item = $cart->item;
         $stokHabis = $item->stok_minimum <= 0;
-        $buttonStyle = $stokHabis ? 'btn-outline-secondary' : 'btn-outline-success';
-        $borderColor = $stokHabis ? '#6c757d' : '#198754';
+        $nonaktif = $stokHabis || $opnameAktif;
+        $buttonStyle = $nonaktif ? 'btn-outline-secondary' : 'btn-outline-success';
+        $borderColor = $nonaktif ? '#6c757d' : '#198754';
     @endphp
 
-    <div class="card border-0 mb-3 p-3 shadow-sm position-relative {{ $stokHabis ? 'bg-light' : '' }}">
+    <div class="card border-0 mb-3 p-3 shadow-sm position-relative {{ $nonaktif ? 'bg-light grayscale-card' : '' }}">
         @if($stokHabis)
-        <span class="badge bg-secondary position-absolute" style="top: 10px; left: 10px;">HABIS</span>
+            <span class="badge bg-secondary position-absolute" style="top: 10px; left: 10px;">HABIS</span>
+        @elseif($opnameAktif)
+            <span class="badge bg-warning text-dark position-absolute" style="top: 10px; left: 10px;">OPNAME</span>
         @else
-        <input class="form-check-input position-absolute item-checkbox border-success"
-               style="top: 10px; left: 10px; width: 1.3em; height: 1.3em;"
-               type="checkbox"
-               value="{{ $cart->id }}">
+            <input class="form-check-input position-absolute item-checkbox border-success"
+                   style="top: 10px; left: 10px; width: 1.3em; height: 1.3em;"
+                   type="checkbox"
+                   value="{{ $cart->id }}">
         @endif
 
-        <div class="d-flex align-items-center justify-content-between ps-7 {{ $stokHabis ? 'text-muted opacity-50' : '' }}">
-            <a href="{{ route('produk.show', ['id' => $item->id]) }}"
-               class="text-decoration-none {{ $stokHabis ? 'pointer-events-none' : '' }}">
+        <div class="d-flex align-items-center justify-content-between ps-7 {{ $nonaktif ? 'text-muted' : '' }}">
+            <a href="{{ $nonaktif ? '#' : route('produk.show', ['id' => $item->id]) }}"
+               class="text-decoration-none {{ $nonaktif ? 'pointer-events-none' : '' }}">
                 <div class="d-flex align-items-center">
-                    <img src="{{ asset('storage/' . $cart->item->photo_url) }}" alt="gambar" width="80" height="80" class="rounded me-3" style="object-fit: cover;">
+                    <img src="{{ asset('storage/' . $item->photo_url) }}" alt="gambar"
+                         width="80" height="80" class="rounded me-3" style="object-fit: cover;">
                     <div>
-                        <div class="text-muted small">{{ $item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</div>
+                        <div class="text-muted small">{{ $item->category->categori_name ?? '-' }}</div>
                         <div class="fw-semibold text-dark">{{ $item->nama_barang }}</div>
                         <div class="text-muted small">Stok tersedia: {{ $item->stok_minimum }} {{ $item->satuan }}</div>
                     </div>
@@ -67,7 +73,8 @@
                 <form method="POST" action="{{ route('cart.destroy', $cart->id) }}" class="me-3">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn text-secondary">
+                    <button type="submit" class="btn text-secondary"
+                            {{ $opnameAktif ? 'disabled' : '' }}>
                         <i class="bi bi-trash" style="font-size: 1.2rem;"></i>
                     </button>
                 </form>
@@ -76,18 +83,18 @@
                     @csrf
                     @method('PUT')
                     <div class="input-group {{ $buttonStyle }} flex-nowrap w-100"
-                         style="border: 1px solid {{ $borderColor }}; border-radius: 50px; overflow: hidden; opacity: {{ $stokHabis ? '0.5' : '1' }};">
+                         style="border: 1px solid {{ $borderColor }}; border-radius: 50px; overflow: hidden; opacity: {{ $nonaktif ? '0.5' : '1' }};">
                         <button type="submit" name="action" value="decrease"
                                 class="btn {{ $buttonStyle }} px-2 py-1 border-0"
-                                {{ $stokHabis ? 'disabled' : '' }}>−</button>
+                                {{ $nonaktif ? 'disabled' : '' }}>−</button>
                         <input type="number" name="manual_qty" value="{{ $cart->qty }}"
                                min="1" max="{{ $item->stok_minimum }}"
                                class="form-control text-center border-0"
                                style="width: 43px; height: 32px; padding: 0 0.1rem;"
-                               {{ $stokHabis ? 'disabled' : '' }}>
+                               {{ $nonaktif ? 'disabled' : '' }}>
                         <button type="submit" name="action" value="increase"
                                 class="btn {{ $buttonStyle }} px-2 py-1 border-0"
-                                {{ $stokHabis ? 'disabled' : '' }}>+</button>
+                                {{ $nonaktif ? 'disabled' : '' }}>+</button>
                     </div>
                 </form>
             </div>
@@ -114,16 +121,15 @@
 
                 <form method="POST" action="{{ route('cart.checkout') }}" id="checkoutForm">
                     @csrf
-                    @php
-                        $now = \Carbon\Carbon::now()->format('Y-m-d\TH:i');
-                    @endphp
                     <input type="hidden" name="tanggal_pengiriman" id="tanggal_pengiriman">
                     <div class="mb-3">
                         <label for="tanggal_pengiriman_input" class="form-label">Tanggal Pengiriman</label>
                         <input type="text" id="tanggal_pengiriman_input" class="form-control"
-                                placeholder="Pilih tanggal & waktu" required>
+                               placeholder="Pilih tanggal & waktu" required
+                               {{ $opnameAktif ? 'disabled' : '' }}>
                     </div>
-                    <button type="submit" class="btn btn-success w-100">Ajukan Permintaan</button>
+                    <button type="submit" class="btn btn-success w-100"
+                            {{ $opnameAktif ? 'disabled' : '' }}>Ajukan Permintaan</button>
                 </form>
             </div>
         </div>
@@ -153,4 +159,3 @@
     </div>
 </div>
 @endsection
-

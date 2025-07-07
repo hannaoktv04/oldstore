@@ -17,22 +17,9 @@
 @elseif ($status === 'approved')
     <div class="d-flex justify-content-center justify-content-md-end gap-3">
         <a href="{{ route('pengajuan.resi', $pengajuan->id) }}" class="btn btn-sm btn-outline-primary">
-            <i class="bi bi-printer" title="Cetak Resi"></i>
+            <i class="bi bi-qr-code" title="Cetak Resi"></i>
         </a>
-        <form action="{{ route('admin.pengajuan.deliver', $pengajuan->id) }}" method="POST">
-            @csrf
-            <button class="btn btn-sm btn-outline-success" type="submit">
-                <i class="bi bi-truck" title="Dikirim"></i>
-            </button>
-        </form>
     </div>
-
-@elseif ($status === 'delivered')
-    <a href="#" class="btn btn-sm btn-outline-secondary"
-       data-bs-toggle="modal"
-       data-bs-target="#receiveModal-{{ $pengajuan->id }}">
-        <i class="bi bi-box" title="Terima Barang"></i>
-    </a>
 
 @elseif ($status === 'received')
     <a href="#', $request->id) }}"

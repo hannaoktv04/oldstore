@@ -95,4 +95,10 @@ class Item extends Model
     {
         return $this->stocks?->qty ?? 0;
     }
+
+    public function stockNotifications()
+    {
+        return $this->hasMany(StockNotification::class);
+    }
+
 }

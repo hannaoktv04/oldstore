@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use App\Models\OpnameSession;
+use Illuminate\Support\Facades\View;
 
 class OpnameBlockMiddleware
 {
@@ -12,10 +13,9 @@ class OpnameBlockMiddleware
     {
         $activeSession = OpnameSession::where('status', 'aktif')->where('block_transaction', true)->first();
 
-        if ($activeSession) {
-            return redirect()->back()->with('error', 'Transaksi tidak dapat dilakukan selama stock opname berlangsung.');
-        }
+        View::share('opnameAktif', $activeSession ? true : false);
 
         return $next($request);
     }
 }
+

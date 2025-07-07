@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\ItemImage;
 use App\Models\ItemStock;
 use App\Models\ItemLog;
+use App\Models\StockNotification;
 use App\Models\StockAdjustment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -52,6 +53,13 @@ class ItemController extends Controller
                 'item_id' => $item->id,
                 'qty'     => $validated['stok_awal'],
             ]);
+
+            if ($validated['stok_awal'] > 0) {
+                StockNotification::create([
+                    'item_id' => $item->id,
+                    'seen' => false,
+                ]);
+            }
 
             $adjustment = StockAdjustment::create([
                 'item_id'         => $item->id,

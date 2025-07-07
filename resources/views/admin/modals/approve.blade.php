@@ -1,7 +1,7 @@
 @php($no = str_pad($pengajuan->id, 3, '0', STR_PAD_LEFT))
 
 <div class="modal fade" id="approveModal-{{ $pengajuan->id }}" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 400px;">
         <form method="POST" action="{{ route('admin.pengajuan.approve', $pengajuan->id) }}">
             @csrf
             <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
@@ -11,7 +11,6 @@
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-
 
                 <div class="modal-body p-4">
                     <p class="text-muted mb-4">Silakan sesuaikan jumlah barang yang akan disetujui.</p>

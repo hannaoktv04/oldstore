@@ -11,6 +11,7 @@
           </h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+
         <div class="modal-body p-4">
           <h6 class="fw-semibold text-muted mb-3">Detail Barang</h6>
 
@@ -27,10 +28,24 @@
               </li>
             @endforeach
           </ul>
+
+         @if($pengajuan->itemDelivery && $pengajuan->itemDelivery->staff_pengiriman)
+              <div class="mb-4">
+                  <label class="form-label fw-semibold mb-1">Nama Pengirim</label>
+                  <input type="text" class="form-control" value="{{ $pengajuan->itemDelivery->staff_pengiriman }}" readonly>
+              </div>
+          @else
+              <div class="mb-4">
+                  <label class="form-label fw-semibold mb-1">Nama Pengirim</label>
+                  <input type="text" class="form-control" value="Belum tersedia" readonly>
+              </div>
+          @endif
+
           <div class="mb-4">
             <label class="form-label fw-semibold">Catatan Penerimaan <small class="text-muted">(opsional)</small></label>
-            <textarea class="form-control rounded-3" name="catatan" rows="3" ></textarea>
+            <textarea class="form-control rounded-3" name="catatan" rows="3"></textarea>
           </div>
+
           <div class="mb-3">
             <label class="form-label fw-semibold mb-1">
               Bukti Foto <span class="text-danger">*</span>
@@ -40,6 +55,7 @@
             </div>
           </div>
         </div>
+
         <div class="modal-footer bg-light py-3 px-4">
           <button type="submit" class="btn btn-success px-4">
             <i class="bi bi-check-circle me-1"></i> Konfirmasi Terima

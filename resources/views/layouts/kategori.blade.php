@@ -58,16 +58,26 @@
     <div class="col-md-9">
       <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
         @forelse ($items as $item)
-          @php $stokHabis = $item->stok_minimum == 0; @endphp
+          @php
+            $stokHabis = $item->stok_minimum == 0;
+            $nonaktif = $stokHabis || ($opnameAktif ?? false);
+          @endphp
           <div class="col">
-            <a href="{{ route('produk.show', ['id' => $item->id]) }}" class="text-decoration-none {{ $stokHabis ? 'text-muted' : 'text-dark' }}">
-              <div class="card card-3d h-100 shadow-sm position-relative {{ $stokHabis ? 'bg-light' : '' }}" style="{{ $stokHabis ? 'opacity: 0.6;' : '' }}">
+            <a href="{{ $nonaktif ? '#' : route('produk.show', ['id' => $item->id]) }}"
+               class="text-decoration-none {{ $nonaktif ? 'text-muted disabled-link' : 'text-dark' }}"
+               style="{{ $nonaktif ? 'pointer-events: none;' : '' }}">
+              <div class="card card-3d h-100 shadow-sm position-relative {{ $nonaktif ? 'bg-light grayscale-card' : '' }}"
+                   style="{{ $nonaktif ? 'opacity: 0.6;' : '' }}">
+
                 @if($stokHabis)
                   <div class="position-absolute top-0 end-0 m-2">
                     <span class="badge bg-danger">Stok Habis</span>
                   </div>
                 @endif
-                <img src="{{ asset('storage/' . ($item->photo?->image ?? 'placeholder.jpg')) }}" class="card-img-top" style="height: 160px; object-fit: cover;" alt="{{ $item->nama_barang }}">
+
+                <img src="{{ asset('storage/' . ($item->photo?->image ?? 'placeholder.jpg')) }}"
+                     class="card-img-top" style="height: 160px; object-fit: cover;" alt="{{ $item->nama_barang }}">
+
                 <div class="card-body">
                   <h6 class="card-title">{{ $item->nama_barang }}</h6>
                   <p class="card-text small text-muted mb-1">{{ $item->category?->categori_name ?? '-' }}</p>
@@ -88,6 +98,7 @@
           </div>
         @endforelse
       </div>
+
       <div class="d-flex justify-content-center mt-4">
         {{ $items->links('pagination::bootstrap-5') }}
       </div>

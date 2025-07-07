@@ -25,7 +25,7 @@ class PengajuanController extends Controller
         $pengajuan = ItemRequest::with(['user', 'details.item'])->findOrFail($id);
 
         $kodeResi = 'KP' . str_pad($pengajuan->id, 6, '0', STR_PAD_LEFT);
-        $qrLink = route('staff-pengiriman.konfirmasi', $kodeResi); // halaman kurir konfirmasi
+        $qrLink = route('staff-pengiriman.konfirmasi', $kodeResi); 
 
         $result = Builder::create()
             ->writer(new PngWriter())

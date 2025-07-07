@@ -41,11 +41,20 @@
 
 </head>
 <body>
+  @if (isset($opnameAktif) && $opnameAktif)
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+      Swal.fire({
+          icon: 'warning',
+          title: 'Stok Opname Sedang Berlangsung',
+          text: 'Pengajuan tidak dapat dilakukan saat stok opname berlangsung.',
+          confirmButtonText: 'Mengerti'
+      });
+  </script>
+  @endif
+
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
-      <!-- Sidebar (optional) -->
-      {{-- @include('layouts.components.sidebar') --}}
-
       <div class="layout-page">
         @include('components.navbar')
 

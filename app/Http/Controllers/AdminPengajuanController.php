@@ -111,40 +111,7 @@ class AdminPengajuanController extends Controller
             return back()->with('error', 'Gagal menolak: '.$e->getMessage());
         }
     }
-    public function deliver(Request $request, ItemRequest $pengajuan)
-    {
-        $request->validate([
-            'bukti_foto' => 'nullable|image|max:2048',
-        ]);
 
-        DB::beginTransaction();
-        try {
-            $buktiPath = null;
-            if ($request->hasFile('bukti_foto')) {
-                $buktiPath = $request->file('bukti_foto')
-                                     ->store('bukti_pengiriman', 'public');
-            }
-
-            ItemDelivery::updateOrCreate(
-                ['item_request_id' => $pengajuan->id],
-                [
-                    'operator_id'   => auth()->id(),
-                    'tanggal_kirim' => now(),
-                    'bukti_foto'    => $buktiPath,
-                    'status'        => 'in_progress',
-                ]
-            );
-
-            $pengajuan->update(['status' => 'delivered']);
-
-            DB::commit();
-            return back()->with('success', 'Pengajuan ditandai dikirim.');
-        } catch (\Throwable $e) {
-            DB::rollBack();
-            if (isset($buktiPath)) Storage::disk('public')->delete($buktiPath);
-            return back()->with('error', 'Gagal kirim: '.$e->getMessage());
-        }
-    }
     public function markAsReceived(Request $request, ItemRequest $pengajuan)
     {
         $request->validate([
@@ -160,10 +127,8 @@ class AdminPengajuanController extends Controller
                 throw new \Exception('Pengiriman tidak ditemukan.');
             }
 
-            // Simpan gambar ke public storage
             $buktiPath = $request->file('bukti_foto')->store('bukti_penerimaan', 'public');
 
-            // Buat record ItemReceipt
             ItemReceipt::create([
                 'item_delivery_id' => $delivery->id,
                 'received_by' => auth()->id(),
@@ -171,13 +136,12 @@ class AdminPengajuanController extends Controller
                 'catatan' => $request->input('catatan'),
             ]);
 
-            // Update delivery
             $delivery->update([
                 'status' => 'completed',
                 'bukti_foto' => $buktiPath,
+                'staff_pengiriman' => auth()->user()->nama,
             ]);
 
-            // Update pengajuan
             $pengajuan->update([
                 'status' => 'received',
             ]);

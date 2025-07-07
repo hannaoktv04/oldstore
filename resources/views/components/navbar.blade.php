@@ -25,6 +25,13 @@
         </span>
       </div>
     </form>
+    
+    @php
+      use App\Models\StockNotification;
+      $notifikasiProdukBaru = Auth::check() && Auth::user()->role === 'pegawai'
+          ? StockNotification::where('seen', false)->with('item')->latest()->get()
+          : collect();
+    @endphp
 
     <div class="d-flex align-items-center gap-2">
 
@@ -69,11 +76,48 @@
             </div>
           </div>
         @endif
-      @else
-        <a href="{{ route('login') }}" class="text-dark text-decoration-none">
-          <i class="bi bi-bag-fill fs-5"></i>
-        </a>
-    @endauth
+        @else
+          <a href="{{ route('login') }}" class="text-dark text-decoration-none">
+            <i class="bi bi-bag-fill fs-5"></i>
+          </a>
+      @endauth
+    
+      @if(Auth::user()->role === 'pegawai')
+        <div class="dropdown position-relative">
+          <button class="icon-button text-dark bg-transparent border-0 p-0 position-relative"
+                  type="button" id="notifDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-bell-fill fs-5"></i>
+            @if($notifikasiProdukBaru->count() > 0)
+              <span class="badge bg-success rounded-pill position-absolute top-0 start-100 translate-middle">
+                {{ $notifikasiProdukBaru->count() }}
+              </span>
+            @endif
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow p-3" style="min-width: 300px;" aria-labelledby="notifDropdown">
+            <h6 class="mb-2">Produk Tersedia Kembali</h6>
+            @forelse($notifikasiProdukBaru as $notif)
+              <li class="mb-2 small d-flex align-items-start">
+                <i class="bi bi-box-seam text-success me-2 mt-1"></i>
+                <div>
+                  <strong>{{ $notif->item->nama_barang }}</strong><br>
+                  <small class="text-muted">Sekarang sudah tersedia</small>
+                </div>
+              </li>
+            @empty
+              <li class="text-muted">Tidak ada notifikasi.</li>
+            @endforelse
+            @if($notifikasiProdukBaru->count() > 0)
+              <li class="mt-3 text-center">
+                <form action="{{ route('notifikasi.markSeen') }}" method="POST">
+                  @csrf
+                  <button class="btn btn-outline-secondary btn-sm w-100" type="submit">Tandai Sudah Dibaca</button>
+                </form>
+              </li>
+            @endif
+          </ul>
+        </div>
+      @endif
+
 
       <div class="dropdown">
         <button id="user-icon" class="icon-button text-dark bg-transparent border-0 pe-3 dropdown-toggle "

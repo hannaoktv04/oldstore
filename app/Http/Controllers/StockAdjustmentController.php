@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\ItemStock;
 use App\Models\StockAdjustment;
 use App\Models\ItemLog;
+use App\Models\StockNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -57,6 +58,13 @@ class StockAdjustmentController extends Controller
             if ($item) {
                 $item->stok_minimum = $qtyFisik;
                 $item->save();
+            }
+
+            if ($qtySebelum <= 0 && $qtyFisik > 0) {
+                StockNotification::create([
+                    'item_id' => $itemId,
+                    'seen' => false,
+                ]);
             }
 
             DB::commit();

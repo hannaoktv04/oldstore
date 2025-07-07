@@ -12,28 +12,25 @@
         .header {
             display: flex;
             align-items: center;
-            gap: 15px;
             margin-bottom: 10px;
         }
         .header img {
             height: 100px;
+            margin-right: 15px;
         }
-        .header-info h5, .header-info h6 {
+        .header-info h3, .header-info h4 {
             margin: 0;
         }
-        .text-center {
-            text-align: center;
-        }
-        .text-end {
-            text-align: right;
-        }
-        .text-start {
-            text-align: left;
+        .header-info small {
+            font-size: 10px;
         }
         hr {
             margin: 10px 0 20px;
             border: 1px solid #000;
         }
+        .text-center { text-align: center; }
+        .text-end { text-align: right; }
+        .text-start { text-align: left; }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -42,18 +39,15 @@
         table th, table td {
             border: 1px solid #000;
             padding: 6px;
-            text-align: center;
         }
         table th {
             background-color: #f2f2f2;
+            text-align: center;
         }
         .signature-table {
             width: 100%;
             margin-top: 40px;
             text-align: center;
-        }
-        .signature-table td {
-            border: none;
         }
         .footer {
             margin-top: 40px;
@@ -65,16 +59,16 @@
 
 <div class="text-center">
     <div class="header">
-        <img src="{{ public_path('assets/img/logo-komdigi.png') }}" alt="Kop KOMDIGI">
+        <img src="{{ public_path('assets/img/logo-komdigi.png') }}" alt="Logo KOMDIGI">
         <div class="header-info text-start">
-            <h5 style="font-weight: bold;">KEMENTERIAN KOMUNIKASI DAN DIGITAL RI</h5>
-            <h6>SEKRETARIAT JENDERAL</h6>
-            <h6>BIRO SUMBER DAYA MANUSIA DAN ORGANISASI</h6>
+            <h3 style="font-weight: bold;">KEMENTERIAN KOMUNIKASI DAN DIGITAL RI</h3>
+            <h4>SEKRETARIAT JENDERAL</h4>
+            <h4>BIRO SUMBER DAYA MANUSIA DAN ORGANISASI</h4>
             <small>Jl. Medan Merdeka Barat No. 9, Jakarta 10110 Telp. (021) 3865189 www.komdigi.go.id</small>
         </div>
     </div>
     <hr>
-    <h5 style="text-decoration: underline; font-weight: bold;">MEMO - DINAS</h5>
+    <h3 style="text-decoration: underline; font-weight: bold;">MEMO - DINAS</h3>
 </div>
 
 <div class="text-end">
@@ -90,20 +84,20 @@
 <table>
     <thead>
         <tr>
-            <th>No</th>
+            <th style="width: 5%;">No</th>
             <th>Nama Barang</th>
-            <th>Jumlah</th>
-            <th>Diberikan</th>
+            <th style="width: 15%;">Jumlah</th>
+            <th style="width: 20%;">Diberikan</th>
             <th>Keterangan</th>
         </tr>
     </thead>
     <tbody>
         @foreach($request->details as $index => $detail)
         <tr>
-            <td>{{ $index + 1 }}</td>
-            <td style="text-align: left;">{{ $detail->item->nama_barang }}</td>
-            <td>{{ $detail->qty_requested }} {{ $detail->item->satuan }}</td>
-            <td>{{ $detail->qty_approved ?? '-' }}</td>
+            <td style="text-align: center;">{{ $index + 1 }}</td>
+            <td>{{ $detail->item->nama_barang }}</td>
+            <td style="text-align: center;">{{ $detail->qty_requested }} {{ $detail->item->satuan }}</td>
+            <td style="text-align: center;">{{ $detail->qty_approved ?? '-' }}</td>
             <td></td>
         </tr>
         @endforeach
