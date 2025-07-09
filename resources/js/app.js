@@ -13,5 +13,4 @@ import './purchase_order.js';
 import './category-table.js';
 import './formPO.js';
 import './showPO.js';
-import './stock_opname.js';
 import './scan-resi.js';
