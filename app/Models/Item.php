@@ -16,7 +16,7 @@ class Item extends Model
         'satuan',
         'stok_minimum',
         'deskripsi',
-        'photo_id', 
+        'photo_id',
     ];
 
     public function images()
@@ -31,7 +31,7 @@ class Item extends Model
 
     public function stocks()
     {
-        return $this->hasOne(ItemStock::class);
+        return $this->hasOne(ItemStock::class, 'item_id');
     }
 
     public function carts()
@@ -61,14 +61,14 @@ class Item extends Model
 
     public function logs()
     {
-        return $this->hasMany(ItemLog::class);
+        return $this->hasMany(ItemLog::class, 'item_id');
     }
     public function getGalleryAttribute()
     {
         $gallery = collect();
 
         if ($this->photo && $this->photo->image) {
-            $gallery->push($this->photo->image); // Thumbnail duluan
+            $gallery->push($this->photo->image);
         }
 
         foreach ($this->images as $image) {

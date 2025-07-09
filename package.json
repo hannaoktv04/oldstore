@@ -15,7 +15,10 @@
     },
     "dependencies": {
         "cropperjs": "^2.0.0",
+        "datatables.net": "^2.3.2",
+        "datatables.net-bs5": "^2.3.2",
         "flatpickr": "^4.6.13",
+        "jquery": "^3.7.1",
         "html5-qrcode": "^2.3.8",
         "sweetalert2": "^11.22.2"
     }

@@ -1,116 +1,147 @@
 @extends('layouts.admin')
 
-@section('title', 'Detail Stok Opname')
+@section('title', 'Detail Stock Opname')
 
 @section('content')
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="card-title">Opname Bulan: {{ $session->periode_bulan }}
-            <span class="badge bg-{{ $session->status == 'aktif' ? 'success' : 'secondary' }}">{{ $session->status }}</span>
-        </h4>
-        <a href="{{ route('admin.stock_opname.index') }}" class="btn btn-secondary btn-sm">Kembali</a>
-    </div>
-    <div class="card-body">
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <p><strong>Tanggal Mulai:</strong> {{ $session->tanggal_mulai }}</p>
-            </div>
-            <div class="col-md-4">
-                <p><strong>Tanggal Selesai:</strong> {{ $session->tanggal_selesai ?? '-' }}</p>
-            </div>
-            <div class="col-md-4">
-                <p><strong>Dibuka Oleh:</strong> {{ $session->user->nama }}</p>
-            </div>
-        </div>
-
-        <form action="{{ route('admin.stock_opname.submit', $session->id) }}" method="POST">
-            @csrf
-            <table class="table table-bordered" id="opname-table">
-                <thead>
-                    <tr class="table-light">
-                        <th>No.</th>
-                        <th>Kode Barang</th>
-                        <th>Nama Barang</th>
-                        <th>Satuan</th>
-                        <th>Stok Sistem</th>
-                        <th>Stok Fisik</th>
-                        <th>Selisih</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($items as $i => $item)
-                        @php
-                            $stokSistem = $item->stock->qty ?? 0;
-                            $stokFisik = old("qty_fisik.{$item->id}", $item->opname_value);
-                            $selisih = $stokFisik - $stokSistem;
-                        @endphp
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->kode_barang }}</td>
-                            <td>{{ $item->nama_barang }}</td>
-                            <td>{{ $item->satuan }}</td>
-                            <td>{{ number_format($stokSistem, 2) }}</td>
-                            <td>
-                                <input type="number" name="qty_fisik[{{ $item->id }}]" step="0.01" class="form-control form-control-sm qty-fisik" data-id="{{ $item->id }}" value="{{ $stokFisik }}" required>
-                            </td>
-                            <td>
-                                <span class="selisih-text" id="selisih-{{ $item->id }}">{{ number_format($selisih, 2) }}</span>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <div class="mt-4">
-                <label class="form-label">Catatan</label>
-                <textarea name="catatan" class="form-control" rows="3">{{ old('catatan') }}</textarea>
-            </div>
-            <div class="mt-3">
-                <button type="submit" class="btn btn-primary">Simpan dan Ajukan</button>
-            </div>
-        </form>
-
-        <!-- Form untuk menyelesaikan sesi (hanya tampil jika status aktif) -->
-        @if($session->status === 'aktif')
-        <hr>
-        <div class="mt-4 p-3 bg-light rounded">
-            <h5 class="mb-3">Selesaikan Sesi Stock Opname</h5>
-            <form action="{{ route('admin.stock_opname.end') }}" method="POST">
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="id" value="{{ $session->id }}">
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <label class="form-label">Tanggal Selesai</label>
-                        <input type="date" name="tanggal_selesai" class="form-control" required
-                               min="{{ \Carbon\Carbon::parse($session->tanggal_mulai)->format('Y-m-d') }}"
-                               max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+    <div class="card card-outline card-primary">
+        <div class="card-body">
+            <div class="container-fluid" id="print_out">
+                <div class="text-center mb-4">
+                    <div class="d-flex align-items-center justify-content-space-between">
+                        <img src="{{ asset('assets/img/logo-komdigi.png') }}" alt="Kop KOMDIGI" class="me-3"
+                            style="height: 80px;">
+                        <div class="text-start px-10">
+                            <h4 class="mb-0 fw-bold">KEMENTERIAN KOMUNIKASI DAN DIGITAL RI</h4>
+                            <h5 class="mb-0">INSPEKTORAT JENDERAL</h5>
+                            <h5 class="mb-0">BIRO SUMBER DAYA MANUSIA DAN ORGANISASI</h5>
+                            <p>Jl. Medan Merdeka Barat No. 9, Jakarta 10110 Telp. (021) 3865189
+                                www.komdigi.go.id</p>
+                        </div>
                     </div>
-                    <div class="col-md-8 d-flex align-items-end">
-                        <button type="submit" class="btn btn-success"
-                                onclick="return confirm('Anda yakin ingin menyelesaikan sesi ini? Transaksi akan diaktifkan kembali.')">
-                            <i class="fas fa-check-circle"></i> Selesaikan Sesi
-                        </button>
+                    <hr style="border: 1px solid black;">
+                    <h5 class="fw-bold text-decoration-underline">LAPORAN STOCK OPNAME</h5>
+                    <div class="text-end">
+                        <span>Tanggal Opname: {{ \Carbon\Carbon::parse($session->tanggal_mulai)->format('d M Y') }}</span>
+                    </div>
+                    <div class="text-start">
+                        <span>Nomor: {{ str_pad($session->id, 3, '0', STR_PAD_LEFT) }}/NNNN/{{ now()->year }}</span>
+                    </div>
+                    <div class="text-start">
+                        <span>Periode: {{ $session->periode_bulan }}</span><br>
                     </div>
                 </div>
-                <small class="text-muted">* Menyelesaikan sesi akan mengaktifkan kembali transaksi</small>
-            </form>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Kode Barang</th>
+                            <th>Nama Barang</th>
+                            <th>Satuan</th>
+                            <th>Stok Sistem</th>
+                            <th>Stok Fisik</th>
+                            <th>Selisih</th>
+                            <th>Catatan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($items as $index => $item)
+                            @php
+                                $opnameData = $item->stockOpnames->first();
+                                $qtySistem = $item->stocks ? $item->stocks->qty : 0;
+                                $qtyFisik = $opnameData ? $opnameData->qty_fisik : null;
+                                $selisih = $opnameData ? $opnameData->selisih : null;
+                            @endphp
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $item->kode_barang }}</td>
+                                <td>{{ $item->nama_barang }}</td>
+                                <td>{{ $item->satuan }}</td>
+                                <td>{{ number_format($qtySistem) }}</td>
+                                <td>
+                                    @if (!is_null($qtyFisik))
+                                        {{ number_format($qtyFisik) }}
+                                    @else
+                                        <span class="text-muted"></span>
+                                    @endif
+                                </td>
+                                <td class="{{ $selisih < 0 ? 'text-danger' : '' }}">
+                                    @if (!is_null($selisih))
+                                        {{ number_format($selisih) }}
+                                    @else
+                                        <span class="text-muted"></span>
+                                    @endif
+                                </td>
+                                <td>{{ $opnameData->catatan ?? '' }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="fw-bold">Status:</label>
+                            <span
+                                class="badge
+                            @switch($session->status)
+                                @case('menunggu') bg-secondary @break
+                                @case('aktif') bg-primary @break
+                                @case('selesai') bg-success @break
+                                @default bg-dark
+                            @endswitch">
+                                {{ ucfirst($session->status) }}
+                            </span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">Catatan:</label>
+                            <p>{{ $session->catatan ?? '-' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col text-center">
+                        <p>Mengetahui,</p>
+                        <br><br><br>
+                        <p>_________________________</p>
+                        <p>(Nama & Tanda Tangan)</p>
+                    </div>
+                    <div class="col text-center">
+                        <p>Pelaksana Stock Opname,</p>
+                        <br><br><br>
+                        <p>_________________________</p>
+                        <p>{{ auth()->user()->nama }}</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="text-start mt-4 mb-2">
+                <a href="{{ route('admin.stock_opname.downloadPdf', $session->id) }}" class="btn btn-flat btn-success"
+                    target="_blank">
+                    <i class="fas fa-file-pdf"></i> Print
+                </a>
+                <a href="{{ route('admin.stock_opname.index') }}" class="btn btn-flat btn-dark">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
         </div>
-        @endif
     </div>
-</div>
 @endsection
 
 @section('scripts')
-<script>
-    document.querySelectorAll('.qty-fisik').forEach(input => {
-        input.addEventListener('input', function () {
-            const row = this.closest('tr');
-            const sistem = parseFloat(row.children[4].innerText.replace(/,/g, ''));
-            const fisik = parseFloat(this.value) || 0;
-            const selisih = (fisik - sistem).toFixed(2);
-            row.querySelector('.selisih-text').innerText = selisih;
+    <script>
+        $(document).ready(function() {
+            $('#print').click(function() {
+                var printContents = document.getElementById('print_out').innerHTML;
+                var originalContents = document.body.innerHTML;
+
+                document.body.innerHTML = printContents;
+                window.print();
+                document.body.innerHTML = originalContents;
+                window.location.reload();
+            });
         });
-    });
-</script>
+    </script>
 @endsection

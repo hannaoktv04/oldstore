@@ -23,6 +23,7 @@
 
 @elseif ($status === 'received')
     <a href="#', $request->id) }}"
+    <a href="#', $request->id) }}"
        class="btn btn-sm btn-outline-primary">
         <i class="bi bi-printer" title="Cetak Nota"></i>
     </a>
@@ -32,3 +33,4 @@
         Ditolak: {{ $pengajuan->keterangan ?? 'Tidak ada keterangan' }}
     </div>
 @endif
+
