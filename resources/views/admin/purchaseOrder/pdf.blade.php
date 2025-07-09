@@ -92,7 +92,6 @@
         </div>
         <div class="ttd-box">
             <p>Pemohon,</p>
-            {{-- <p>{{ Auth::user()->jabatan ?? 'Admin Purchasing' }}</p> --}}
             <br><br><br>
             <p>_________________________</p>
             <p>{{ Auth::user()->nama }}</p>

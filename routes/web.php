@@ -134,7 +134,8 @@ Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
         Route::get('/{stock_opname}/edit', 'edit')->name('edit');
         Route::put('/{stock_opname}', 'update')->name('update');
         Route::delete('/{stock_opname}', 'destroy')->name('destroy');
-
+        Route::get('/{stock_opname}', [StockOpnameController::class, 'show'])->name('show');
+        Route::get('/{stock_opname}/download', [StockOpnameController::class, 'downloadPdf'])->name('downloadPdf');
     });
 });
 

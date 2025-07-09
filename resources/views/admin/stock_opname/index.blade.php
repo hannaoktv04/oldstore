@@ -77,7 +77,7 @@
                         </form>
 
                         @else
-                        <a href="{{ route('admin.stock_opname.index') }}" class="btn btn-sm btn-info me-1" title="Lihat">
+                        <a href="{{ route('admin.stock_opname.show', $session) }}" class="btn btn-sm btn-info me-1" title="Lihat">
                             <i class="bi bi-eye"></i>
                         </a>
                         @endif
