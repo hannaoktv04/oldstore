@@ -101,8 +101,7 @@ class StockOpnameController extends Controller
             }
 
             DB::commit();
-
-            return back()->with('success', $statusChanged
+            return redirect()->route('admin.stock_opname.index')->with('success', $statusChanged
                 ? 'Data opname dan status sesi berhasil diperbarui'
                 : 'Data opname berhasil disimpan');
         } catch (\Exception $e) {
@@ -142,7 +141,7 @@ class StockOpnameController extends Controller
         ]);
     }
 
-   public function downloadPdf(OpnameSession $stock_opname)
+    public function downloadPdf(OpnameSession $stock_opname)
     {
         $allItems = Item::with(['stocks', 'stockOpnames' => function ($query) use ($stock_opname) {
             $query->where('session_id', $stock_opname->id);

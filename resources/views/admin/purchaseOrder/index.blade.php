@@ -3,9 +3,9 @@
 @section('title', 'Daftar Purchase Order')
 
 @section('content')
-<div class="card card-outline card-primary">
+<div class="card card-outline card-primary mt-4">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h3 class="card-title">Daftar Pengajuan Pembelian Barang</h3>
+        <h3>Daftar Pengajuan Pembelian Barang</h3>
         <a href="{{ route('admin.purchase_orders.create') }}" class="btn btn-flat btn-primary ">
             <span class="bi bi-plus-lg"> Penjuan Baru</span>
         </a>
@@ -16,7 +16,7 @@
         @endif
 
         <div style="overflow-x: auto;">
-            <table id="poTable" class="table table-bordered table-striped nowrap w-100">
+            <table id="poTable" class="table table-bordered  w-100 table-hover">
                 <colgroup>
                     <col width="5%">
                     <col width="20%">

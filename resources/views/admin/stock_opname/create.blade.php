@@ -45,10 +45,10 @@
                 <tbody>
                     @foreach($items as $item)
                     <tr>
-                        <td>{{ $item->kode_barang }}</td>
+                        <td class="text-center">{{ $item->kode_barang }}</td>
                         <td>{{ $item->nama_barang }}</td>
-                        <td>{{ $item->satuan }}</td>
-                        <td class="text-end">{{ number_format($item->stocks->qty ?? 0) }}</td>
+                        <td class="text-center">{{ $item->satuan }}</td>
+                        <td class="text-center">{{ number_format($item->stocks->qty ?? 0) }}</td>
                     </tr>
                     @endforeach
                 </tbody>

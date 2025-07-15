@@ -87,34 +87,23 @@ Route::get('/', function () {
 // ADMIN ROUTES (ADMIN-ONLY)
 // -------------------------
 Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
-     Route::controller(OpnameSessionController::class)->prefix('stock-opname')->name('admin.stock_opname.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::post('{stock_opname}/end', 'endSession')->name('endSession');
-    });
-
-    Route::controller(StockOpnameController::class)->prefix('stock-opname')->name('admin.stock_opname.')->group(function () {
-        Route::get('/create', 'create')->name('create');
-        Route::post('/', 'store')->name('store');
-        Route::get('/{stock_opname}/edit', 'edit')->name('edit');
-        Route::put('/{stock_opname}', 'update')->name('update');
-    });
-
-
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
-    Route::get('/pengajuan/status/{status}', [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
+    Route::get('/pengajuan/status/{status}', action: [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
     Route::get('/pengajuan/{pengajuan}/nota', [AdminPengajuanController::class, 'nota'])->name('admin.pengajuan.nota');
     Route::post('/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])->name('admin.pengajuan.received');
     Route::post('/pengajuan/{pengajuan}/approve', [AdminPengajuanController::class, 'approve'])->name('admin.pengajuan.approve');
     Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('admin.pengajuan.reject');
     Route::get('/admin/pengajuan/{id}/resi', [PengajuanController::class, 'cetakResi'])->name('pengajuan.resi');
 
-    Route::get('/add-item', [ItemController::class, 'create'])->name('admin.addItem');
-    Route::post('/add-item', [ItemController::class, 'store'])->name('admin.storeItem');
-    Route::get('/items', [ItemController::class, 'itemList'])->name('admin.items');
-    Route::get('/items/{item}/edit', [ItemController::class, 'edit'])->name('admin.items.edit');
-    Route::put('/items/{item}', [ItemController::class, 'update'])->name('admin.items.update');
+    Route::get('/items', [ItemController::class, 'index'])->name('admin.items');
+    Route::get('/add-item', action: [ItemController::class, 'create'])->name('admin.item.create');
+    Route::post('/add-item', [ItemController::class, 'store'])->name('admin.item.store');
+    Route::get('/items/{item}/edit', [ItemController::class, 'edit'])->name('admin.item.edit');
+    Route::put('/items/{item}', [ItemController::class, 'update'])->name('admin.item.update');
     Route::delete('/items/{item}', [ItemController::class, 'destroy'])->name('admin.items.destroy');
+
+
     Route::post('/items/bulk-action', [ItemController::class, 'bulkAction'])->name('admin.items.bulkAction');
     Route::post('/items/toggle/{item}', [ItemController::class, 'toggleState'])->name('admin.items.toggle');
     Route::delete('/items/images/{image}', [ItemController::class, 'deleteImage'])->name('admin.items.images.destroy');
@@ -146,15 +135,9 @@ Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
         Route::post('{stock_opname}/end', 'endSession')->name('endSession');
     });
 
-    Route::controller(StockOpnameController::class)->prefix('stock-opname')->name('admin.stock_opname.')->group(function () {
-        Route::get('/create', 'create')->name('create');
-        Route::post('/', 'store')->name('store');
-        Route::get('/{stock_opname}/edit', 'edit')->name('edit');
-        Route::put('/{stock_opname}', 'update')->name('update');
-        Route::delete('/{stock_opname}', 'destroy')->name('destroy');
-        Route::get('/{stock_opname}', [StockOpnameController::class, 'show'])->name('show');
-        Route::get('/{stock_opname}/download', [StockOpnameController::class, 'downloadPdf'])->name('downloadPdf');
-    });
+    Route::resource('stock-opname', StockOpnameController::class)->except(['index'])->names('admin.stock_opname');
+    Route::get('stock-opname/{stock_opname}/download', [StockOpnameController::class, 'downloadPdf'])
+        ->name('admin.stock_opname.downloadPdf');
 });
 
 

@@ -14,8 +14,9 @@ class OpnameBlockMiddleware
         $activeSession = OpnameSession::where('status', 'aktif')->where('block_transaction', true)->first();
 
         View::share('opnameAktif', $activeSession ? true : false);
+        View::share('opnameDimulai', $activeSession ? $activeSession->tanggal_mulai : null);
 
         return $next($request);
     }
-}
 
+}

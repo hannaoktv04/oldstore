@@ -2,18 +2,26 @@
 
 @section('content')
 <div class="container mt-4">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.items') }}">Daftar Barang</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Tambah Barang</li>
+        </ol>
+    </nav>
+
     <h5 class="mb-4">Tambah Item Baru</h5>
 
     @foreach (['success' => 'success', 'error' => 'danger'] as $key => $type)
-        @if(session($key))
-            <div class="alert alert-{{ $type }} alert-dismissible fade show fadeout" role="alert">
-                {{ session($key) }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
+    @if(session($key))
+    <div class="alert alert-{{ $type }} alert-dismissible fade show fadeout" role="alert">
+        {{ session($key) }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    @endif
     @endforeach
 
-    <form action="{{ route('admin.storeItem') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.item.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <input type="hidden" name="thumbnail_index" id="thumbnail_index" value="0">
@@ -22,8 +30,8 @@
             <div id="imageUploadWrapper" class="d-flex flex-wrap gap-2">
                 <div class="upload-box">
                     <label class="upload-trigger">
-                        <input type="file" name="photo_Item[]" accept="image/*"
-                               class="d-none" onchange="handleImageUpload(this)" multiple>
+                        <input type="file" name="photo_Item[]" accept="image/*" class="d-none"
+                            onchange="handleImageUpload(this)" multiple>
                         <div class="upload-placeholder">
                             <i class="bi bi-image fs-2 d-block text-secondary"></i>
                         </div>
@@ -41,40 +49,48 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                     <label for="kode_barang" class="form-label">Kode Item <span class="text-danger">*</span></label>
-                    <input type="text" name="kode_barang" id="kode_barang" class="form-control text-uppercase" maxlength="30" required>
+                    <input type="text" name="kode_barang" id="kode_barang" class="form-control text-uppercase"
+                        maxlength="30" required>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="stok_awal" class="form-label">Stok Awal <span class="text-danger">*</span></label>
-                    <input type="number" name="stok_awal" id="stok_awal" class="form-control" min="0" required>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                     <label for="satuan" class="form-label">Satuan <span class="text-danger">*</span></label>
                     <select name="satuan" id="satuan" class="form-select" required>
                         <option value="" selected disabled>Pilih Satuan</option>
                         @foreach(['pcs','buah','rim','pack','dus','botol'] as $sat)
-                            <option value="{{ $sat }}">{{ ucfirst($sat) }}</option>
+                        <option value="{{ $sat }}">{{ ucfirst($sat) }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                     <label for="category_id" class="form-label">Kategori <span class="text-danger">*</span></label>
                     <select name="category_id" id="category_id" class="form-select" required>
                         <option value="" selected disabled>Pilih Kategori</option>
                         @foreach(App\Models\Category::orderBy('categori_name')->get() as $cat)
-                            <option value="{{ $cat->id }}">{{ $cat->categori_name }}</option>
+                        <option value="{{ $cat->id }}">{{ $cat->categori_name }}</option>
                         @endforeach
                     </select>
                 </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="stok_awal" class="form-label">Stok Awal <span class="text-danger">*</span></label>
+                    <input type="number" name="stok_awal" id="stok_awal" class="form-control" min="0" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="stok_minimum" class="form-label">Stok Minimum <span class="text-danger">*</span></label>
+                    <input type="number" name="stok_minimum" id="stok_minimum" class="form-control" required></input>
+                </div>
+
             </div>
 
             <div class="mb-3">
                 <label for="deskripsi" class="form-label">Deskripsi <span class="text-danger">*</span></label>
-                <textarea name="deskripsi" id="deskripsi" class="form-control" rows="4" maxlength="500" required placeholder="Tuliskan deskripsi item..."></textarea>
+                <textarea name="deskripsi" id="deskripsi" class="form-control" rows="4" maxlength="500" required
+                    placeholder="Tuliskan deskripsi item..."></textarea>
                 <small class="text-muted">Maksimal 500 karakter.</small>
             </div>
         </div>

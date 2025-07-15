@@ -4,6 +4,14 @@
 
 @section('content')
 <div class="container-fluid py-4">
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('admin.stock_opname.index') }}">Stock Opname</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ $session->periode_bulan }}</li>
+  </ol>
+</nav>
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4>Stock Opname - Periode {{ $session->periode_bulan }}</h4>
     </div>
@@ -50,7 +58,7 @@
         </div>
         <div class="table-responsive mb-4">
             <table class="table table-bordered" id="stockOpnameTable">
-                <thead class="table-light">
+                <thead>
                     <tr>
                         <th>Kode Barang</th>
                         <th>Nama Barang</th>
@@ -61,7 +69,7 @@
                         <th>Catatan Item</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody">
                     @foreach ($items as $item)
                     @php
                     $stockOpname = $item->stockOpnames->firstWhere('session_id', $session->id);
@@ -72,18 +80,17 @@
                     <tr>
                         <td>{{ $item->kode_barang }}</td>
                         <td>{{ $item->nama_barang }}</td>
-                        <td>{{ $item->satuan }}</td>
+                        <td class="text-center">{{ $item->satuan }}</td>
                         <td class="text-end">{{ number_format($qtySistem) }}</td>
                         <td>
                             <input type="hidden" name="items[{{ $item->id }}][item_id]" value="{{ $item->id }}">
                             <input type="number" name="items[{{ $item->id }}][qty_fisik]" step="0.01" min="0"
-                                class="form-control form-control-sm qty-fisik"
+                                class="form-control form-control-sm qty-fisik text-end"
                                 value="{{ !is_null($qtyFisik) ? $qtyFisik : '' }}" data-sistem="{{ $qtySistem }}"
                                 placeholder="0">
                         </td>
-                        <td
-                            class="selisih text-end fw-bold {{ !is_null($selisih) ? ($selisih < 0 ? 'text-danger' : ($selisih > 0 ? 'text-success' : 'text-muted')) : '' }}">
-                            {{ !is_null($selisih) ? number_format($selisih) : '-' }}
+                        <td class="selisih text-center fw-bold {{ !is_null($selisih) ? ($selisih < 0 ? 'text-danger' : ($selisih > 0 ? 'text-success' : 'text-muted')) : '' }}">
+                            {{ !is_null($selisih) ? number_format($selisih) : '' }}
                             <input type="hidden" name="items[{{ $item->id }}][selisih]" class="input-selisih"
                                 value="{{ !is_null($selisih) ? $selisih : '' }}">
                         </td>
@@ -133,7 +140,7 @@
                 }
             },
             columnDefs: [
-                { orderable: false, targets: [4, 5, 6] },
+                { orderable: false, targets: [ 6] },
                 { className: "dt-head-center", targets: "_all" }
             ]
         });

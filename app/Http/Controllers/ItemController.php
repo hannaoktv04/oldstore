@@ -18,12 +18,20 @@ use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
+  public function index()
+{
+    $items = Item::with(['images', 'category', 'stocks']) // pastikan 'stocks' di-load
+        ->withCount('images as variant_count')
+        ->orderBy('nama_barang')
+        ->get();
 
+    return view('admin.item.index', compact('items'));
+}
     public function create()
     {
-        return view('admin.addItem');
+        return view('admin.item.create');
     }
-    
+
     public function store(Request $request)
     {
         DB::beginTransaction();
@@ -33,6 +41,7 @@ class ItemController extends Controller
                 'nama_barang'    => 'required|string|max:255',
                 'kode_barang'    => 'required|string|max:255|unique:items,kode_barang',
                 'stok_awal'      => 'required|numeric|min:0',
+                'stok_minimum'   => 'required|numeric|min:0',
                 'satuan'         => 'required|string',
                 'deskripsi'      => 'required|string',
                 'category_id'    => 'required|exists:category,id',
@@ -43,7 +52,7 @@ class ItemController extends Controller
             $item = Item::create([
                 'nama_barang'   => $validated['nama_barang'],
                 'kode_barang'   => $validated['kode_barang'],
-                'stok_minimum'  => $validated['stok_awal'],
+                'stok_minimum'  => $validated['stok_minimum'],
                 'satuan'        => $validated['satuan'],
                 'deskripsi'     => $validated['deskripsi'],
                 'category_id'   => $validated['category_id'],
@@ -114,7 +123,7 @@ class ItemController extends Controller
         }
     }
 
-   public function update(Request $request, Item $item)
+    public function update(Request $request, Item $item)
     {
         DB::beginTransaction();
         try {
@@ -183,38 +192,10 @@ class ItemController extends Controller
         return back()->with('success', 'Gambar berhasil dihapus.');
     }
 
-
-
-    public function index()
-    {
-        $categories = Category::orderBy('categori_name')->get();
-        $items = Item::with(['category', 'state'])
-            ->whereHas('state', function ($query) {
-                $query->where('is_archived', false); 
-            })
-            ->orderByRaw('stok_minimum <= 0')
-            ->orderByDesc('stok_minimum')
-            ->get();
-
-        return view('layouts.kategori', compact('items', 'categories'));
-    }
-
-
-    public function itemList()
-    {
-        $items = Item::with(['images', 'category'])
-                    ->withCount('images as variant_count') 
-                    ->withSum('stocks as total_stok', 'qty')
-                    ->orderBy('nama_barang')
-                    ->get();
-
-        return view('admin.items', compact('items'));
-    }
-
     public function edit(Item $item)
     {
         $categories = Category::all();
-        return view('admin.editItem', compact('item', 'categories'));
+        return view('admin.item.edit', compact('item', 'categories'));
     }
 
     public function destroy(Item $item)
@@ -222,8 +203,6 @@ class ItemController extends Controller
         $item->delete();
         return redirect()->route('admin.items')->with('success', 'Item berhasil dihapus.');
     }
-
-
     public function toggleState(Item $item)
     {
         if (!$item->state) {
@@ -260,6 +239,4 @@ class ItemController extends Controller
 
         return back()->with('status', 'Aksi berhasil dijalankan.');
     }
-
-
 }

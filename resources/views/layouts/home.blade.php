@@ -48,7 +48,7 @@
                 @if ($stokHabis)
                   <span class="text-danger">0 Tersisa</span>
                 @else
-                  <strong>{{ number_format($item->stok_minimum, 0) }}</strong> Tersisa
+                  <strong>{{ number_format($item->stocks->qty, 0) }}</strong> Tersisa
                 @endif
               </p>
             </div>

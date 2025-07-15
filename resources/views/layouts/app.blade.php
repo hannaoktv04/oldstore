@@ -29,7 +29,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-    
+
 
     <!-- Helpers & Config -->
     <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
@@ -57,7 +57,72 @@
     <div class="layout-container">
       <div class="layout-page">
         @include('components.navbar')
+        @if (isset($opnameAktif) && $opnameAktif)
+                @php
+                    $hasTime = strlen($opnameDimulai) > 10;
+                    $opnameStartFull = \Carbon\Carbon::parse($hasTime ? $opnameDimulai : $opnameDimulai . ' 00:00:00')->toIso8601String();
+                @endphp
 
+                <div class="opname-banner bg-success text-white py-2 w-100">
+                    <div class="ticker">
+                        <div class="ticker-move">
+                            @for ($i = 0; $i < 3; $i++)
+                            <span class="ticker-text">
+                                <i class="bi bi-exclamation-circle-fill me-2"></i>
+                                Stok Opname sedang berlangsung — Pengajuan tidak dapat dilakukan.
+                                Sudah berlangsung selama: <span id="opnameDuration">--</span>
+                            </span>
+                            @endfor
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    .opname-banner {
+                        position: fixed;
+                        top: 74px;
+                        left: 0;
+                        right: 0;
+                        z-index: 1040;
+                    }
+                    .ticker {
+                        overflow: hidden;
+                        white-space: nowrap;
+                        position: relative;
+                    }
+                    .ticker-move {
+                        display: inline-block;
+                        white-space: nowrap;
+                        animation: scroll-left 20s linear infinite;
+                    }
+                    .ticker-text {
+                        display: inline-block;
+                        padding-right: 4rem;
+                        font-weight: 500;
+                        font-size: 0.95rem;
+                    }
+                    @keyframes scroll-left {
+                        0%   { transform: translateX(0%); }
+                        100% { transform: translateX(-50%); }
+                    }
+                </style>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const opnameStart = new Date("{{ $opnameStartFull }}").getTime();
+                        setInterval(() => {
+                            const now = new Date().getTime();
+                            const elapsed = now - opnameStart;
+
+                            const days = Math.floor(elapsed / (1000 * 60 * 60 * 24));
+                            const hours = Math.floor((elapsed % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
+
+                            const display = ${days > 0 ? days + ' hari ' : ''}${String(hours).padStart(2, '0')} jam ${String(minutes).padStart(2, '0')} menit ${String(seconds).padStart(2, '0')} detik;
+                            document.querySelectorAll('#opnameDuration').forEach(el => el.textContent = display);
+                        }, 1000);
+                    });
+                </script>
+            @endif
         <div class="content-wrapper">
             <div class="container-xxl flex-grow-1 container-p-y">
                 @yield('content')
