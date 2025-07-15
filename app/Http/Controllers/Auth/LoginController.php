@@ -13,21 +13,16 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $request)
+   public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'username' => 'required|string',
-            'password' => 'required|string',
-        ]);
+        $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
             $user = Auth::user();
 
-            if ($user->role === 'admin') {
+            if ($user->hasRole('admin')) {
                 return redirect()->route('admin.dashboard');
-            } elseif ($user->role === 'staff_pengiriman') {
+            } elseif ($user->hasRole('staff_pengiriman')) {
                 return redirect()->route('staff-pengiriman.dashboard');
             } else {
                 return redirect()->route('home');
@@ -35,8 +30,8 @@ class LoginController extends Controller
         }
 
         return back()->withErrors([
-            'username' => 'Username atau password salah.',
-        ])->onlyInput('username');
+            'login_error' => 'Username atau password salah',
+        ]);
     }
 
     public function logout(Request $request)
@@ -46,6 +41,8 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect()->route('login');
     }
+
+
 }

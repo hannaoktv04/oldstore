@@ -54,7 +54,7 @@
                     </td>
 
                     <td class="text-center">
-                        <a href="{{ route('admin.items.edit',$item->id) }}" class="btn btn-outline-primary btn-sm me-1">
+                        <a href="{{ route('admin.items.edit',$item->id) }}" class="btn btn-outline-success btn-sm me-1">
                             <i class="bi bi-pencil-square"></i>
                         </a>
                         <button type="button" class="btn btn-outline-danger btn-sm btnHapusItem"

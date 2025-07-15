@@ -3,7 +3,7 @@
 @section('title', 'Detail Purchase Order')
 
 @section('content')
-<div class="card card-outline card-primary">
+<div class="card card-outline card-success">
     <div class="card-header">
         <h4 class="card-title">Purchase Order Details - {{ $purchaseOrder->nomor_po }}</h4>
     </div>
@@ -22,7 +22,7 @@
 
             <h5 class="mt-3">Orders</h5>
             <table class="table table-striped table-bordered">
-                <thead class="bg-primary text-white">
+                <thead class="bg-success text-white">
                     <tr>
                         <th class="col-md-2">Kode Item</th>
                         <th class="col-md-5 text-center">Item</th>

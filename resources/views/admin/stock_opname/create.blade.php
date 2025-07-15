@@ -17,7 +17,7 @@
                 <label>Tanggal Mulai</label>
                 <input type="date" name="tanggal_mulai" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-primary">Mulai Sesi</button>
+            <button type="submit" class="btn btn-success">Mulai Sesi</button>
             <a href="{{ route('admin.stock_opname.index') }}" class="btn btn-secondary">Batal</a>
         </form>
     </div>

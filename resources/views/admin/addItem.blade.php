@@ -108,8 +108,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button class="btn btn-primary" id="saveCropBtn">Simpan Gambar</button>
+                    <button class="btn btn-outline-success" data-bs-dismiss="modal">Batal</button>
+                    <button class="btn btn-success" id="saveCropBtn">Simpan Gambar</button>
                 </div>
             </div>
         </div>

@@ -5,11 +5,11 @@
 
 #cart-icon:hover i::before,
 #user-icon:hover i::before{
-  color: #2aa7a7;
+  color: #5cb85c;
 }
 
 .icon-button:hover .bi-bell-fill {
-    color: #2aa7a7; 
+    color: #5cb85c; 
     transform: scale(1.15);
     transition: all 0.2s ease-in-out;
 }
@@ -17,7 +17,7 @@
 #heart-icon:hover i::before {
   content: "\f415"; 
   font-weight: bold;
-    color: #2aa7a7;
+    color: #5cb85c;
 }
 
 body {
@@ -25,7 +25,7 @@ body {
 }
 
 .brand-custom {
-    color: #2aa7a7 !important;
+    color: #5cb85c !important;
 }
 
 input.form-control.rounded-pill::placeholder {
@@ -33,7 +33,7 @@ input.form-control.rounded-pill::placeholder {
 }
 
 input.form-control.rounded-pill:focus {
-    border-color: #2aa7a7 !important;
+    border-color: #5cb85c !important;
     outline: none !important;
     border-radius: 50rem !important;
 }
@@ -88,7 +88,7 @@ input.form-control {
 }
 
 .list-group-item a:hover {
-  color: #2aa7a7;
+  color: #5cb85c;
   text-decoration: none;
 }
 
@@ -125,7 +125,7 @@ input.form-control {
 }
 
 .icon-button:hover {
-    color: #2aa7a7;
+    color: #5cb85c;
 }
 
 .dropdown-menu {
@@ -149,7 +149,7 @@ input.form-control {
 }
 
 .text-custom:hover {
-    color: #2aa7a7;
+    color: #5cb85c;
     text-decoration: none;
 }
 
@@ -235,7 +235,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .sidebar-nav .nav-link:hover {
-    color: #2aa7a7 !important;
+    color: #5cb85c !important;
 }
 
 #calendarContainer {
@@ -262,7 +262,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 /* Sidebar */
 .nav-link:hover {
-    color: #2aa7a7 !important;
+    color: #5cb85c !important;
     text-decoration: none !important;
 }
 
@@ -276,7 +276,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .nav-link.active {
     background: none !important;
-    color: #2aa7a7 !important;
+    color: #5cb85c !important;
     font-weight: 600;
     border-radius: 4px;
 }

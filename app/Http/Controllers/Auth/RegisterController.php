@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -12,7 +13,8 @@ class RegisterController extends Controller
 {
     public function showRegistrationForm()
     {
-        return view('auth.register');
+        $roles = Role::all();
+        return view('auth.register', compact('roles'));
     }
 
     public function register(Request $request)
@@ -22,7 +24,7 @@ class RegisterController extends Controller
             'nama' => 'required|string|max:255',
             'nip' => 'required|string|max:50|unique:users',
             'jabatan' => 'required|string|max:100',
-            'role' => 'required|in:admin,pegawai,staff_pengiriman',
+            'role' => 'required|exists:roles,nama_role',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|confirmed|min:6',
         ]);
@@ -32,16 +34,20 @@ class RegisterController extends Controller
             'nama' => $request->nama,
             'nip' => $request->nip,
             'jabatan' => $request->jabatan,
-            'role' => $request->role,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
+        $role = Role::where('nama_role', $request->role)->first();
+        if ($role) {
+            $user->roles()->attach($role->id);
+        }
+
         Auth::login($user);
 
-       if ($user->role === 'admin') {
+        if ($user->hasRole('admin')) {
             return redirect()->route('admin.dashboard');
-        } elseif ($user->role === 'staff_pengiriman') {
+        } elseif ($user->hasRole('staff_pengiriman')) {
             return redirect()->route('staff-pengiriman.dashboard');
         } else {
             return redirect()->route('home');

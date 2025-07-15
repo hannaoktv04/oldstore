@@ -24,7 +24,7 @@
                     <input type="number" name="qty_fisik" class="form-control" step="0.01" required>
                 </div>
                 <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary">Tambah</button>
+                    <button type="submit" class="btn btn-success">Tambah</button>
                 </div>
             </div>
         </form>

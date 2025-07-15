@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-    <h4 class="mb-4">📦 Konfirmasi Pengiriman - <span class="text-primary">{{ $kodeResi }}</span></h4>
+    <h4 class="mb-4">📦 Konfirmasi Pengiriman - <span class="text-succ">{{ $kodeResi }}</span></h4>
 
     <div class="mb-3">
         <p><strong>Pemohon:</strong> {{ $pengajuan->user->nama }}</p>

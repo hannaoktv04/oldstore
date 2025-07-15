@@ -120,7 +120,7 @@
     </div>
 
     <div class="text-center mt-4">
-        <button onclick="window.print()" class="btn btn-primary">Cetak Resi</button>
+        <button onclick="window.print()" class="btn btn-success">Cetak Resi</button>
     </div>
 </div>
 @endsection

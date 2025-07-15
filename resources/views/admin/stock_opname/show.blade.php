@@ -65,11 +65,10 @@
                 <textarea name="catatan" class="form-control" rows="3">{{ old('catatan') }}</textarea>
             </div>
             <div class="mt-3">
-                <button type="submit" class="btn btn-primary">Simpan dan Ajukan</button>
+                <button type="submit" class="btn btn-success">Simpan dan Ajukan</button>
             </div>
         </form>
 
-        <!-- Form untuk menyelesaikan sesi (hanya tampil jika status aktif) -->
         @if($session->status === 'aktif')
         <hr>
         <div class="mt-4 p-3 bg-light rounded">

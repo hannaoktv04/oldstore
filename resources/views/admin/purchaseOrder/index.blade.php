@@ -3,10 +3,10 @@
 @section('title', 'Daftar Purchase Order')
 
 @section('content')
-<div class="card card-outline card-primary">
+<div class="card card-outline card-success">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h3 class="card-title">List of Purchase Orders</h3>
-        <a href="{{ route('admin.purchase_orders.createPO') }}" class="btn btn-flat btn-primary ">
+        <a href="{{ route('admin.purchase_orders.createPO') }}" class="btn btn-flat btn-success ">
             <span class="bi bi-plus-lg"> Create New</span>
         </a>
     </div>
@@ -72,7 +72,7 @@
                                             method="POST">
                                             @csrf
                                             <button type="submit" class="dropdown-item">
-                                                <i class="fa fa-paper-plane text-primary"></i> Submit
+                                                <i class="fa fa-paper-plane text-success"></i> Submit
                                             </button>
                                         </form>
                                     </li>
@@ -81,7 +81,7 @@
                                     </li>
                                     <li><a class="dropdown-item"
                                             href="{{ route('admin.purchase_orders.edit', $po->id) }}"><i
-                                                class="fa fa-edit text-primary"></i> Edit</a></li>
+                                                class="fa fa-edit text-success"></i> Edit</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>

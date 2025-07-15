@@ -9,6 +9,7 @@ use App\Models\ItemRequestDetail;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\ItemWishlist;
+use App\Models\User;
 
 class AdminController extends Controller
 {
@@ -55,7 +56,6 @@ class AdminController extends Controller
             ->take(12)
             ->get();
 
-
         return view('admin.dashboard', compact(
             'pengajuanBaru', 'perluDikirim', 'pengajuanSelesai', 'pembatalan',
             'barangKeluarPerBulan', 'barangKeluarHarian', 'tahunDipilih', 'bulanDipilih', 'topProduk', 'topWishlist'
@@ -64,7 +64,29 @@ class AdminController extends Controller
 
     public function pengajuanByStatus($status)
     {
-        $pengajuans = ItemRequest::where('status', $status)->get();
-        return view('admin.pengajuan-status', compact('pengajuans', 'status'));
+        $pengajuans = ItemRequest::with([
+            'user',
+            'details.item.photo',
+            'details.item.category',
+            'itemDelivery'
+        ])
+        ->where('status', $status);
+
+        if ($status === 'submitted') {
+            $pengajuans->orderBy('created_at', 'asc');
+        } elseif ($status === 'approved') {
+            $pengajuans->orderBy('tanggal_pengiriman', 'asc')
+                       ->orderBy('id', 'asc');
+        } else {
+            $pengajuans->orderBy('created_at', 'desc');
+        }
+
+        $pengajuans = $pengajuans->get();
+
+        $staff_pengiriman = User::whereHas('roles', function($q){
+            $q->where('nama_role', 'staff_pengiriman');
+        })->get();
+
+        return view('admin.pengajuan-status', compact('pengajuans', 'status', 'staff_pengiriman'));
     }
 }

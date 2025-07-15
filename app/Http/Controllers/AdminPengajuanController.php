@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\ItemRequest;
@@ -7,10 +8,10 @@ use App\Models\ItemDelivery;
 use App\Models\ItemReceipt;
 use App\Models\ItemStock;
 use App\Models\ItemLog;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Termwind\Components\Raw;
 
 class AdminPengajuanController extends Controller
 {
@@ -20,6 +21,7 @@ class AdminPengajuanController extends Controller
             'user',
             'details.item.photo',
             'details.item.category',
+            'itemDelivery'
         ])
         ->where('status', $status);
 
@@ -33,9 +35,12 @@ class AdminPengajuanController extends Controller
         }
 
         $pengajuans = $pengajuans->get();
-        
 
-        return view('admin.pengajuan-status', compact('pengajuans', 'status'));
+        $staff_pengiriman = User::whereHas('roles', function($q){
+            $q->where('name', 'staff_pengiriman');
+        })->get();
+
+        return view('admin.pengajuan-status', compact('pengajuans', 'status', 'staff_pengiriman'));
     }
 
     public function approve(Request $request, ItemRequest $pengajuan)
@@ -139,7 +144,6 @@ class AdminPengajuanController extends Controller
             $delivery->update([
                 'status' => 'completed',
                 'bukti_foto' => $buktiPath,
-                'staff_pengiriman' => auth()->user()->nama,
             ]);
 
             $pengajuan->update([
@@ -155,6 +159,47 @@ class AdminPengajuanController extends Controller
                 Storage::disk('public')->delete($buktiPath);
             }
             return back()->with('error', 'Gagal menyimpan penerimaan: '.$e->getMessage());
+        }
+    }
+
+    public function assignStaff(Request $request, ItemRequest $pengajuan)
+    {
+        $request->validate([
+            'staff_pengiriman' => 'required|exists:users,id',
+            'tanggal_pengiriman' => 'required|date|after_or_equal:today',
+            'catatan' => 'nullable|string',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $delivery = ItemDelivery::firstOrNew(['item_request_id' => $pengajuan->id]);
+
+            if ($delivery->staff_pengiriman) {
+                throw new \Exception('Pengiriman sudah diassign ke staff: ' . $delivery->staff_pengiriman);
+            }
+
+            $staff = User::findOrFail($request->staff_pengiriman);
+
+            $delivery->fill([
+                'operator_id'     => auth()->id(),
+                'tanggal_kirim'   => $request->tanggal_pengiriman,
+                'status'          => 'in_progress',
+                'staff_pengiriman'=> $staff->nama,
+            ])->save();
+
+            $pengajuan->update([
+                'status' => 'approved',
+                'tanggal_pengiriman' => $request->tanggal_pengiriman,
+                'keterangan' => $request->catatan,
+            ]);
+
+            DB::commit();
+            return back()->with('success', 'Staff pengiriman berhasil diassign.');
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal assign staff: ' . $e->getMessage());
         }
     }
 

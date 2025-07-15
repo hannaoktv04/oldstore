@@ -26,7 +26,7 @@
                 @foreach ($item->images as $index => $img)
                     <div class="upload-box">
                         <img src="{{ asset('storage/' . $img->image) }}"
-                             class="preview {{ $item->photo_id == $img->id ? 'border border-primary' : '' }}"
+                             class="preview {{ $item->photo_id == $img->id ? 'border border-success' : '' }}"
                              style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;">
                         <div class="tools">
                             <i class="bi bi-crop" onclick="openCropper(this)"></i>

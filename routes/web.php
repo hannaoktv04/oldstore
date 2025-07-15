@@ -83,12 +83,13 @@ Route::get('/', function () {
 // -------------------------
 // ADMIN ROUTES (ADMIN-ONLY)
 // -------------------------
-Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
     Route::get('/pengajuan/status/{status}', [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
     Route::get('/pengajuan/{pengajuan}/nota', [AdminPengajuanController::class, 'nota'])->name('admin.pengajuan.nota');
     Route::post('/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])->name('admin.pengajuan.received');
+    Route::post('/pengajuan/{pengajuan}/assign', [AdminPengajuanController::class, 'assignStaff'])->name('admin.pengajuan.assign');
     Route::post('/pengajuan/{pengajuan}/approve', [AdminPengajuanController::class, 'approve'])->name('admin.pengajuan.approve');
     Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('admin.pengajuan.reject');
     Route::get('/admin/pengajuan/{id}/resi', [PengajuanController::class, 'cetakResi'])->name('pengajuan.resi');
@@ -132,7 +133,6 @@ Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
     Route::get('/create', [StockOpnameController::class, 'create'])->name('create');
     Route::post('/', [StockOpnameController::class, 'store'])->name('store');
 
-    // jangan prefix nested lagi
     Route::get('/{opname}/edit', [StockOpnameController::class, 'edit'])->name('edit');
     Route::put('/{opname}', [StockOpnameController::class, 'update'])->name('update');
 
@@ -168,5 +168,8 @@ Route::middleware(['auth', 'role:staff_pengiriman'])->prefix('staff-pengiriman')
     Route::get('/dashboard', [StaffPengirimanController::class, 'index'])->name('staff-pengiriman.dashboard');
     Route::get('/konfirmasi/{kodeResi}', [StaffPengirimanController::class, 'show'])->name('staff-pengiriman.konfirmasi');
     Route::post('/konfirmasi/{kodeResi}', [StaffPengirimanController::class, 'submit'])->name('staff-pengiriman.konfirmasi.submit');
+    Route::get('/on-progress', [StaffPengirimanController::class, 'onProgress'])->name('staff-pengiriman.onprogress');
+    Route::get('/selesai', [StaffPengirimanController::class, 'selesai'])->name('staff-pengiriman.selesai');
 });
+
 

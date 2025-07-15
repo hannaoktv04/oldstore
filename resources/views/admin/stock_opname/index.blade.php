@@ -4,7 +4,7 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between">
         <h4 class="card-title">Riwayat Stock Opname</h4>
-        <a href="{{ route('admin.stock_opname.create') }}" class="btn btn-sm btn-primary">+ Mulai Sesi Baru</a>
+        <a href="{{ route('admin.stock_opname.create') }}" class="btn btn-sm btn-success">+ Mulai Sesi Baru</a>
     </div>
     <div class="card-body">
         <table class="table table-bordered" id="opname-table">

@@ -30,7 +30,7 @@
                     <td>{{ $session->opened_by->nama }}</td>
                     <td>{{ $session->catatan }}</td>
                     <td>
-                        <a href="{{ route('admin.opname.detail', $session->id) }}" class="btn btn-sm btn-primary">Lihat</a>
+                        <a href="{{ route('admin.opname.detail', $session->id) }}" class="btn btn-sm btn-success">Lihat</a>
                     </td>
                 </tr>
                 @endforeach

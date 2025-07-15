@@ -33,7 +33,7 @@
                     <td class="text-center">{{ $category->items_count }}</td>
 
                     <td class="text-center">
-                        <button class="btn btn-outline-primary btn-sm me-1 btnEditKategori"
+                        <button class="btn btn-outline-success btn-sm me-1 btnEditKategori"
                             data-id="{{ $category->id }}"
                             data-name="{{ $category->categori_name }}"
                             data-action="{{ route('admin.categories.update', $category->id) }}"
@@ -104,7 +104,7 @@
                     <input type="text" class="form-control" id="editCategoryName" name="categori_name" required>
                 </div>
                 <div class="modal-footer border-0">
-                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    <button type="submit" class="btn btn-success">Simpan Perubahan</button>
                 </div>
             </div>
         </form>

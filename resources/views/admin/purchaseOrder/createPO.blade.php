@@ -46,7 +46,7 @@
                     <input type="number" class="form-control" id="qty" step="0.01" min="0.01">
                 </div>
                 <div class="col-md-2">
-                    <button type="button" class="btn btn-sm btn-outline-primary w-full" id="add-item">
+                    <button type="button" class="btn btn-sm btn-outline-success w-full" id="add-item">
                         <span class="bi bi-plus"></span> Tambah Item
                     </button>
                 </div>
@@ -66,7 +66,7 @@
             </table>
 
             <div class="mt-4">
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-success">Simpan</button>
                 <a href="{{ route('admin.purchase_orders.index') }}" class="btn btn-secondary">Batal</a>
             </div>
         </form>

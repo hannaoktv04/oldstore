@@ -16,14 +16,21 @@
 
 @elseif ($status === 'approved')
     <div class="d-flex justify-content-center justify-content-md-end gap-3">
-        <a href="{{ route('pengajuan.resi', $pengajuan->id) }}" class="btn btn-sm btn-outline-primary">
+        <a href="{{ route('pengajuan.resi', $pengajuan->id) }}" class="btn btn-sm btn-outline-success">
             <i class="bi bi-qr-code" title="Cetak Resi"></i>
         </a>
+
+        @if(!$pengajuan->itemDelivery || !$pengajuan->itemDelivery->staff_pengiriman)
+            <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#assignModal-{{ $pengajuan->id }}">
+                <i class="bi bi-truck" title="Assign Staff Pengiriman"></i>
+            </button>
+        @else
+            <small class="text-muted">Sudah diassign ke: <strong>{{ $pengajuan->itemDelivery->staff_pengiriman }}</strong></small>
+        @endif
     </div>
 
 @elseif ($status === 'received')
-    <a href="#', $request->id) }}"
-       class="btn btn-sm btn-outline-primary">
+    <a href="#" class="btn btn-sm btn-outline-success">
         <i class="bi bi-printer" title="Cetak Nota"></i>
     </a>
 
