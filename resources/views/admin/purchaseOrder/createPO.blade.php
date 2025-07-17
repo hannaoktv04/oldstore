@@ -25,13 +25,13 @@
             <hr>
             <h5 class="mt-3">Tambah Item</h5>
             <div class="row align-items-end mb-3">
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <label class="fw-semibold">Item</label>
                     <select class="form-control" id="item-select">
                         <option value="">Pilih Item</option>
                         @foreach ($items as $item)
                             <option value="{{ $item->id }}" data-kode="{{ $item->kode_barang }}"
-                                data-nama="{{ $item->nama_barang }}" data-satuan="{{ $item->satuan }}">
+                                data-nama="{{ $item->nama_barang }}" data-satuan="{{ $item->satuan }}" data-stok="{{ $item->stocks->qty ?? 0}}">
                                 {{ $item->nama_barang }}
                             </option>
                         @endforeach
@@ -40,6 +40,10 @@
                 <div class="col-md-2">
                     <label class="fw-semibold">Satuan</label>
                     <input type="text" class="form-control" id="unit" readonly>
+                </div>
+                <div class="col-md-2">
+                    <label class="fw-semibold">stok akhir</label>
+                    <input type="number" class="form-control" id="stok-akhir" readonly>
                 </div>
                 <div class="col-md-2">
                     <label class="fw-semibold">Qty</label>

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class OpnameSession extends Model
 {
     use HasFactory;
-    public $timestamps = true; 
+    public $timestamps = true;
 
     protected $fillable = [
         'periode_bulan',
@@ -26,31 +26,19 @@ class OpnameSession extends Model
         'tanggal_selesai' => 'date'
     ];
 
-    // Relasi ke user yang membuka sesi
     public function opener()
     {
         return $this->belongsTo(User::class, 'dibuka_oleh');
     }
 
-    // Relasi many-to-many dengan Item melalui tabel stock_opnames
-    public function items()
+       public function stockOpnames()
     {
-        return $this->belongsToMany(Item::class, 'stock_opnames')
-            ->using(StockOpname::class)
-            ->withPivot([
-                'qty_sistem',
-                'qty_fisik',
-                'selisih',
-                'status',
-                'dilakukan_oleh',
-                'tanggal_opname',
-                'catatan'
-            ]);
+        return $this->hasMany(StockOpname::class, 'session_id');
     }
 
-    // Scope untuk sesi aktif
-    public function scopeActive($query)
+
+     public function canBeEnded()
     {
-        return $query->where('status', 'aktif');
+        return $this->status === 'aktif';
     }
 }

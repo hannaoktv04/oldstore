@@ -15,8 +15,8 @@
         <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-        <div class="container-fluid">
-            <table class="table table-bordered table-striped">
+        <div style="overflow-x: auto;">
+            <table id="poTable" class="table table-bordered table-striped nowrap w-100">
                 <colgroup>
                     <col width="5%">
                     <col width="20%">
@@ -26,8 +26,8 @@
                     <col width="10%">
                     <col width="18%">
                 </colgroup>
-                <thead class="table-dark">
-                    <tr">
+                <thead>
+                    <tr>
                         <th>No</th>
                         <th>Tanggal</th>
                         <th>Kode PO</th>
@@ -35,7 +35,7 @@
                         <th>Status</th>
                         <th>Aksi</th>
                         <th>Admin</th>
-                        </tr>
+                    </tr>
                 </thead>
                 <tbody>
                     @forelse ($purchaseOrders as $index => $po)
@@ -86,7 +86,7 @@
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li><a class="dropdown-item"
-                                            href="{{ route('admin.purchase_orders.showPO', $po->id) }}"><i
+                                            href="{{ route('admin.purchase_orders.show', $po->id) }}"><i
                                                 class="fa fa-eye text-dark"></i> View</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
@@ -112,13 +112,13 @@
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li><a class="dropdown-item"
-                                            href="{{ route('admin.purchase_orders.showPO', $po->id) }}"><i
+                                            href="{{ route('admin.purchase_orders.show', $po->id) }}"><i
                                                 class="fa fa-eye text-dark"></i> View</a></li>
                                     @endif
 
                                     @if ($po->status === 'received')
                                     <li><a class="dropdown-item"
-                                            href="{{ route('admin.purchase_orders.showPO', $po->id) }}"><i
+                                            href="{{ route('admin.purchase_orders.show', $po->id) }}"><i
                                                 class="fa fa-eye text-dark"></i> View</a></li>
                                     @endif
                                 </ul>
@@ -137,3 +137,27 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function () {
+        $('#poTable').DataTable({
+            scrollX: true,
+            responsive: true,
+            language: {
+                search: "Cari:",
+                lengthMenu: "Tampilkan _MENU_ data",
+                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                infoEmpty: "Tidak ada data yang tersedia",
+                zeroRecords: "Data tidak ditemukan",
+                paginate: {
+                    previous: "<",
+                    next: ">",
+                }
+            },
+            columnDefs: [{ orderable: false, targets: [5] }],
+            order: [[1, 'desc']]
+        });
+    });
+</script>
+@endpush

@@ -22,6 +22,11 @@ document.addEventListener("DOMContentLoaded", function () {
     itemSelect.addEventListener("change", function () {
         const selected = this.options[this.selectedIndex];
         unitInput.value = selected?.getAttribute("data-satuan") || "";
+
+        const stokAkhirInput = document.getElementById("stok-akhir");
+    if (stokAkhirInput) {
+        stokAkhirInput.value = selected?.getAttribute("data-stok") || 0;
+    }
     });
 
     addItemBtn.addEventListener("click", function () {

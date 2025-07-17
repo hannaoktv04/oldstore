@@ -8,7 +8,7 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="fw-bold mb-0">Daftar Barang</h4>
-        <a href="{{ route('admin.addItem') }}" class="btn btn-success">
+        <a href="{{ route('admin.addItem') }}" class="btSn btn-success">
             <i class="bi bi-plus-lg me-1"></i> Tambah Item
         </a>
     </div>

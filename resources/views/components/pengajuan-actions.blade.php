@@ -39,3 +39,4 @@
         Ditolak: {{ $pengajuan->keterangan ?? 'Tidak ada keterangan' }}
     </div>
 @endif
+
