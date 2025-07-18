@@ -168,3 +168,5 @@ Route::middleware(['auth', 'role:staff_pengiriman'])->prefix('staff-pengiriman')
     Route::get('/konfirmasi/{kodeResi}', [StaffPengirimanController::class, 'show'])->name('staff-pengiriman.konfirmasi');
     Route::post('/konfirmasi/{kodeResi}', [StaffPengirimanController::class, 'submit'])->name('staff-pengiriman.konfirmasi.submit');
 });
+
+>>>>>>>>> Temporary merge branch 2
