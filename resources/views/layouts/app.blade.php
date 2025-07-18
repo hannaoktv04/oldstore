@@ -50,10 +50,7 @@
 @endif
 
 <div class="layout-wrapper layout-content-navbar">
-<div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
-        <div class="layout-page">
-            @include('components.navbar')
         <div class="layout-page">
             @include('components.navbar')
 
