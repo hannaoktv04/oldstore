@@ -16,7 +16,7 @@
         @endif
 
         <div style="overflow-x: auto;">
-            <table id="poTable" class="table table-bordered table-striped nowrap w-100">
+            <table id="poTable" class="table table-bordered  w-100 table-hover">
                 <colgroup>
                     <col width="5%">
                     <col width="20%">

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en" class="light-style" data-theme="theme-default" data-assets-path="{{ asset('assets') }}/">
+<html lang="en" class="light-style" data-theme="theme-default" data-assets-path="{{ asset('assets') }}/">
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="utf-8" />
@@ -10,8 +11,8 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com/" />
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- CSS -->
@@ -49,7 +50,10 @@
 @endif
 
 <div class="layout-wrapper layout-content-navbar">
+<div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
+        <div class="layout-page">
+            @include('components.navbar')
         <div class="layout-page">
             @include('components.navbar')
 
@@ -130,13 +134,20 @@
                 @if(!(Auth::check() && Auth::user()->role === 'admin'))
                     @include('components.footer')
                 @endif
+                @if(!(Auth::check() && Auth::user()->role === 'admin'))
+                    @include('components.footer')
+                @endif
 
+                <div class="content-backdrop fade"></div>
+            </div>
+        </div>
                 <div class="content-backdrop fade"></div>
             </div>
         </div>
     </div>
     <div class="layout-overlay layout-menu-toggle"></div>
     <div class="drag-target"></div>
+</div>
 </div>
 
 <!-- Core JS -->

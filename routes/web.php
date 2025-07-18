@@ -89,7 +89,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
-    Route::get('/pengajuan/status/{status}', [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
+    Route::get('/pengajuan/status/{status}', action: [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
     Route::get('/pengajuan/{pengajuan}/nota', [AdminPengajuanController::class, 'nota'])->name('admin.pengajuan.nota');
     Route::post('/pengajuan/{pengajuan}/received', [AdminPengajuanController::class, 'markAsReceived'])->name('admin.pengajuan.received');
     Route::post('/pengajuan/{pengajuan}/assign', [AdminPengajuanController::class, 'assignStaff'])->name('admin.pengajuan.assign');
@@ -97,12 +97,14 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('admin.pengajuan.reject');
     Route::get('/admin/pengajuan/{id}/resi', [PengajuanController::class, 'cetakResi'])->name('pengajuan.resi');
 
-    Route::get('/add-item', [ItemController::class, 'create'])->name('admin.addItem');
-    Route::post('/add-item', [ItemController::class, 'store'])->name('admin.storeItem');
-    Route::get('/items', [ItemController::class, 'itemList'])->name('admin.items');
-    Route::get('/items/{item}/edit', [ItemController::class, 'edit'])->name('admin.items.edit');
-    Route::put('/items/{item}', [ItemController::class, 'update'])->name('admin.items.update');
+    Route::get('/items', [ItemController::class, 'index'])->name('admin.items');
+    Route::get('/add-item', action: [ItemController::class, 'create'])->name('admin.item.create');
+    Route::post('/add-item', [ItemController::class, 'store'])->name('admin.item.store');
+    Route::get('/items/{item}/edit', [ItemController::class, 'edit'])->name('admin.item.edit');
+    Route::put('/items/{item}', [ItemController::class, 'update'])->name('admin.item.update');
     Route::delete('/items/{item}', [ItemController::class, 'destroy'])->name('admin.items.destroy');
+
+
     Route::post('/items/bulk-action', [ItemController::class, 'bulkAction'])->name('admin.items.bulkAction');
     Route::post('/items/toggle/{item}', [ItemController::class, 'toggleState'])->name('admin.items.toggle');
     Route::delete('/items/images/{image}', [ItemController::class, 'deleteImage'])->name('admin.items.images.destroy');
@@ -120,29 +122,23 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
     Route::post('/categories/bulk-delete', [CategoryController::class, 'bulkDelete'])->name('admin.categories.bulkDelete');
 
-    Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('admin.purchase_orders.index');
-    Route::get('/purchase-orders/create', [PurchaseOrderController::class, 'create'])->name('admin.purchase_orders.createPO');
-    Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('admin.purchase_orders.store');
-    Route::get('/purchase-orders/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('admin.purchase_orders.showPO');
-    Route::post('/purchase-orders/{purchaseOrder}/submit', [PurchaseOrderController::class, 'submit'])->name('admin.purchase_orders.submit');
-    Route::delete('/purchase-orders/{purchaseOrder}', [PurchaseOrderController::class, 'destroy'])->name('admin.purchase_orders.destroy');
-    Route::get('/purchase-orders/{purchaseOrder}/receive', [PurchaseOrderController::class, 'receiveForm'])->name('admin.purchase_orders.receive');
-    Route::post('/purchase-orders/{purchaseOrder}/receive', [PurchaseOrderController::class, 'processReceive'])->name('admin.purchase_orders.processReceive');
-    Route::get('/purchase_orders/{purchase_order}/edit', [PurchaseOrderController::class, 'edit'])->name('admin.purchase_orders.edit');
-    Route::put('/purchase_orders/{purchase_order}', [PurchaseOrderController::class, 'update'])->name('admin.purchase_orders.update');
+    Route::resource('purchase-orders', PurchaseOrderController::class)
+        ->names('admin.purchase_orders');
+    Route::prefix('purchase-orders')->name('admin.purchase_orders.')->group(function () {
+        Route::post('{purchaseOrder}/submit', [PurchaseOrderController::class, 'submit'])->name('submit');
+        Route::get('{purchaseOrder}/receive', [PurchaseOrderController::class, 'receiveForm'])->name('receive');
+        Route::post('{purchaseOrder}/receive', [PurchaseOrderController::class, 'processReceive'])->name('processReceive');
+        Route::get('{id}/pdf', [PurchaseOrderController::class, 'downloadPdf'])->name('downloadPdf');
+    });
 
-    Route::prefix('stock-opname')->name('admin.stock_opname.')->group(function () {
-    Route::get('/', [StockOpnameController::class, 'index'])->name('index');
-    Route::get('/create', [StockOpnameController::class, 'create'])->name('create');
-    Route::post('/', [StockOpnameController::class, 'store'])->name('store');
+    Route::controller(OpnameSessionController::class)->prefix('stock-opname')->name('admin.stock_opname.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('{stock_opname}/end', 'endSession')->name('endSession');
+    });
 
-    Route::get('/{opname}/edit', [StockOpnameController::class, 'edit'])->name('edit');
-    Route::put('/{opname}', [StockOpnameController::class, 'update'])->name('update');
-
-    Route::post('/{opname}/end', [StockOpnameController::class, 'endSession'])->name('end');
-    Route::get('/{opname}', [StockOpnameController::class, 'show'])->name('show');
-});
-
+    Route::resource('stock-opname', StockOpnameController::class)->except(['index'])->names('admin.stock_opname');
+    Route::get('stock-opname/{stock_opname}/download', [StockOpnameController::class, 'downloadPdf'])
+        ->name('admin.stock_opname.downloadPdf');
 });
 
 // -------------------------

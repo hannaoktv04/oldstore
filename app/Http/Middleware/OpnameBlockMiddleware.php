@@ -18,5 +18,5 @@ class OpnameBlockMiddleware
 
         return $next($request);
     }
-}
 
+}

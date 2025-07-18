@@ -61,62 +61,61 @@
                                 @case('received') bg-success @break
                                 @default bg-dark
                             @endswitch">
-                            {{ ucfirst($purchaseOrder->status) }}
-                        </span>
+                                {{ ucfirst($purchaseOrder->status) }}
+                            </span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">Catatan:</label>
+                            <p>{{ $purchaseOrder->catatan ?? '-' }}</p>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="fw-bold">Catatan:</label>
-                        <p>{{ $purchaseOrder->catatan ?? '-' }}</p>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col text-center">
+                        <p>Menyetujui,</p>
+                        <br><br><br>
+                        <p>_________________________</p>
+                        <p>(Nama & Tanda Tangan)</p>
+                    </div>
+                    <div class="col text-center">
+                        <p>Pemohon,</p>
+                        <br><br><br>
+                        <p>_________________________</p>
+                        <p>{{ Auth::user()->nama }}</p>
                     </div>
                 </div>
-            </div>
 
-            <div class="row mt-5">
-                <div class="col text-center">
-                    <p>Menyetujui,</p>
-                    <br><br><br>
-                    <p>_________________________</p>
-                    <p>(Nama & Tanda Tangan)</p>
-                </div>
-                <div class="col text-center">
-                    <p>Pemohon,</p>
-                    {{-- <p>{{ Auth::user()->jabatan ?? 'Admin' }}</p> --}}
-                    <br><br><br>
-                    <p>_________________________</p>
-                    <p>{{ Auth::user()->nama }}</p>
+                <div class="text-start mt-5">
+                    <em>Dicetak pada: {{ now()->format('d M Y H:i') }}</em>
                 </div>
             </div>
 
-            <div class="text-start mt-5">
-                <em>Dicetak pada: {{ now()->format('d M Y H:i') }}</em>
+            <div class="text-start mt-4 mb-2">
+                <a href="{{ route('admin.purchase_orders.downloadPdf', $purchaseOrder->id) }}"
+                    class="btn btn-flat btn-success" target="_blank">
+                    <i class="fas fa-file-pdf"></i> Print
+                </a>
+                <a href="{{ route('admin.purchase_orders.index') }}" class="btn btn-flat btn-dark">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
             </div>
-        </div>
-
-        <div class="text-start mt-4 mb-2">
-            <a href="{{ route('admin.purchase_orders.downloadPdf', $purchaseOrder->id) }}"
-   class="btn btn-flat btn-success" target="_blank">
-   <i class="fas fa-file-pdf"></i> Print
-</a>
-            <a href="{{ route('admin.purchase_orders.index') }}" class="btn btn-flat btn-dark">
-                <i class="fas fa-arrow-left"></i> Back
-            </a>
         </div>
     </div>
-</div>
 @endsection
 
 @section('scripts')
-<script>
-    $(document).ready(function() {
-        $('#print').click(function() {
-            var printContents = document.getElementById('print_out').innerHTML;
-            var originalContents = document.body.innerHTML;
+    <script>
+        $(document).ready(function() {
+            $('#print').click(function() {
+                var printContents = document.getElementById('print_out').innerHTML;
+                var originalContents = document.body.innerHTML;
 
-            document.body.innerHTML = printContents;
-            window.print();
-            document.body.innerHTML = originalContents;
-            window.location.reload();
+                document.body.innerHTML = printContents;
+                window.print();
+                document.body.innerHTML = originalContents;
+                window.location.reload();
+            });
         });
-    });
-</script>
+    </script>
 @endsection

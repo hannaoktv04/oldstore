@@ -3,7 +3,18 @@
 @section('title', 'Stock Opname - ' . $session->periode_bulan)
 
 @section('content')
-<div class="container-fluid py-4">
+<div class="container-fluid">
+    <div class="py-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.stock_opname.index') }}">Stock Opname</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ $session->periode_bulan }}</li>
+            </ol>
+        </nav>
+
+    </div>
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4>Stock Opname - Periode {{ $session->periode_bulan }}</h4>
     </div>
@@ -50,7 +61,7 @@
         </div>
         <div class="table-responsive mb-4">
             <table class="table table-bordered" id="stockOpnameTable">
-                <thead class="table-light">
+                <thead>
                     <tr>
                         <th>Kode Barang</th>
                         <th>Nama Barang</th>
@@ -61,29 +72,29 @@
                         <th>Catatan Item</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody">
                     @foreach ($items as $item)
                     @php
                     $stockOpname = $item->stockOpnames->firstWhere('session_id', $session->id);
                     $qtySistem = $item->stocks->qty ?? 0;
                     $qtyFisik = $stockOpname->qty_fisik ?? null;
-                    $selisih = is_null($qtyFisik) ? null : ($qtyFisik - $qtySistem);
+                    $selisih = is_null($qtyFisik) ? null : $qtyFisik - $qtySistem;
                     @endphp
                     <tr>
                         <td>{{ $item->kode_barang }}</td>
                         <td>{{ $item->nama_barang }}</td>
-                        <td>{{ $item->satuan }}</td>
+                        <td class="text-center">{{ $item->satuan }}</td>
                         <td class="text-end">{{ number_format($qtySistem) }}</td>
                         <td>
                             <input type="hidden" name="items[{{ $item->id }}][item_id]" value="{{ $item->id }}">
                             <input type="number" name="items[{{ $item->id }}][qty_fisik]" step="0.01" min="0"
-                                class="form-control form-control-sm qty-fisik"
+                                class="form-control form-control-sm qty-fisik text-end"
                                 value="{{ !is_null($qtyFisik) ? $qtyFisik : '' }}" data-sistem="{{ $qtySistem }}"
                                 placeholder="0">
                         </td>
                         <td
-                            class="selisih text-end fw-bold {{ !is_null($selisih) ? ($selisih < 0 ? 'text-danger' : ($selisih > 0 ? 'text-success' : 'text-muted')) : '' }}">
-                            {{ !is_null($selisih) ? number_format($selisih) : '-' }}
+                            class="selisih text-center fw-bold {{ !is_null($selisih) ? ($selisih < 0 ? 'text-danger' : ($selisih > 0 ? 'text-success' : 'text-muted')) : '' }}">
+                            {{ !is_null($selisih) ? number_format($selisih) : '' }}
                             <input type="hidden" name="items[{{ $item->id }}][selisih]" class="input-selisih"
                                 value="{{ !is_null($selisih) ? $selisih : '' }}">
                         </td>
@@ -94,7 +105,7 @@
                         </td>
                     </tr>
                     @endforeach
-                </tbody>
+                    </tbody>
             </table>
         </div>
 
@@ -119,52 +130,56 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        $('#stockOpnameTable').DataTable({
-            responsive: true,
-            language: {
-                search: "Cari:",
-                lengthMenu: "Tampilkan _MENU_ data per halaman",
-                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-                infoEmpty: "Tidak ada data",
-                zeroRecords: "Data tidak ditemukan",
-                paginate: {
-                    previous: "Sebelumnya",
-                    next: "Selanjutnya"
-                }
-            },
-            columnDefs: [
-                { orderable: false, targets: [4, 5, 6] },
-                { className: "dt-head-center", targets: "_all" }
-            ]
-        });
+            $('#stockOpnameTable').DataTable({
+                responsive: true,
+                language: {
+                    search: "Cari:",
+                    lengthMenu: "Tampilkan _MENU_ ",
+                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    infoEmpty: "Tidak ada data",
+                    zeroRecords: "Data tidak ditemukan",
+                    paginate: {
+                        previous: "Sebelumnya",
+                        next: "Selanjutnya"
+                    }
+                },
+                columnDefs: [{
+                        orderable: false,
+                        targets: [6]
+                    },
+                    {
+                        className: "dt-head-center",
+                        targets: "_all"
+                    }
+                ]
+            });
 
-        $(document).on('input', '.qty-fisik', function() {
-            const fisik = parseFloat($(this).val()) || 0;
-            const sistem = parseFloat($(this).data('sistem')) || 0;
-            const selisih = (fisik - sistem).toFixed(2);
+            $(document).on('input', '.qty-fisik', function() {
+                const fisik = parseFloat($(this).val()) || 0;
+                const sistem = parseFloat($(this).data('sistem')) || 0;
+                const selisih = (fisik - sistem).toFixed(2);
 
-            const tr = $(this).closest('tr');
-            const selisihCell = tr.find('.selisih');
-            const inputSelisih = tr.find('.input-selisih');
+                const tr = $(this).closest('tr');
+                const selisihCell = tr.find('.selisih');
+                const inputSelisih = tr.find('.input-selisih');
 
-            selisihCell.text(selisih);
-            inputSelisih.val(selisih);
-            selisihCell.removeClass('text-danger text-success text-muted');
-
-            if (selisih < 0) {
-                selisihCell.addClass('text-danger');
-            } else if (selisih > 0) {
-                selisihCell.addClass('text-success');
-            } else {
-                selisihCell.addClass('text-muted');
-            }
-            if ($(this).val() === '') {
-                selisihCell.text('-');
-                inputSelisih.val('');
+                selisihCell.text(selisih);
+                inputSelisih.val(selisih);
                 selisihCell.removeClass('text-danger text-success text-muted');
-            }
-        });
-    });
 
+                if (selisih < 0) {
+                    selisihCell.addClass('text-danger');
+                } else if (selisih > 0) {
+                    selisihCell.addClass('text-success');
+                } else {
+                    selisihCell.addClass('text-muted');
+                }
+                if ($(this).val() === '') {
+                    selisihCell.text('-');
+                    inputSelisih.val('');
+                    selisihCell.removeClass('text-danger text-success text-muted');
+                }
+            });
+        });
 </script>
 @endpush

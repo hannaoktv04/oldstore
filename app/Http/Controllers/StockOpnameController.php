@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class StockOpnameController extends Controller
 {
@@ -100,8 +101,7 @@ class StockOpnameController extends Controller
             }
 
             DB::commit();
-
-            return back()->with('success', $statusChanged
+            return redirect()->route('admin.stock_opname.index')->with('success', $statusChanged
                 ? 'Data opname dan status sesi berhasil diperbarui'
                 : 'Data opname berhasil disimpan');
         } catch (\Exception $e) {
@@ -125,5 +125,36 @@ class StockOpnameController extends Controller
             DB::rollBack();
             return back()->with('error', 'Gagal menghapus sesi: ' . $e->getMessage());
         }
+    }
+    public function show(OpnameSession $stock_opname)
+    {
+        $allItems = Item::with(['stocks', 'stockOpnames' => function ($q) use ($stock_opname) {
+            $q->where('session_id', $stock_opname->id);
+        }])->get();
+
+        $stock_opname->load(['opener']);
+
+        return view('admin.stock_opname.show', [
+            'session' => $stock_opname,
+            'items' => $allItems,
+            'currentDate' => Carbon::now()
+        ]);
+    }
+
+    public function downloadPdf(OpnameSession $stock_opname)
+    {
+        $allItems = Item::with(['stocks', 'stockOpnames' => function ($query) use ($stock_opname) {
+            $query->where('session_id', $stock_opname->id);
+        }])->orderBy('nama_barang', 'asc')->get();
+        $stock_opname->load(['opener']);
+
+        $data = [
+            'session'     => $stock_opname,
+            'items'       => $allItems,
+            'currentDate' => Carbon::now()
+        ];
+        $pdf = PDF::loadView('admin.stock_opname.print', $data);
+        $pdf->setPaper('a4', 'potrait');
+        return $pdf->download('laporan-stock-opname-' . $stock_opname->periode_bulan . '-' . $stock_opname->id . '.pdf');
     }
 }

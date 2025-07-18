@@ -4,22 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Item;
+use App\Models\ItemStock;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
 
     public function index()
-    {
-        $categories = Category::withCount('items')->get();
+{
+    $categories = Category::withCount('items')->get();
 
-        $items = Item::with(['category', 'photo'])
-            ->orderByRaw('stok_minimum = 0')
-            ->orderBy('stok_minimum', 'desc')
-            ->paginate(20);
+    $items = Item::with(['category', 'photo'])
+        ->withSum('stocks', 'qty')
+        ->orderByRaw('stocks_sum_qty = 0')
+        ->orderBy('stocks_sum_qty', 'desc') 
+        ->paginate(20);
 
-            return view('layouts.kategori', compact('categories', 'items'));
-    }
+    return view('layouts.kategori', compact('categories', 'items'));
+}
+
 
     public function store(Request $request)
     {
@@ -75,12 +78,12 @@ class CategoryController extends Controller
         $categories = Category::withCount('items')->get();
         $selectedCategory = Category::findOrFail($id);
         $items = Item::with(['category', 'photo'])
-            ->where('category_id', $id)
-            ->orderByRaw('stok_minimum = 0')
-            ->orderBy('stok_minimum', 'desc')
-            ->paginate(20);
+        ->withSum('stocks', 'qty') // hitung total qty dari relasi stocks
+        ->orderByRaw('stocks_sum_qty = 0') // taruh stok kosong di atas
+        ->orderBy('stocks_sum_qty', 'desc') // urutkan dari stok terbesar
+        ->paginate(20);
 
-        return view('layouts.kategori', compact('categories', 'items', 'selectedCategory'));
+    return view('layouts.kategori', compact('categories', 'items'));
     }
 
     public function publicView()
@@ -92,7 +95,6 @@ class CategoryController extends Controller
             ->orderBy('stok_minimum', 'desc')
             ->get();
 
-        return view('admin.categoryItem', compact('categories', 'items'));
+        return view('admin.category.index', compact('categories', 'items'));
     }
-
 }

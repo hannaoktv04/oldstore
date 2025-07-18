@@ -14,22 +14,20 @@
     </div>
 
     <div class="table-responsive shadow-sm">
-        <table class="table table-hover table-striped align-middle" id="categoryTable">
-            <thead class="table-success">
+        <table class="table table-hover" id="categoryTable">
+            <thead>
                 <tr>
                     <th><input type="checkbox" id="selectAllCategory" class="form-check-input"></th>
                     <th>Nama Kategori</th>
-                    <th class="text-center">Jumlah Item</th>
-                    <th class="text-center">Aksi</th>
+                    <th>Jumlah Item</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($categories as $category)
                 <tr>
-                    <td><input type="checkbox" value="{{ $category->id }}" class="form-check-input category-checkbox"></td>
-
-                    <td>{{ $category->categori_name }}</td>
-
+                    <td class="text-center"><input type="checkbox" value="{{ $category->id }}" class="form-check-input category-checkbox"></td>
+                    <td class="text-start">{{ $category->categori_name }}</td>
                     <td class="text-center">{{ $category->items_count }}</td>
 
                     <td class="text-center">

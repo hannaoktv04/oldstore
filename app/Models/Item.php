@@ -100,5 +100,14 @@ class Item extends Model
     {
         return $this->hasMany(StockNotification::class);
     }
+    public function stockOpnames()
+    {
+        return $this->hasMany(StockOpname::class, 'item_id');
+    }
+    public function adjustments()
+    {
+        return $this->hasMany(StockAdjustment::class, 'item_id');
+    }
+
 
 }
