@@ -1,8 +1,8 @@
 @php
-$produkOpen = request()->routeIs('admin.item.create') || request()->routeIs('admin.items');
-$pengajuanOpen = request()->routeIs('admin.pengajuan.status');
-$stokOpen = request()->routeIs('admin.stok.koreksi') || request()->routeIs('admin.stok.opname');
-$prefix = $prefix ?? 'default';
+    $produkOpen = request()->routeIs('admin.item.create') || request()->routeIs('admin.items');
+    $pengajuanOpen = request()->routeIs('admin.pengajuan.status');
+    $stokOpen = request()->routeIs('admin.stok.koreksi') || request()->routeIs('admin.stok.opname');
+    $prefix = $prefix ?? 'default';
 @endphp
 
 <div class="sidebar-admin">
@@ -11,8 +11,8 @@ $prefix = $prefix ?? 'default';
     <ul class="nav flex-column mb-2">
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between text-dark" data-bs-toggle="collapse"
-                href="#{{ $prefix }}-collapseProduk" role="button" aria-expanded="{{ $produkOpen ? 'true' : 'false' }}"
-                aria-controls="{{ $prefix }}-collapseProduk">
+                href="#{{ $prefix }}-collapseProduk" role="button"
+                aria-expanded="{{ $produkOpen ? 'true' : 'false' }}" aria-controls="{{ $prefix }}-collapseProduk">
                 <span><i class="bi bi-box-seam me-2"></i> Produk</span>
                 <i class="bi bi-chevron-down rotate-icon {{ $produkOpen ? 'rotate' : '' }}"></i>
             </a>
@@ -25,6 +25,10 @@ $prefix = $prefix ?? 'default';
                     class="nav-link d-flex py-1 {{ request()->routeIs('admin.items') ? 'active' : 'text-dark' }}">
                     Daftar Produk
                 </a>
+                <a href="{{ route('admin.categories.index') }}"
+                    class="nav-link d-flex py-1 {{ request()->routeIs('admin.categories.*') ? 'active' : 'text-dark' }}">
+                 Kategori
+                </a>
             </div>
         </li>
     </ul>
@@ -34,11 +38,13 @@ $prefix = $prefix ?? 'default';
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between text-dark" data-bs-toggle="collapse"
                 href="#{{ $prefix }}-collapsePengajuan" role="button"
-                aria-expanded="{{ $pengajuanOpen ? 'true' : 'false' }}" aria-controls="{{ $prefix }}-collapsePengajuan">
+                aria-expanded="{{ $pengajuanOpen ? 'true' : 'false' }}"
+                aria-controls="{{ $prefix }}-collapsePengajuan">
                 <span><i class="bi bi-clipboard me-2"></i> Riwayat Pengajuan</span>
                 <i class="bi bi-chevron-down rotate-icon {{ $pengajuanOpen ? 'rotate' : '' }}"></i>
             </a>
-            <div class="collapse ms-3 mt-2 {{ $pengajuanOpen ? 'show' : '' }}" id="{{ $prefix }}-collapsePengajuan">
+            <div class="collapse ms-3 mt-2 {{ $pengajuanOpen ? 'show' : '' }}"
+                id="{{ $prefix }}-collapsePengajuan">
                 <a href="{{ route('admin.pengajuan.status', 'submitted') }}"
                     class="nav-link d-flex py-1 {{ request()->fullUrlIs('*submitted*') ? 'active' : 'text-dark' }}">
                     Pengajuan Baru
@@ -59,8 +65,8 @@ $prefix = $prefix ?? 'default';
     <ul class="nav flex-column mb-2">
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between text-dark" data-bs-toggle="collapse"
-                href="#{{ $prefix }}-collapseStok" role="button" aria-expanded="{{ $stokOpen ? 'true' : 'false' }}"
-                aria-controls="{{ $prefix }}-collapseStok">
+                href="#{{ $prefix }}-collapseStok" role="button"
+                aria-expanded="{{ $stokOpen ? 'true' : 'false' }}" aria-controls="{{ $prefix }}-collapseStok">
                 <span><i class="bi bi-boxes me-2"></i> Stok</span>
                 <i class="bi bi-chevron-down rotate-icon {{ $stokOpen ? 'rotate' : '' }}"></i>
             </a>
@@ -75,12 +81,6 @@ $prefix = $prefix ?? 'default';
 
     {{-- Lainnya --}}
     <ul class="nav flex-column mb-2">
-        <li class="nav-item">
-            <a href="{{ route('admin.categories.index') }}"
-                class="nav-link d-flex align-items-center {{ request()->routeIs('admin.categories.*') ? 'active' : 'text-dark' }}">
-                <span><i class="bi bi-folder2-open me-2"></i> Kategori</span>
-            </a>
-        </li>
         <li class="nav flex-column mb-2">
             <a href="{{ route('admin.purchase_orders.index') }}"
                 class="nav-link d-flex align-items-center {{ request()->routeIs('admin.purchase_orders.*') ? 'active' : 'text-dark' }}">
