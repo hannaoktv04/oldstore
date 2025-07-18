@@ -309,6 +309,20 @@ input[type="number"]::-webkit-outer-spin-button {
 .sidebar-admin .collapse .nav-link {
     padding-left: 2.5rem;
 }
+.sidebar-admin {
+    font-size: 14px;
+}
+.sidebar-admin .nav-link {
+    padding: 0.4rem 0.75rem;
+}
+.sidebar-admin .nav-link.active {
+    font-weight: 600;
+    color: #198754 !important;
+}
+.sidebar-admin i.bi {
+    width: 20px;
+}
+
 
 .collapse,
 .collapsing {
@@ -484,19 +498,6 @@ td .form-check {
     border-radius: 100%;
 }
 
-.sidebar-admin {
-    font-size: 14px;
-}
-.sidebar-admin .nav-link {
-    padding: 0.4rem 0.75rem;
-}
-.sidebar-admin .nav-link.active {
-    font-weight: 600;
-    color: #198754 !important;
-}
-.sidebar-admin i.bi {
-    width: 20px;
-}
 
 .navbar {
     z-index: 1055 !important;

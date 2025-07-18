@@ -6,7 +6,6 @@
 @endphp
 
 <div class="sidebar-admin">
-    <h6 class="text-uppercase fw-bold mb-3">Dashboard</h6>
 
     <ul class="nav flex-column mb-2">
         <li class="nav-item">
