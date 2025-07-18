@@ -3,22 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
     use Notifiable;
-    
-    protected $fillable = [
-        'username', 'nama', 'nip', 'role', 'jabatan', 'email', 'password',
-    ];
 
-    public function getAuthIdentifierName()
-    {
-        return 'id';
-    }
+    protected $fillable = [
+        'username', 'nama', 'nip', 'jabatan', 'email', 'password',
+    ];
 
     public function setPasswordAttribute($password)
     {
@@ -27,9 +22,13 @@ class User extends Authenticatable
             : Hash::make($password);
     }
 
-    public function carts()
+    public function roles()
     {
-        return $this->hasMany(Cart::class);
+        return $this->belongsToMany(Role::class, 'users_role');
     }
 
+    public function hasRole($roleName)
+    {
+        return $this->roles->pluck('nama_role')->contains($roleName);
+    }
 }

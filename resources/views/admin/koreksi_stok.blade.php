@@ -32,7 +32,7 @@
             <textarea name="keterangan" class="form-control"></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary">Simpan Koreksi</button>
+        <button type="submit" class="btn btn-success">Simpan Koreksi</button>
     </form>
 </div>
 @endsection

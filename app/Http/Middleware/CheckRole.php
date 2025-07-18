@@ -14,12 +14,14 @@ class CheckRole
             return redirect()->route('login');
         }
 
-        $user = Auth::user();
-        if (in_array($user->role, $roles)) {
-            return $next($request);
+        $user = Auth::user()->load('roles');
+
+        foreach ($roles as $role) {
+            if ($user->hasRole($role)) {
+                return $next($request);
+            }
         }
 
         abort(403);
     }
 }
-

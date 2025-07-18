@@ -30,6 +30,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 
+
+    <!-- Helpers & Config -->
+    <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
+    <script src="{{ asset('assets/js/config.js') }}"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @stack('style')
     @stack('scripts')
@@ -47,7 +52,6 @@
         });
     </script>
 @endif
-
 
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
@@ -142,11 +146,12 @@
 
 <!-- Core JS -->
 <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
-<script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
 <script src="{{ asset('assets/js/hero.js') }}"></script>
+<script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
 <script src="{{ asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
 <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
+<script src="{{ asset('assets/js/produk-detail.js') }}"></script>
 @stack('scripts')
 </body>
 </html>

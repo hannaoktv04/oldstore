@@ -1,50 +1,50 @@
 <nav class="navbar navbar-expand-lg bg-white shadow-sm py-2 sticky-top">
   <div class="container d-flex justify-content-between align-items-center">
-
+    
     <div class="d-flex align-items-center">
-      @if(Auth::check() && Auth::user()->role === 'admin')
-        <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+      @if(Auth::check() && Auth::user()->hasRole('admin'))
+        <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
           <i class="bi bi-list fs-4"></i>
         </button>
       @endif
-      <a class="navbar-brand brand-custom d-flex align-items-center" href="{{ url('/') }}">
+
+      <a class="navbar-brand d-flex align-items-center"
+         href="{{ Auth::user()->hasRole('admin') ? route('admin.dashboard') : url('/') }}">
         <img src="{{ asset('assets/img/peri.png') }}" alt="PERI Logo" style="height: 50px;">
-        @if(Auth::check() && Auth::user()->role === 'admin')
-          <span class="fw-normal text-secondary fs-6">Admin</span>
+        @if(Auth::user()->hasRole('admin'))
+          <span class="fw-normal text-secondary fs-6 ms-2">Admin</span>
         @endif
       </a>
-      <a class="nav-link fw-medium" href="{{ url('/kategori') }}">Kategori</a>
+
+      <a class="nav-link fw-medium ms-3" href="{{ url('/kategori') }}">Kategori</a>
     </div>
 
-
-    <form class="d-none d-lg-flex me-3 flex-grow-1 mx-3" role="search" method="GET" action="{{ route('search') }}">
-      <div class="input-group position-relative w-100 align-items-center">
-        <input name="q" class="form-control rounded-pill ps-4" type="search" placeholder="Cari barang yang kamu inginkan..." aria-label="Search" value="{{ request('q') }}">
+    <form class="d-none d-lg-flex flex-grow-1 mx-3" method="GET" action="{{ route('search') }}">
+      <div class="input-group position-relative w-100">
+        <input name="q" class="form-control rounded-pill ps-4" type="search" placeholder="Cari barang..." value="{{ request('q') }}">
         <span class="position-absolute top-50 end-0 translate-middle-y me-3 text-muted">
           <i class="bi bi-search"></i>
         </span>
       </div>
     </form>
-    
+
     @php
+      use App\Models\Cart;
       use App\Models\StockNotification;
-      $notifikasiProdukBaru = Auth::check() && Auth::user()->role === 'pegawai'
-          ? StockNotification::where('seen', false)->with('item')->latest()->get()
-          : collect();
+      $cartItems = Auth::check() ? Cart::where('user_id', Auth::id())->get() : collect();
+      $jumlahKeranjang = $cartItems->count();
+      $notifikasiProdukBaru = Auth::check() && Auth::user()->hasRole('pegawai')
+        ? StockNotification::where('seen', false)->with('item')->latest()->get()
+        : collect();
     @endphp
 
     <div class="d-flex align-items-center gap-2">
-
-      <button class="btn d-lg-none text-dark bg-transparent border-0" type="button" data-bs-toggle="modal" data-bs-target="#searchModalMobile">
+      <button class="btn d-lg-none text-dark bg-transparent border-0" data-bs-toggle="modal" data-bs-target="#searchModalMobile">
         <i class="bi bi-search fs-5"></i>
       </button>
 
       @auth
-        @if(Auth::user()->role !== 'admin')
-          @php
-            $cartItems = \App\Models\Cart::where('user_id', Auth::id())->get();
-            $jumlahKeranjang = $cartItems->count();
-          @endphp
+        @if(!Auth::user()->hasRole('admin'))
           <div class="position-relative">
             <button id="cart-icon" class="icon-button text-dark bg-transparent border-0 p-0">
               <i class="bi bi-bag-fill fs-5"></i>
@@ -55,11 +55,11 @@
               @endif
             </button>
             <div id="cart-popup" class="position-absolute text-dark bg-white shadow rounded p-3 mt-2 z-3 d-none"
-                style="min-width: 315px; right: 0px; font-size: 14px;">
+                 style="min-width: 315px; right: 0px; font-size: 14px;">
               <h6 class="mb-3">Barang yang ada di Keranjang</h6>
               @forelse($cartItems as $item)
                 <div class="d-flex align-items-start mb-2">
-                  <img src="{{ asset('storage/' . ($item->item->photo->image ?? 'placeholder.jpg')) }}" alt="{{ $item->item->nama_barang }}" width="50" class="me-2 rounded">
+                  <img src="{{ asset('storage/' . ($item->item->photo->image ?? 'placeholder.jpg')) }}" width="50" class="me-2 rounded">
                   <div>
                     <small>{{ $item->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</small><br>
                     <strong>{{ $item->item->nama_barang }}</strong><br>
@@ -76,16 +76,12 @@
             </div>
           </div>
         @endif
-        @else
-          <a href="{{ route('login') }}" class="text-dark text-decoration-none">
-            <i class="bi bi-bag-fill fs-5"></i>
-          </a>
       @endauth
-    
-      @if(Auth::user()->role === 'pegawai')
+
+      @if(Auth::check() && Auth::user()->hasRole('pegawai'))
         <div class="dropdown position-relative">
           <button class="icon-button text-dark bg-transparent border-0 p-0 position-relative"
-                  type="button" id="notifDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  id="notifDropdown" data-bs-toggle="dropdown">
             <i class="bi bi-bell-fill fs-5"></i>
             @if($notifikasiProdukBaru->count() > 0)
               <span class="badge bg-success rounded-pill position-absolute top-0 start-100 translate-middle">
@@ -93,7 +89,7 @@
               </span>
             @endif
           </button>
-          <ul class="dropdown-menu dropdown-menu-end shadow p-3" style="min-width: 300px;" aria-labelledby="notifDropdown">
+          <ul class="dropdown-menu dropdown-menu-end shadow p-3" style="min-width: 300px;">
             <h6 class="mb-2">Produk Tersedia Kembali</h6>
             @forelse($notifikasiProdukBaru as $notif)
               <li class="mb-2 small d-flex align-items-start">
@@ -118,11 +114,10 @@
         </div>
       @endif
 
-
       <div class="dropdown">
-        <button id="user-icon" class="icon-button text-dark bg-transparent border-0 pe-3 dropdown-toggle "
-                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="bi bi-person-fill fs-4 "></i>
+        <button id="user-icon" class="icon-button text-dark bg-transparent border-0 pe-3 dropdown-toggle"
+                data-bs-toggle="dropdown">
+          <i class="bi bi-person-fill fs-4"></i>
         </button>
         <ul class="dropdown-menu dropdown-menu-end shadow p-3" style="min-width: 250px;">
           @guest
@@ -137,7 +132,7 @@
               <small class="text-muted">{{ Auth::user()->role }}</small>
             </li>
             <li><hr class="dropdown-divider"></li>
-            @if(Auth::user()->role === 'admin')
+            @if(Auth::user()->hasRole('admin'))
               <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
             @else
               <li><a class="dropdown-item" href="{{ route('user.wishlist') }}"><i class="bi bi-heart me-2"></i>My Wishlist</a></li>
