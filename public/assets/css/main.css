@@ -9,13 +9,14 @@
 }
 
 .icon-button:hover .bi-bell-fill {
-    color: #5cb85c; 
+    color: #2aa7a7;
+    color: #5cb85c;
     transform: scale(1.15);
     transition: all 0.2s ease-in-out;
 }
 
 #heart-icon:hover i::before {
-  content: "\f415"; 
+  content: "\f415";
   font-weight: bold;
     color: #5cb85c;
 }

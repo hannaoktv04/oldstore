@@ -30,10 +30,40 @@
                 <textarea name="catatan" class="form-control form-control-sm" rows="2"
                     placeholder="Tambahkan catatan jika diperlukan"></textarea>
             </div>
-            <button type="submit" class="btn btn-success">Mulai Sesi</button>
-            <a href="{{ route('admin.stock_opname.index') }}" class="btn btn-secondary">Batal</a>
-        </form>
-    </div>
+        </div>
+
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered" id="datatable-opname">
+                <thead class="table-light">
+                    <tr>
+                        <th>Kode Barang</th>
+                        <th>Nama Barang</th>
+                        <th>Satuan</th>
+                        <th>Stok Sistem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($items as $item)
+                    <tr>
+                        <td class="text-center">{{ $item->kode_barang }}</td>
+                        <td>{{ $item->nama_barang }}</td>
+                        <td class="text-center">{{ $item->satuan }}</td>
+                        <td class="text-center">{{ number_format($item->stocks->qty ?? 0) }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <a href="{{ route('admin.stock_opname.index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Kembali
+            </a>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Simpan
+            </button>
+        </div>
+    </form>
 </div>
 @endsection
 

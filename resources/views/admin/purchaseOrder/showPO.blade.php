@@ -3,58 +3,76 @@
 @section('title', 'Detail Purchase Order')
 
 @section('content')
-<div class="card card-outline card-success">
-    <div class="card-header">
-        <h4 class="card-title">Purchase Order Details - {{ $purchaseOrder->nomor_po }}</h4>
-    </div>
-    <div class="card-body" id="print_out">
-        <div class="container-fluid">
-            <div class="row mt-3">
-                <div class="col-md-6">
-                    <label class="fw-semibold">Kode PO</label>
-                    <div>{{ $purchaseOrder->nomor_po }}</div>
+    <div class="card card-outline card-primary">
+        <div class="card-body">
+            <div class="container-fluid" id="print_out">
+                <div class="text-center mb-4">
+                    <div class="d-flex align-items-center justify-content-space-between">
+                        <img src="{{ asset('assets/img/logo-komdigi.png') }}" alt="Kop KOMDIGI" class="me-3"
+                            style="height: 80px;">
+                        <div class="text-start px-10">
+                            <h4 class="mb-0 fw-bold">KEMENTERIAN KOMUNIKASI DAN DIGITAL RI</h4>
+                            <h5 class="mb-0">SEKRETARIAT JENDERAL</h5>
+                            <h5 class="mb-1">BIRO SUMBER DAYA MANUSIA DAN ORGANISASI</h5>
+                            <p>Jl. Medan Merdeka Barat No. 9, Jakarta 10110 Telp. (021) 3865189
+                                www.komdigi.go.id</p>
+                        </div>
+                    </div>
+                    <hr style="border: 1px solid black;">
+                    <h5 class="fw-bold text-decoration-underline">DAFTAR PENGAJUAN PEMBELIAN</h5>
+                    <div class="text-end">
+                        <span>Jakarta, {{ \Carbon\Carbon::parse($purchaseOrder->tanggal_po)->format('d M Y') }}</span>
+                    </div>
+                    <div class="text-start">
+                        <span>Nomor: {{ $purchaseOrder->nomor_po }}</span>
+                    </div>
                 </div>
-                <div class="text-start">
-                    <span>Nomor: {{ $purchaseOrder->nomor_po }}</span>
-                </div>
-            </div>
 
-            <h5 class="mt-3">Orders</h5>
-            <table class="table table-striped table-bordered">
-                <thead class="bg-success text-white">
-                    <tr>
-                        <th style="width: 5%;">No</th>
-                        <th style="width: 15%;">Kode Barang</th>
-                        <th>Nama Barang</th>
-                        <th style="width: 10%;">Satuan</th>
-                        <th style="width: 15%;">Jumlah</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php $totalQty = 0; @endphp
-                    @foreach ($purchaseOrder->details as $index => $detail)
-                    @php $totalQty += $detail->qty; @endphp
-                    <tr>
-                        <td class="text-center">{{ $index + 1 }}</td>
-                        <td class="text-center">{{ $detail->item->kode_barang ?? '-' }}</td>
-                        <td>{{ $detail->item->nama_barang ?? '-' }}</td>
-                        <td class="text-center">{{ $detail->item->satuan ?? '-' }}</td>
-                        <td class="text-center">{{ number_format($detail->qty) }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-                <tfoot class="table-light">
-                    <tr>
-                        <th colspan="4" class="text-end">Total</th>
-                        <th class="text-center">{{ number_format($totalQty) }}</th>
-                    </tr>
-                </tfoot>
-            </table>
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="fw-bold">Status:</label>
-                        <span class="badge
+                <div class="mb-4">
+                    <p>Kepada Yth. <br> Vendor/Penyedia Barang</p>
+                    <p>
+                        Dengan hormat, <br>
+                        Sehubungan dengan kebutuhan persediaan barang pada unit Staf Rumah Tangga, bersama ini kami
+                        mengajukan pemesanan barang sebagaimana terlampir di bawah ini :
+                    </p>
+                </div>
+
+                <table class="table table-bordered">
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th style="width: 5%;">No</th>
+                            <th style="width: 15%;">Kode Barang</th>
+                            <th>Nama Barang</th>
+                            <th style="width: 10%;">Satuan</th>
+                            <th style="width: 15%;">Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php $totalQty = 0; @endphp
+                        @foreach ($purchaseOrder->details as $index => $detail)
+                            @php $totalQty += $detail->qty; @endphp
+                            <tr>
+                                <td class="text-center">{{ $index + 1 }}</td>
+                                <td class="text-center">{{ $detail->item->kode_barang ?? '-' }}</td>
+                                <td>{{ $detail->item->nama_barang ?? '-' }}</td>
+                                <td class="text-center">{{ $detail->item->satuan ?? '-' }}</td>
+                                <td class="text-center">{{ number_format($detail->qty) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot class="table-light">
+                        <tr>
+                            <th colspan="4" class="text-end">Total</th>
+                            <th class="text-center">{{ number_format($totalQty) }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="fw-bold">Status:</label>
+                            <span
+                                class="badge
                             @switch($purchaseOrder->status)
                                 @case('draft') bg-secondary @break
                                 @case('submitted') bg-primary @break

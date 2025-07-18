@@ -170,5 +170,3 @@ Route::middleware(['auth', 'role:staff_pengiriman'])->prefix('staff-pengiriman')
     Route::get('/on-progress', [StaffPengirimanController::class, 'onProgress'])->name('staff-pengiriman.onprogress');
     Route::get('/selesai', [StaffPengirimanController::class, 'selesai'])->name('staff-pengiriman.selesai');
 });
-
-

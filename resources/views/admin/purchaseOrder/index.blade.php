@@ -3,11 +3,11 @@
 @section('title', 'Daftar Purchase Order')
 
 @section('content')
-<div class="card card-outline card-primary mt-4">
+<div class="card card-outline card-success">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h3>Daftar Pengajuan Pembelian Barang</h3>
-        <a href="{{ route('admin.purchase_orders.create') }}" class="btn btn-flat btn-primary ">
-            <span class="bi bi-plus-lg"> Penjuan Baru</span>
+        <h3 class="card-title">List of Purchase Orders</h3>
+        <a href="{{ route('admin.purchase_orders.createPO') }}" class="btn btn-flat btn-success ">
+            <span class="bi bi-plus-lg"> Create New</span>
         </a>
     </div>
     <div class="card-body my-2">

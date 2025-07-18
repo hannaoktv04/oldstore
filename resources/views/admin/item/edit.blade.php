@@ -24,16 +24,16 @@
             <h6 class="fw-semibold mb-3">Foto Item</h6>
             <div id="imageUploadWrapper" class="d-flex flex-wrap gap-2">
                 @foreach ($item->images as $index => $img)
-                <div class="upload-box">
-                    <img src="{{ asset('storage/' . $img->image) }}"
-                        class="preview {{ $item->photo_id == $img->id ? 'border border-primary' : '' }}"
-                        style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;">
-                    <div class="tools">
-                        <i class="bi bi-crop" onclick="openCropper(this)"></i>
-                        <i class="bi bi-trash" onclick="removeImage(this)"></i>
+                    <div class="upload-box">
+                        <img src="{{ asset('storage/' . $img->image) }}"
+                             class="preview {{ $item->photo_id == $img->id ? 'border border-success' : '' }}"
+                             style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;">
+                        <div class="tools">
+                            <i class="bi bi-crop" onclick="openCropper(this)"></i>
+                            <i class="bi bi-trash" onclick="removeImage(this)"></i>
+                        </div>
+                        <input type="file" name="photo_Item[]" accept="image/*" style="display: none;">
                     </div>
-                    <input type="file" name="photo_Item[]" accept="image/*" style="display: none;">
-                </div>
                 @endforeach
 
                 <div class="upload-box">

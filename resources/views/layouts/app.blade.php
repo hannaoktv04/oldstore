@@ -30,7 +30,12 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-    
+
+
+    <!-- Helpers & Config -->
+    <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
+    <script src="{{ asset('assets/js/config.js') }}"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @stack('style')
     @stack('scripts')
@@ -77,7 +82,7 @@
                 <style>
                     .opname-banner {
                         position: fixed;
-                        top: 74px; 
+                        top: 74px;
                         left: 0;
                         right: 0;
                         z-index: 1040;
