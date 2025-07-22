@@ -58,8 +58,9 @@
                     <label for="satuan" class="form-label">Satuan <span class="text-danger">*</span></label>
                     <select name="satuan" id="satuan" class="form-select" required>
                         <option value="" selected disabled>Pilih Satuan</option>
-                        @foreach(['pcs','buah','rim','pack','dus','botol'] as $sat)
-                        <option value="{{ $sat }}">{{ ucfirst($sat) }}</option>
+                   
+                        @foreach (App\Models\Satuan::orderBy('nama_satuan')->get() as $satuan )
+                        <option value="{{ $satuan->id }}">{{ $satuan->nama_satuan }}</option>
                         @endforeach
                     </select>
                 </div>

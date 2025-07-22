@@ -18,15 +18,15 @@ use function Psy\debug;
 
 class ItemController extends Controller
 {
-  public function index()
-{
-    $items = Item::with(['images', 'category', 'stocks']) // pastikan 'stocks' di-load
-        ->withCount('images as variant_count')
-        ->orderBy('nama_barang')
-        ->get();
+    public function index()
+    {
+        $items = Item::with(['images', 'category', 'stocks'])
+            ->withCount('images as variant_count')
+            ->orderBy('nama_barang')
+            ->get();
 
-    return view('admin.item.index', compact('items'));
-}
+        return view('admin.item.index', compact('items'));
+    }
     public function create()
     {
         return view('admin.item.create');
@@ -123,52 +123,74 @@ class ItemController extends Controller
         }
     }
 
+
+
     public function update(Request $request, Item $item)
     {
         DB::beginTransaction();
         try {
             $validated = $request->validate([
-                'nama_barang'   => 'required|string|max:255',
-                'kode_barang'   => 'required|string|max:255|unique:items,kode_barang,' . $item->id,
-                'satuan'        => 'required|string',
-                'deskripsi'     => 'required|string',
-                'category_id'   => 'nullable|exists:category,id',
-                'photo_Item'    => 'nullable|array|max:5',
-                'photo_Item.*'  => 'image|mimes:jpeg,png,jpg|max:2048',
+                'nama_barang' => 'required|string|max:255',
+                'kode_barang' => 'required|string|max:255|unique:items,kode_barang,' . $item->id,
+                'satuan' => 'required|string',
+                'deskripsi' => 'required|string',
+                'stok_minimum' => 'required|integer|min:0',
+                'category_id' => 'required|exists:category,id',
+                'photo_Item' => 'nullable|array|max:5',
+                'photo_Item.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+                'thumbnail_index' => 'required|integer|min:0',
+                'existing_images' => 'nullable|array',
+                'existing_images.*' => 'exists:item_images,id,item_id,'.$item->id
             ]);
 
+            // Update item data
             $item->update([
                 'nama_barang' => $validated['nama_barang'],
                 'kode_barang' => $validated['kode_barang'],
-                'satuan'      => $validated['satuan'],
-                'deskripsi'   => $validated['deskripsi'],
+                'satuan' => $validated['satuan'],
+                'deskripsi' => $validated['deskripsi'],
+                'stok_minimum' => $validated['stok_minimum'],
                 'category_id' => $validated['category_id'],
             ]);
 
-            if ($request->hasFile('photo_Item')) {
-                $thumbnailIndex = $request->input('thumbnail_index', 0);
-                if (!is_numeric($thumbnailIndex) || $thumbnailIndex < 0) {
-                    $thumbnailIndex = 0;
-                }
+            // Handle existing images
+            $existingImages = $request->input('existing_images', []);
+            $currentImages = $item->images()->pluck('id')->toArray();
 
-                $uploadedImages = [];
-
-                foreach ($request->file('photo_Item') as $index => $file) {
-                    $path = $file->store('images', 'public');
-                    $img = ItemImage::create([
-                        'item_id' => $item->id,
-                        'image'   => $path,
-                    ]);
-                    $uploadedImages[] = $img;
-
-                    if ($index == $thumbnailIndex) {
-                        $item->update(['photo_id' => $img->id]);
+            // Delete images that were removed
+            $imagesToDelete = array_diff($currentImages, $existingImages);
+            foreach ($imagesToDelete as $imageId) {
+                $image = ItemImage::find($imageId);
+                if ($image) {
+                    // Don't delete if it's the current thumbnail
+                    if ($image->id !== $item->photo_id) {
+                        Storage::disk('public')->delete($image->image);
+                        $image->delete();
                     }
                 }
+            }
 
-                if (!$item->photo_id && count($uploadedImages)) {
-                    $item->update(['photo_id' => $uploadedImages[0]->id]);
+            // Handle new uploads (including cropped images)
+            if ($request->hasFile('photo_Item')) {
+                foreach ($request->file('photo_Item') as $file) {
+                    $path = $file->store('images', 'public');
+                    ItemImage::create([
+                        'item_id' => $item->id,
+                        'image' => $path,
+                    ]);
                 }
+            }
+
+            // Handle thumbnail selection
+            $thumbnailIndex = (int)$request->thumbnail_index;
+            $allImages = $item->images()->orderBy('created_at')->get();
+
+            if ($allImages->count() > 0) {
+                // Make sure index is within bounds
+                $selectedIndex = min($thumbnailIndex, $allImages->count() - 1);
+                $item->update(['photo_id' => $allImages[$selectedIndex]->id]);
+            } else {
+                $item->update(['photo_id' => null]);
             }
 
             DB::commit();
@@ -182,16 +204,31 @@ class ItemController extends Controller
 
     public function deleteImage(ItemImage $image)
     {
-        if ($image->id === optional($image->item)->photo_id) {
-            return back()->with('error', 'Gambar utama tidak boleh dihapus langsung.');
+        DB::beginTransaction();
+        try {
+            if ($image->item && $image->item->photo_id == $image->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gambar utama tidak boleh dihapus langsung. Silakan pilih thumbnail lain terlebih dahulu.'
+                ], 400);
+            }
+            Storage::disk('public')->delete($image->image);
+            $image->delete();
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Gambar berhasil dihapus.'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus gambar: ' . $e->getMessage()
+            ], 500);
         }
-
-        Storage::disk('public')->delete($image->image);
-        $image->delete();
-
-        return back()->with('success', 'Gambar berhasil dihapus.');
     }
-
     public function edit(Item $item)
     {
         $categories = Category::all();

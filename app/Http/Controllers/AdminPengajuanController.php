@@ -40,7 +40,7 @@ class AdminPengajuanController extends Controller
             $q->where('name', 'staff_pengiriman');
         })->get();
 
-        return view('admin.pengajuan-status', compact('pengajuans', 'status', 'staff_pengiriman'));
+        return view('admin.pengajuan.index', compact('pengajuans', 'status', 'staff_pengiriman'));
     }
 
     public function approve(Request $request, ItemRequest $pengajuan)

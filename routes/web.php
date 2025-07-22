@@ -26,6 +26,7 @@ use App\Models\OpnameSession;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 use App\Http\Controllers\StaffPengirimanController;
 use App\Http\Controllers\NotifikasiController;
+use App\Http\Controllers\SatuanController;
 
 
 Route::get('/tes-barcode', function () {
@@ -107,7 +108,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
     Route::post('/items/bulk-action', [ItemController::class, 'bulkAction'])->name('admin.items.bulkAction');
     Route::post('/items/toggle/{item}', [ItemController::class, 'toggleState'])->name('admin.items.toggle');
-    Route::delete('/items/images/{image}', [ItemController::class, 'deleteImage'])->name('admin.items.images.destroy');
+    Route::delete('/items/images/{image}', [ItemController::class, 'deleteImage'])->name('admin.items.images.delete');
 
     Route::get('/wishlist', [AdminWishlistController::class, 'index'])->name('admin.wishlist.index');
     Route::post('/wishlist/{id}/akomodasi', [AdminWishlistController::class, 'akomodasi'])->name('admin.wishlist.akomodasi');
@@ -122,8 +123,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
     Route::post('/categories/bulk-delete', [CategoryController::class, 'bulkDelete'])->name('admin.categories.bulkDelete');
 
-    Route::resource('purchase-orders', PurchaseOrderController::class)
-        ->names('admin.purchase_orders');
+    Route::resource('purchase-orders', PurchaseOrderController::class)->names('admin.purchase_orders');
     Route::prefix('purchase-orders')->name('admin.purchase_orders.')->group(function () {
         Route::post('{purchaseOrder}/submit', [PurchaseOrderController::class, 'submit'])->name('submit');
         Route::get('{purchaseOrder}/receive', [PurchaseOrderController::class, 'receiveForm'])->name('receive');
@@ -139,6 +139,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::resource('stock-opname', StockOpnameController::class)->except(['index'])->names('admin.stock_opname');
     Route::get('stock-opname/{stock_opname}/download', [StockOpnameController::class, 'downloadPdf'])
         ->name('admin.stock_opname.downloadPdf');
+
+    Route::resource('satuan', SatuanController::class)->except(['show'])->names('admin.satuan');
 });
 
 // -------------------------
