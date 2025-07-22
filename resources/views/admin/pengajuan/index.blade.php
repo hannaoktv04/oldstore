@@ -25,8 +25,8 @@
                     @foreach ($pengajuan->details as $detail)
                         <div class="d-flex align-items-start mb-3">
                         <img
-                            src="{{ $detail->item->gallery->first() 
-                                ? asset('storage/' . $detail->item->gallery->first()) 
+                            src="{{ $detail->item->gallery->first()
+                                ? asset('storage/' . $detail->item->gallery->first())
                                 : asset('assets/img/default.png') }}"
                             class="me-3 rounded border" width="80" height="80" style="object-fit: cover;" alt="{{ $detail->item->nama_barang }}">
                             <div>
@@ -64,5 +64,5 @@
     <a href="{{ route('admin.dashboard') }}" class="btn btn-success">Kembali ke Dashboard</a>
 </div>
 
-@include('partials.alert') 
+@include('partials.alert')
 @endsection

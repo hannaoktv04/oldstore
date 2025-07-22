@@ -1,5 +1,3 @@
-import Cropper from 'cropperjs';
-
 let cropper = null;
 let cropTargetImage = null;
 let cropTargetInput = null;
@@ -10,10 +8,10 @@ window.handleImageUpload = function (input) {
 
     const reader = new FileReader();
     reader.onload = function (e) {
-        const wrapper = document.getElementById('imageUploadWrapper');
+        const wrapper = document.getElementById("imageUploadWrapper");
 
-        const box = document.createElement('div');
-        box.className = 'upload-box';
+        const box = document.createElement("div");
+        box.className = "upload-box";
         box.innerHTML = `
             <img src="${e.target.result}" class="preview" onclick="setThumbnail(this)">
             <div class="tools">
@@ -30,15 +28,15 @@ window.handleImageUpload = function (input) {
         hiddenInput.files = dt.files;
 
         wrapper.insertBefore(box, wrapper.lastElementChild);
-        input.value = '';
+        input.value = "";
 
-        if (!wrapper.querySelector('.upload-trigger')) {
-            const newBox = document.createElement('div');
-            newBox.className = 'upload-box';
+        if (!wrapper.querySelector(".upload-trigger")) {
+            const newBox = document.createElement("div");
+            newBox.className = "upload-box";
             newBox.innerHTML = `
                 <label class="upload-trigger">
                     <input type="file" accept="image/*" class="d-none" onchange="handleImageUpload(this)">
-                    <div class="upload-placeholder d-flex flex-column justify-content-center align-items-center h-100">
+                    <div class="upload-placeholder">
                         <i class="bi bi-image fs-2 d-block text-secondary"></i>
                         <span class="text-secondary small">Tambah Gambar</span>
                     </div>
@@ -50,77 +48,185 @@ window.handleImageUpload = function (input) {
     reader.readAsDataURL(file);
 };
 
-window.removeImage = function (el) {
-    const box = el.closest('.upload-box');
-    const wrapper = document.getElementById('imageUploadWrapper');
-    box.remove();
-
-    const index = Array.from(wrapper.children).findIndex(b => b.classList.contains('selected-thumbnail'));
-    document.getElementById('thumbnail_index').value = index !== -1 ? index : 0;
+window.removeImage = function (el, imageId = null) {
+    if (imageId) {
+        if (confirm("Yakin ingin menghapus gambar ini?")) {
+            fetch(`/admin/items/images/${imageId}`, {
+                method: "DELETE",
+                headers: {
+                    "X-CSRF-TOKEN": document
+                        .querySelector('meta[name="csrf-token"]')
+                        .getAttribute("content"),
+                    Accept: "application/json",
+                },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        el.closest(".upload-box").remove();
+                        updateThumbnailIndex();
+                    } else {
+                        alert(data.message || "Gagal menghapus gambar");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    alert("Terjadi kesalahan saat menghapus gambar");
+                });
+        }
+    } else {
+        const box = el.closest(".upload-box");
+        box.remove();
+        updateThumbnailIndex();
+    }
 };
 
+function updateThumbnailIndex() {
+    const wrapper = document.getElementById("imageUploadWrapper");
+    const selectedBox = wrapper.querySelector(".selected-thumbnail");
+    const newIndex = selectedBox
+        ? Array.from(wrapper.children).indexOf(selectedBox)
+        : 0;
+    document.getElementById("thumbnail_index").value = newIndex;
+}
 window.setThumbnail = function (imgEl) {
-    const allBoxes = document.querySelectorAll('#imageUploadWrapper .upload-box');
-    allBoxes.forEach(box => {
-        box.classList.remove('selected-thumbnail');
-        box.querySelector('.badge')?.classList.add('d-none');
+    const allBoxes = document.querySelectorAll(
+        "#imageUploadWrapper .upload-box"
+    );
+    allBoxes.forEach((box) => {
+        box.classList.remove("selected-thumbnail");
+        box.querySelector(".badge")?.classList.add("d-none");
     });
 
-    const box = imgEl.closest('.upload-box');
-    box.classList.add('selected-thumbnail');
-    box.querySelector('.badge').classList.remove('d-none');
+    const box = imgEl.closest(".upload-box");
+    box.classList.add("selected-thumbnail");
+    box.querySelector(".badge").classList.remove("d-none");
 
-    const index = Array.from(document.getElementById('imageUploadWrapper').children).indexOf(box);
-    document.getElementById('thumbnail_index').value = index;
+    const index = Array.from(
+        document.getElementById("imageUploadWrapper").children
+    ).indexOf(box);
+    document.getElementById("thumbnail_index").value = index;
 };
 
 window.openCropper = function (icon) {
-    const box = icon.closest('.upload-box');
-    const img = box.querySelector('img.preview');
+    const box = icon.closest(".upload-box");
+    const img = box.querySelector("img.preview");
     cropTargetImage = img;
     cropTargetInput = box.querySelector('input[type="file"]');
 
-    const cropperImage = document.getElementById('cropperImage');
-    const previewEl = document.getElementById('cropPreview');
+    if (!cropTargetInput && box.hasAttribute("data-image-id")) {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.name = "photo_Item[]";
+        input.style.display = "none";
+        box.appendChild(input);
+        cropTargetInput = input;
+    }
 
+    const cropperImage = document.getElementById("cropperImage");
+    const previewEl = document.getElementById("cropPreview");
+
+    if (cropper) {
+        cropper.destroy();
+        cropper = null;
+    }
     cropperImage.src = img.src;
     previewEl.src = img.src;
-
-    const modal = new bootstrap.Modal(document.getElementById('cropperModal'));
+    const modal = new bootstrap.Modal(document.getElementById("cropperModal"));
     modal.show();
-
     setTimeout(() => {
         cropper = new Cropper(cropperImage, {
             aspectRatio: 3 / 4,
             viewMode: 1,
-            preview: '#cropPreview'
+            preview: "#cropPreview",
+            autoCrop: false,
         });
     }, 300);
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    const saveBtn = document.getElementById('saveCropBtn');
+document.addEventListener("DOMContentLoaded", function () {
+    const saveBtn = document.getElementById("saveCropBtn");
     if (saveBtn) {
-        saveBtn.addEventListener('click', () => {
+        saveBtn.addEventListener("click", function () {
             if (cropper && cropTargetImage && cropTargetInput) {
-                const canvas = cropper.getCroppedCanvas({ width: 300, height: 400 });
+                const canvas = cropper.getCroppedCanvas({
+                    width: 500,
+                    height: 500,
+                    minWidth: 256,
+                    minHeight: 256,
+                    maxWidth: 2000,
+                    maxHeight: 2000,
+                    fillColor: "#fff",
+                    imageSmoothingEnabled: true,
+                    imageSmoothingQuality: "high",
+                });
 
-                canvas.toBlob((blob) => {
-                    const url = URL.createObjectURL(blob);
-                    cropTargetImage.src = url;
-                    const dt = new DataTransfer();
-                    const file = new File([blob], `cropped-${Date.now()}.jpg`, { type: 'image/jpeg' });
-                    dt.items.add(file);
-                    cropTargetInput.files = dt.files;
-                }, 'image/jpeg');
+                // When saving cropped image
+                canvas.toBlob(
+                    function (blob) {
+                        const url = URL.createObjectURL(blob);
+                        cropTargetImage.src = url;
 
-                cropper.destroy();
-                cropper = null;
-                cropTargetImage = null;
-                cropTargetInput = null;
+                        // Create new file input if needed
+                        if (!cropTargetInput) {
+                            cropTargetInput = document.createElement("input");
+                            cropTargetInput.type = "file";
+                            cropTargetInput.name = "photo_Item[]";
+                            cropTargetInput.style.display = "none";
+                            cropTargetImage
+                                .closest(".upload-box")
+                                .appendChild(cropTargetInput);
+                        }
 
-                bootstrap.Modal.getInstance(document.getElementById('cropperModal')).hide();
+                        // Create file from blob
+                        const file = new File(
+                            [blob],
+                            `cropped-${Date.now()}.jpg`,
+                            {
+                                type: "image/jpeg",
+                                lastModified: Date.now(),
+                            }
+                        );
+
+                        const dt = new DataTransfer();
+                        dt.items.add(file);
+                        cropTargetInput.files = dt.files;
+
+                        // Remove the existing image reference if this was a crop of an existing image
+                        const box = cropTargetImage.closest(".upload-box");
+                        if (box.hasAttribute("data-image-id")) {
+                            box.querySelector(
+                                'input[name="existing_images[]"]'
+                            ).remove();
+                        }
+
+                        // Close modal
+                        bootstrap.Modal.getInstance(
+                            document.getElementById("cropperModal")
+                        ).hide();
+                    },
+                    "image/jpeg",
+                    0.92
+                );
             }
         });
+    }
+
+    document
+        .getElementById("cropperModal")
+        .addEventListener("hidden.bs.modal", function () {
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+            cropTargetImage = null;
+            cropTargetInput = null;
+        });
+
+    const initialThumbnail = document.querySelector(".selected-thumbnail");
+    if (initialThumbnail) {
+        const wrapper = document.getElementById("imageUploadWrapper");
+        const index = Array.from(wrapper.children).indexOf(initialThumbnail);
+        document.getElementById("thumbnail_index").value = index;
     }
 });

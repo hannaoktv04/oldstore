@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Models;   
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Item;
 
-class Category extends Model
+class Satuan extends Model
 {
     use HasFactory;
-    protected $table = 'category';
-    protected $fillable = ['categori_name'];
+    protected $table = 'satuan';
+    protected $fillable = ['nama_satuan'];
 
-    public function items()
+   public function items()
     {
         return $this->hasMany(Item::class);
     }
-
 }

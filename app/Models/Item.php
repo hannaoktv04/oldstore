@@ -108,6 +108,8 @@ class Item extends Model
     {
         return $this->hasMany(StockAdjustment::class, 'item_id');
     }
-
-
+    public function satuan()
+    {
+        return $this->belongsTo(Satuan::class);
+    }
 }

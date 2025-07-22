@@ -47,7 +47,7 @@ class AdminController extends Controller
             ->with('item.category', 'item.photo')
             ->take(12)
             ->get();
-        
+
         $topWishlist = ItemWishlist::whereYear('created_at', $tahunDipilih)
             ->selectRaw('nama_barang, category_id, COUNT(*) as total')
             ->groupBy('nama_barang', 'category_id')
@@ -87,6 +87,6 @@ class AdminController extends Controller
             $q->where('nama_role', 'staff_pengiriman');
         })->get();
 
-        return view('admin.pengajuan-status', compact('pengajuans', 'status', 'staff_pengiriman'));
+        return view('admin.pengajuan.index', compact('pengajuans', 'status', 'staff_pengiriman'));
     }
 }
