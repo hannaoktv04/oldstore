@@ -19,7 +19,7 @@ class StaffPengirimanController extends Controller
         $user = Auth::user();
         $pengiriman = ItemDelivery::with(['request.user', 'request.details.item'])
             ->where('status', 'in_progress')
-            ->where('staff_pengiriman', $user->nama)
+            ->where('staff_pengiriman', $user->id)
             ->latest()
             ->get();
 
@@ -34,7 +34,6 @@ class StaffPengirimanController extends Controller
         $delivery = $pengajuan->itemDelivery;
 
         if (!$delivery) {
-            // Belum ada pengiriman sama sekali, kurir bisa assign sendiri
             $delivery = ItemDelivery::create([
                 'item_request_id' => $pengajuan->id,
                 'operator_id' => auth()->id(),
@@ -48,9 +47,7 @@ class StaffPengirimanController extends Controller
                     return redirect()->route('staff-pengiriman.dashboard')
                         ->with('error', 'Pengiriman sudah diassign ke staff lain: ' . $delivery->staff_pengiriman);
                 }
-                // Kalau sudah diassign ke staff ini, biarkan saja, tidak usah overwrite
             } else {
-                // Kalau belum diassign, assign sekarang
                 $delivery->update([
                     'staff_pengiriman' => auth()->user()->nama,
                     'operator_id' => auth()->id(),
@@ -95,12 +92,29 @@ class StaffPengirimanController extends Controller
 
         $pengiriman = ItemDelivery::with(['request.user', 'request.details.item'])
             ->where('status', 'in_progress')
-            ->where('staff_pengiriman', $user->nama)
+            ->where('staff_pengiriman', $user->id)
+            ->whereNotNull('tanggal_kirim')
             ->latest()
             ->get();
 
         return view('staff-pengiriman.onprogress', compact('pengiriman'));
     }
+
+    public function waiting()
+    {
+        $user = Auth::user();
+
+        $pengiriman = ItemDelivery::with(['request.user', 'request.details.item'])
+            ->where('status', 'in_progress')
+            ->where('staff_pengiriman', $user->id)
+            ->whereNull('tanggal_kirim')
+            ->latest()
+            ->get();
+
+        return view('staff-pengiriman.waiting', compact('pengiriman'));
+    }
+
+
 
     public function selesai(Request $request)
     {
@@ -108,7 +122,7 @@ class StaffPengirimanController extends Controller
 
         $query = ItemDelivery::with(['request.user', 'request.details.item'])
             ->where('status', 'completed')
-            ->where('staff_pengiriman', $user->nama);
+            ->where('staff_pengiriman', $user->id);
 
         if ($request->tanggal) {
             $query->whereDate('tanggal_kirim', $request->tanggal);

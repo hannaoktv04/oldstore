@@ -132,7 +132,7 @@
               @if($request->itemDelivery && $request->itemDelivery->status === 'in_progress')
               <li class="mb-3">
                 <strong>🚚 Dalam Pengiriman</strong><br>
-                Sedang diantar oleh <strong>{{ $request->itemDelivery->staff_pengiriman }}</strong><br>
+                Sedang diantar oleh <strong>{{ $request->itemDelivery->staff->nama ?? 'Staff tidak ditemukan' }}</strong><br>
                 {{ \Carbon\Carbon::parse($request->itemDelivery->tanggal_kirim)->format('H:i:s, d M Y') }}
               </li>
               @endif
@@ -143,7 +143,7 @@
                 <a href="#" data-bs-toggle="modal" data-bs-target="#buktiModal-{{ $request->id }}">
                   Lihat Bukti Pengiriman
                 </a><br>
-                Diantar oleh <strong>{{ $request->itemDelivery->staff_pengiriman }}</strong><br>
+                Diantar oleh <strong>{{ $request->itemDelivery->staff->nama ?? 'Staff tidak ditemukan' }}</strong><br>
                 {{ \Carbon\Carbon::parse($request->itemDelivery->updated_at)->format('H:i:s, d M Y') }}
               </li>
               @endif

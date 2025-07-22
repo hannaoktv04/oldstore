@@ -95,7 +95,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('/pengajuan/{pengajuan}/assign', [AdminPengajuanController::class, 'assignStaff'])->name('admin.pengajuan.assign');
     Route::post('/pengajuan/{pengajuan}/approve', [AdminPengajuanController::class, 'approve'])->name('admin.pengajuan.approve');
     Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('admin.pengajuan.reject');
-    Route::get('/admin/pengajuan/{id}/resi', [PengajuanController::class, 'cetakResi'])->name('pengajuan.resi');
+    Route::get('/pengajuan/{id}/resi', [PengajuanController::class, 'cetakResi'])->name('pengajuan.resi');
 
     Route::get('/items', [ItemController::class, 'index'])->name('admin.items');
     Route::get('/add-item', action: [ItemController::class, 'create'])->name('admin.item.create');
@@ -168,5 +168,6 @@ Route::middleware(['auth', 'role:staff_pengiriman'])->prefix('staff-pengiriman')
     Route::get('/konfirmasi/{kodeResi}', [StaffPengirimanController::class, 'show'])->name('staff-pengiriman.konfirmasi');
     Route::post('/konfirmasi/{kodeResi}', [StaffPengirimanController::class, 'submit'])->name('staff-pengiriman.konfirmasi.submit');
     Route::get('/on-progress', [StaffPengirimanController::class, 'onProgress'])->name('staff-pengiriman.onprogress');
+    Route::get('/waiting', [StaffPengirimanController::class, 'waiting'])->name('staff-pengiriman.waiting');
     Route::get('/selesai', [StaffPengirimanController::class, 'selesai'])->name('staff-pengiriman.selesai');
 });

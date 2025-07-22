@@ -42,10 +42,15 @@
 
     <div class="d-none d-lg-flex align-items-center gap-3">
 
-      <a href="{{ route('staff-pengiriman.onprogress') }}" class="nav-link text-dark d-flex align-items-center gap-1">
-        <i class="bi bi-clock-history text-primary"></i> <span>On Progress</span>
+      <a href="{{ route('staff-pengiriman.waiting') }}" class="nav-link text-dark d-flex align-items-center gap-1">
+        <i class="bi bi-clock-history text-primary"></i> <span>Waiting</span>
       </a>
 
+      <a href="{{ route('staff-pengiriman.onprogress') }}" class="nav-link text-dark d-flex align-items-center gap-1">
+        <i class="bi bi-clock-history text-success"></i> <span>On Progress</span>
+      </a>
+
+      
       <a href="{{ route('staff-pengiriman.selesai') }}" class="nav-link text-dark d-flex align-items-center gap-1">
         <i class="bi bi-check-circle text-success"></i> <span>Selesai</span>
       </a>

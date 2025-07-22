@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-white shadow-sm py-2 sticky-top">
   <div class="container d-flex justify-content-between align-items-center">
-    
+
     <div class="d-flex align-items-center">
       @if(Auth::check() && Auth::user()->hasRole('admin'))
         <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
@@ -8,8 +8,7 @@
         </button>
       @endif
 
-      <a class="navbar-brand d-flex align-items-center"
-         href="{{ Auth::user()->hasRole('admin') ? route('admin.dashboard') : url('/') }}">
+      <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
         <img src="{{ asset('assets/img/peri.png') }}" alt="PERI Logo" style="height: 50px;">
         @if(Auth::user()->hasRole('admin'))
           <span class="fw-normal text-secondary fs-6 ms-2">Admin</span>
@@ -44,38 +43,36 @@
       </button>
 
       @auth
-        @if(!Auth::user()->hasRole('admin'))
-          <div class="position-relative">
-            <button id="cart-icon" class="icon-button text-dark bg-transparent border-0 p-0">
-              <i class="bi bi-bag-fill fs-5"></i>
-              @if($jumlahKeranjang > 0)
-                <span class="badge bg-success rounded-pill position-absolute top-0 start-100 translate-middle">
-                  {{ $jumlahKeranjang }}
-                </span>
-              @endif
-            </button>
-            <div id="cart-popup" class="position-absolute text-dark bg-white shadow rounded p-3 mt-2 z-3 d-none"
-                 style="min-width: 315px; right: 0px; font-size: 14px;">
-              <h6 class="mb-3">Barang yang ada di Keranjang</h6>
-              @forelse($cartItems as $item)
-                <div class="d-flex align-items-start mb-2">
-                  <img src="{{ asset('storage/' . ($item->item->photo->image ?? 'placeholder.jpg')) }}" width="50" class="me-2 rounded">
-                  <div>
-                    <small>{{ $item->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</small><br>
-                    <strong>{{ $item->item->nama_barang }}</strong><br>
-                    <small>Jumlah: {{ $item->qty }} {{ $item->item->satuan }}</small>
-                  </div>
+        <div class="position-relative">
+          <button id="cart-icon" class="icon-button text-dark bg-transparent border-0 p-0">
+            <i class="bi bi-bag-fill fs-5"></i>
+            @if($jumlahKeranjang > 0)
+              <span class="badge bg-success rounded-pill position-absolute top-0 start-100 translate-middle">
+                {{ $jumlahKeranjang }}
+              </span>
+            @endif
+          </button>
+          <div id="cart-popup" class="position-absolute text-dark bg-white shadow rounded p-3 mt-2 z-3 d-none"
+               style="min-width: 315px; right: 0px; font-size: 14px;">
+            <h6 class="mb-3">Barang yang ada di Keranjang</h6>
+            @forelse($cartItems as $item)
+              <div class="d-flex align-items-start mb-2">
+                <img src="{{ asset('storage/' . ($item->item->photo->image ?? 'placeholder.jpg')) }}" width="50" class="me-2 rounded">
+                <div>
+                  <small>{{ $item->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</small><br>
+                  <strong>{{ $item->item->nama_barang }}</strong><br>
+                  <small>Jumlah: {{ $item->qty }} {{ $item->item->satuan }}</small>
                 </div>
-              @empty
-                <p class="text-muted">Keranjang kamu kosong.</p>
-              @endforelse
-              <div class="d-flex justify-content-between mt-3">
-                <a href="{{ route('user.history') }}" class="btn btn-outline-success btn-sm">Status Pengajuan</a>
-                <a href="{{ route('cart.index') }}" class="btn btn-success btn-sm">Lihat Keranjang</a>
               </div>
+            @empty
+              <p class="text-muted">Keranjang kamu kosong.</p>
+            @endforelse
+            <div class="d-flex justify-content-between mt-3">
+              <a href="{{ route('user.history') }}" class="btn btn-outline-success btn-sm">Status Pengajuan</a>
+              <a href="{{ route('cart.index') }}" class="btn btn-success btn-sm">Lihat Keranjang</a>
             </div>
           </div>
-        @endif
+        </div>
       @endauth
 
       @if(Auth::check() && Auth::user()->hasRole('pegawai'))

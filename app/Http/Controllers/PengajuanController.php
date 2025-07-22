@@ -20,7 +20,7 @@ class PengajuanController extends Controller
         return $pdf->download('e-nota-pengajuan-' . str_pad($request->id, 3, '0', STR_PAD_LEFT) . '.pdf');
     }
 
-    public function cetakResi($id)
+    public function cetakResi($id, Request $request)
     {
         $pengajuan = ItemRequest::with(['user', 'details.item'])->findOrFail($id);
 
@@ -37,6 +37,8 @@ class PengajuanController extends Controller
             ->build();
 
         $qrBase64 = base64_encode($result->getString());
+
+        $autoPrint = $request->query('auto') == 1;
 
         return view('admin.resi', compact('pengajuan', 'kodeResi', 'qrBase64'));
     }

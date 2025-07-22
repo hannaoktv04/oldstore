@@ -175,18 +175,13 @@ class AdminPengajuanController extends Controller
         try {
             $delivery = ItemDelivery::firstOrNew(['item_request_id' => $pengajuan->id]);
 
-            if ($delivery->staff_pengiriman) {
-                throw new \Exception('Pengiriman sudah diassign ke staff: ' . $delivery->staff_pengiriman);
-            }
-
             $staff = User::findOrFail($request->staff_pengiriman);
 
-            $delivery->fill([
-                'operator_id'     => auth()->id(),
-                'tanggal_kirim'   => $request->tanggal_pengiriman,
-                'status'          => 'in_progress',
-                'staff_pengiriman'=> $staff->nama,
-            ])->save();
+            $delivery->operator_id = auth()->id();
+            $delivery->tanggal_kirim = $request->tanggal_pengiriman;
+            $delivery->status = 'in_progress';
+            $delivery->staff_pengiriman = $staff->id;
+            $delivery->save();
 
             $pengajuan->update([
                 'status' => 'approved',

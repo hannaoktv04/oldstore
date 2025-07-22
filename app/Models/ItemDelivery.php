@@ -13,8 +13,10 @@ class ItemDelivery extends Model
         'item_request_id',
         'operator_id',
         'tanggal_kirim',
-        'bukti_foto',
         'status',
+        'staff_pengiriman',
+        'bukti_foto',
+        'catatan'
     ];
 
     public function request()
@@ -22,14 +24,15 @@ class ItemDelivery extends Model
         return $this->belongsTo(ItemRequest::class, 'item_request_id');
     }
 
-    public function operator()
-    {
-        return $this->belongsTo(User::class, 'operator_id');
-    }
-
     public function receipts()
     {
         return $this->hasMany(ItemReceipt::class);
     }
+
+    public function staff()
+    {
+        return $this->belongsTo(User::class, 'staff_pengiriman');
+    }
+
     
 }
