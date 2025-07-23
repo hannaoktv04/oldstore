@@ -78,7 +78,7 @@
       @if(Auth::check() && Auth::user()->hasRole('pegawai'))
         <div class="dropdown position-relative">
           <button class="icon-button text-dark bg-transparent border-0 p-0 position-relative"
-                  id="notifDropdown" data-bs-toggle="dropdown">
+                  id="notif-icon">
             <i class="bi bi-bell-fill fs-5"></i>
             @if($notifikasiProdukBaru->count() > 0)
               <span class="badge bg-success rounded-pill position-absolute top-0 start-100 translate-middle">
@@ -86,7 +86,7 @@
               </span>
             @endif
           </button>
-          <ul class="dropdown-menu dropdown-menu-end shadow p-3" style="min-width: 300px;">
+          <ul class="dropdown-menu dropdown-menu-end shadow p-3" style="min-width: 300px;" id="notif-popup" data-popup-type="notif">
             <h6 class="mb-2">Produk Tersedia Kembali</h6>
             @forelse($notifikasiProdukBaru as $notif)
               <li class="mb-2 small d-flex align-items-start">
@@ -111,38 +111,35 @@
         </div>
       @endif
 
-      <div class="dropdown">
-        <button id="user-icon" class="icon-button text-dark bg-transparent border-0 pe-3 dropdown-toggle"
-                data-bs-toggle="dropdown">
+      <div class="position-relative">
+        <button id="user-icon" class="icon-button text-dark bg-transparent border-0 pe-3">
           <i class="bi bi-person-fill fs-4"></i>
         </button>
-        <ul class="dropdown-menu dropdown-menu-end shadow p-3" style="min-width: 250px;">
+        <div id="user-popup" class="position-absolute end-0 mt-2 p-3 rounded shadow bg-white d-none" style="min-width: 250px; z-index: 1050;">
           @guest
-            <li class="text-center mb-2">Masuk sebagai...</li>
-            <li class="d-flex">
+            <div class="text-center mb-2">Masuk sebagai...</div>
+            <div class="d-flex">
               <button onclick="window.location.href='{{ url('/login') }}'" class="btn w-50 border-end rounded-0">User</button>
               <button onclick="window.location.href='{{ url('/login') }}'" class="btn w-50 rounded-0">Admin</button>
-            </li>
+            </div>
           @else
-            <li class="text-center mb-2">
+            <div class="text-center text-dark mb-2">
               <strong>{{ Auth::user()->nama }}</strong><br>
               <small class="text-muted">{{ Auth::user()->role }}</small>
-            </li>
-            <li><hr class="dropdown-divider"></li>
+            </div>
+            <hr>
             @if(Auth::user()->hasRole('admin'))
-              <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+              <a class="dropdown-item d-block" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
             @else
-              <li><a class="dropdown-item" href="{{ route('user.wishlist') }}"><i class="bi bi-heart me-2"></i>My Wishlist</a></li>
+              <a class="dropdown-item d-block" href="{{ route('user.wishlist') }}"><i class="bi bi-heart me-2"></i>My Wishlist</a>
             @endif
-            <li><hr class="dropdown-divider"></li>
-            <li>
-              <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                @csrf
-                <button type="submit" class="dropdown-item text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
-              </form>
-            </li>
+            <hr>
+            <form action="{{ route('logout') }}" method="POST">
+              @csrf
+              <button type="submit" class="dropdown-item text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
+            </form>
           @endguest
-        </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -164,3 +161,4 @@
     </form>
   </div>
 </div>
+

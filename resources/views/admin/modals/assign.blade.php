@@ -20,13 +20,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="tanggal_pengiriman_{{ $pengajuan->id }}" class="form-label">Tanggal Pengiriman</label>
-                        <input type="date" name="tanggal_pengiriman" id="tanggal_pengiriman_{{ $pengajuan->id }}" class="form-control" min="{{ date('Y-m-d') }}" required>
-                    </div>
-
-                    <div class="mb-3">
                         <label for="catatan_{{ $pengajuan->id }}" class="form-label">Catatan (Opsional)</label>
-                        <textarea name="catatan" id="catatan_{{ $pengajuan->id }}" class="form-control" rows="2"></textarea>
+                        <textarea name="catatan" id="catatan_{{ $pengajuan->id }}" class="form-control" rows="2" placeholder="Contoh: Kirim siang hari atau ada barang fragile."></textarea>
                     </div>
                 </div>
 

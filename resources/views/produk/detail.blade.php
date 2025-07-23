@@ -28,7 +28,8 @@
                     <span class="text-white fs-5 fw-bold">Habis</span>
                 </div>
                 @endif
-                <img id="mainImage" src="{{ asset('storage/' . $gallery->first()) }}"
+                <img id="mainImage" src="{{ asset('storage/' . $gallery->first()) }}" 
+                    style="width: 100%; height: 350px; object-fit: cover; object-position: center;"
                     class="img-fluid rounded-4 shadow-sm w-100" alt="{{ $produk->nama_barang }}">
             </div>
 

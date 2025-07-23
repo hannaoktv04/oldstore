@@ -2,20 +2,45 @@
 
 @section('content')
 <div class="container py-4">
-    <h4 class="mb-4">Daftar Pengiriman Waiting</h4>
+    <h4 class="mb-4">📦 Daftar Pengiriman Waiting</h4>
 
     @forelse($pengiriman as $item)
-        <div class="card mb-3 shadow-sm">
-            <div class="card-body d-flex justify-content-between align-items-center">
-                <div>
-                    <strong>{{ $item->request->user->nama }}</strong> <br>
-                    <small class="text-muted">Resi: KP{{ str_pad($item->request->id, 6, '0', STR_PAD_LEFT) }}</small><br>
-                    <small class="text-muted">Belum di-scan / Belum dikirim</small>
+        <div class="card mb-4 shadow-sm border-0 rounded-4">
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-start mb-3 flex-wrap">
+                    <div>
+                        <h6 class="mb-1">{{ $item->user->nama }}</h6>
+                        <small class="text-muted">Resi: <span class="fw-semibold">KP{{ str_pad($item->id, 6, '0', STR_PAD_LEFT) }}</span></small><br>
+                    </div>
+
+                    <form method="POST" action="{{ route('staff-pengiriman.assign', $item->id) }}">
+                        @csrf
+                        <button type="submit" class="btn btn-success btn-sm mt-2 mt-md-0">
+                            <i class="bi bi-box-seam"></i> Assign to Me
+                        </button>
+                    </form>
                 </div>
-                <a href="{{ route('staff-pengiriman.konfirmasi', 'KP' . str_pad($item->request->id, 6, '0', STR_PAD_LEFT)) }}" 
-                   class="btn btn-outline-primary btn-sm">
-                    Scan & Mulai Kirim
-                </a>
+
+                <div class="row g-3">
+                    @foreach($item->details as $detail)
+                        <div class="col-12 col-md-6 d-flex align-items-start">
+                            <img src="{{ $detail->item->gallery->first() 
+                                ? asset('storage/' . $detail->item->gallery->first()) 
+                                : asset('assets/img/default.png') 
+                            }}" alt="{{ $detail->item->nama_barang }}" width="60" height="60" class="rounded border me-3" style="object-fit: cover;">
+
+                            <div>
+                                <div class="fw-semibold">{{ $detail->item->nama_barang }}</div>
+                                <small class="text-muted">Jumlah: {{ $detail->qty_approved }} {{ $detail->item->satuan }}</small><br>
+                                @if($detail->catatan)
+                                    <small class="text-muted">Catatan: {{ $detail->catatan }}</small>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
             </div>
         </div>
     @empty
@@ -24,4 +49,15 @@
         </div>
     @endforelse
 </div>
+
+<style>
+    .card:hover {
+        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+        transition: 0.3s ease;
+    }
+
+    .fw-semibold {
+        font-weight: 600;
+    }
+</style>
 @endsection

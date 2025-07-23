@@ -10,18 +10,20 @@
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">
       @foreach($produk as $item)
         @php
-          $stokHabis = $item->stok_minimum == 0;
-          $nonaktif = $stokHabis || ($opnameAktif ?? false);
+          $stokHabis = ($item->stocks->qty ?? 0) == 0;
+          $nonaktif = $opnameAktif ?? false;
         @endphp
-        <div class="col">
+
+        <div class="col position-relative">
           <a href="{{ $nonaktif ? '#' : route('produk.show', ['id' => $item->id]) }}"
-             class="text-decoration-none {{ $nonaktif ? 'text-muted disabled-link' : 'text-dark' }}"
+             class="text-decoration-none {{ $nonaktif ? 'text-muted disabled-link' : ($stokHabis ? 'text-muted' : 'text-dark') }}"
              style="{{ $nonaktif ? 'pointer-events: none;' : '' }}">
-            <div class="card h-100 card-3d shadow-sm position-relative {{ $nonaktif ? 'bg-light grayscale-card' : '' }}"
-                 style="{{ $nonaktif ? 'opacity: 0.6;' : '' }}">
-              
+
+            <div class="card h-100 card-3d shadow-sm position-relative {{ $nonaktif ? 'bg-light grayscale-card' : ($stokHabis ? 'bg-light' : '') }}"
+                 style="{{ $stokHabis || $nonaktif ? 'opacity: 0.7;' : '' }}">
+
               @if($stokHabis)
-                <div class="position-absolute top-0 end-0 m-2">
+                <div class="position-absolute top-0 end-0 m-2" style="z-index: 2;">
                   <span class="badge bg-danger">Stok Habis</span>
                 </div>
               @endif
@@ -36,7 +38,7 @@
                   @if ($stokHabis)
                     <span class="text-danger">0 Tersisa</span>
                   @else
-                    <strong>{{ number_format($item->stok_minimum, 0) }}</strong> Tersisa
+                    <strong>{{ number_format($item->stocks->qty, 0) }}</strong> Tersisa
                   @endif
                 </p>
               </div>

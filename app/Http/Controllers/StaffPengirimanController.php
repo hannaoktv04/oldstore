@@ -38,18 +38,18 @@ class StaffPengirimanController extends Controller
                 'item_request_id' => $pengajuan->id,
                 'operator_id' => auth()->id(),
                 'tanggal_kirim' => now(),
-                'staff_pengiriman' => auth()->user()->nama,
+                'staff_pengiriman' => auth()->user()->id,
                 'status' => 'in_progress',
             ]);
         } else {
             if ($delivery->staff_pengiriman) {
-                if ($delivery->staff_pengiriman !== auth()->user()->nama) {
+                if ($delivery->staff_pengiriman !== auth()->user()->id) {
                     return redirect()->route('staff-pengiriman.dashboard')
                         ->with('error', 'Pengiriman sudah diassign ke staff lain: ' . $delivery->staff_pengiriman);
                 }
             } else {
                 $delivery->update([
-                    'staff_pengiriman' => auth()->user()->nama,
+                    'staff_pengiriman' => auth()->user()->id,
                     'operator_id' => auth()->id(),
                     'tanggal_kirim' => now(),
                     'status' => 'in_progress',
@@ -104,16 +104,39 @@ class StaffPengirimanController extends Controller
     {
         $user = Auth::user();
 
-        $pengiriman = ItemDelivery::with(['request.user', 'request.details.item'])
-            ->where('status', 'in_progress')
-            ->where('staff_pengiriman', $user->id)
-            ->whereNull('tanggal_kirim')
+        $pengiriman = ItemRequest::with(['user', 'details.item', 'itemDelivery'])
+            ->where('status', 'approved')
+            ->whereDoesntHave('itemDelivery', function ($q) {
+                $q->whereNotNull('staff_pengiriman');
+            })
             ->latest()
             ->get();
 
         return view('staff-pengiriman.waiting', compact('pengiriman'));
     }
 
+    public function assignToMe($id)
+    {
+        $user = Auth::user();
+
+        $pengajuan = ItemRequest::with('itemDelivery')->findOrFail($id);
+
+        if ($pengajuan->itemDelivery && $pengajuan->itemDelivery->staff_pengiriman) {
+            return back()->with('error', 'Pengiriman sudah diassign ke staff lain.');
+        }
+
+        $delivery = ItemDelivery::updateOrCreate(
+            ['item_request_id' => $pengajuan->id],
+            [
+                'staff_pengiriman' => $user->id,
+                'operator_id' => $user->id,
+                'status' => 'in_progress',
+                'tanggal_kirim' => now(),
+            ]
+        );
+
+        return redirect()->route('staff-pengiriman.onprogress')->with('success', 'Pengiriman berhasil diambil oleh Anda.');
+    }
 
 
     public function selesai(Request $request)

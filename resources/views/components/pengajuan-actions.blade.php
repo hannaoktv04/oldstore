@@ -46,8 +46,36 @@ $status = $pengajuan->status;
 </div>
 @endif
 
-@if(in_array($status, ['approved', 'delivered']))
-<div id="resi-{{ $pengajuan->id }}" style="display: none;">
-    @include('admin.resi', ['pengajuan' => $pengajuan])
-</div>
-@endif
+@push('scripts')
+<script>
+    function printResi(id) {
+        const resi = document.getElementById('resi-' + id).innerHTML;
+
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+
+        document.body.appendChild(iframe);
+
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write('<html><head><title>Print Resi</title>');
+        doc.write('<style>body{font-family: Arial; font-size: 12px;} table{width:100%; border-collapse:collapse;} th,td{border:1px solid #000; padding:5px;} .qr-img{text-align:center; margin:20px auto; display:block;}</style>');
+        doc.write('</head><body>');
+        doc.write(resi);
+        doc.write('</body></html>');
+        doc.close();
+
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+
+        setTimeout(() => {
+            document.body.removeChild(iframe);
+        }, 1000);
+    }
+</script>
+@endpush
