@@ -170,4 +170,6 @@ Route::middleware(['auth', 'role:staff_pengiriman'])->prefix('staff-pengiriman')
     Route::get('/on-progress', [StaffPengirimanController::class, 'onProgress'])->name('staff-pengiriman.onprogress');
     Route::get('/waiting', [StaffPengirimanController::class, 'waiting'])->name('staff-pengiriman.waiting');
     Route::get('/selesai', [StaffPengirimanController::class, 'selesai'])->name('staff-pengiriman.selesai');
+    Route::post('/assign/{id}', [StaffPengirimanController::class, 'assignToMe'])->name('staff-pengiriman.assign');
+
 });

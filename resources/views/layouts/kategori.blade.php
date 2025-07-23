@@ -60,14 +60,14 @@
         @forelse ($items as $item)
           @php
             $stokHabis = $item->stocks->qty == 0;
-            $nonaktif = $stokHabis || ($opnameAktif ?? false);
+            $nonaktif = $opnameAktif ?? false;
           @endphp
           <div class="col">
             <a href="{{ $nonaktif ? '#' : route('produk.show', ['id' => $item->id]) }}"
-               class="text-decoration-none {{ $nonaktif ? 'text-muted disabled-link' : 'text-dark' }}"
+               class="text-decoration-none {{ $nonaktif ? 'text-muted disabled-link' : ($stokHabis ? 'text-muted' : 'text-dark') }}"
                style="{{ $nonaktif ? 'pointer-events: none;' : '' }}">
-              <div class="card card-3d h-100 shadow-sm position-relative {{ $nonaktif ? 'bg-light grayscale-card' : '' }}"
-                   style="{{ $nonaktif ? 'opacity: 0.6;' : '' }}">
+              <div class="card card-3d h-100 shadow-sm position-relative {{ $nonaktif ? 'bg-light grayscale-card' : ($stokHabis ? 'bg-light' : '') }}"
+                   style="{{ $stokHabis ? 'opacity: 0.6;' : '' }}">
 
                 @if($stokHabis)
                   <div class="position-absolute top-0 end-0 m-2">

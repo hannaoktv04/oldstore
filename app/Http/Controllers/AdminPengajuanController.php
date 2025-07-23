@@ -166,7 +166,6 @@ class AdminPengajuanController extends Controller
     {
         $request->validate([
             'staff_pengiriman' => 'required|exists:users,id',
-            'tanggal_pengiriman' => 'required|date|after_or_equal:today',
             'catatan' => 'nullable|string',
         ]);
 
@@ -178,14 +177,15 @@ class AdminPengajuanController extends Controller
             $staff = User::findOrFail($request->staff_pengiriman);
 
             $delivery->operator_id = auth()->id();
-            $delivery->tanggal_kirim = $request->tanggal_pengiriman;
+            $delivery->tanggal_kirim = now();
             $delivery->status = 'in_progress';
             $delivery->staff_pengiriman = $staff->id;
+            $delivery->catatan = $request->catatan;
             $delivery->save();
 
             $pengajuan->update([
                 'status' => 'approved',
-                'tanggal_pengiriman' => $request->tanggal_pengiriman,
+                'tanggal_pengiriman' => now(),
                 'keterangan' => $request->catatan,
             ]);
 
@@ -197,5 +197,6 @@ class AdminPengajuanController extends Controller
             return back()->with('error', 'Gagal assign staff: ' . $e->getMessage());
         }
     }
+
 
 }

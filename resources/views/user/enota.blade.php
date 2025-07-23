@@ -45,7 +45,7 @@
                     <td class="text-center">{{ $index + 1 }}</td>
                     <td>{{ $detail->item->nama_barang }}</td>
                     <td class="text-center">{{ $detail->qty_requested }} {{ $detail->item->satuan }}</td>
-                    <td class="text-center">{{ $detail->qty_approved ?? '-' }}</td>
+                    <td class="text-center">{{ $detail->qty_approved ?? 'Belum disetujui' }}</td>
                     <td></td>
                 </tr>
                 @endforeach

@@ -29,7 +29,8 @@
 
                             <div>
                                 <div class="fw-semibold">{{ $detail->item->nama_barang }}</div>
-                                <small class="text-muted">Jumlah: {{ $detail->qty_requested }} {{ $detail->item->satuan }}</small>
+                                <small class="text-muted">Jumlah: {{ $detail->qty_approved }} {{ $detail->item->satuan }}</small><br>
+                                <small class="text-muted">Catatan: {{ $item->catatan ?? 'Tidak ada catatan' }}</small>
                             </div>
                         </a>
                     @endforeach

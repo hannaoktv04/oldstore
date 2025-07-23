@@ -77,10 +77,12 @@ class CategoryController extends Controller
     {
         $categories = Category::withCount('items')->get();
         $selectedCategory = Category::findOrFail($id);
+        
         $items = Item::with(['category', 'photo'])
-        ->withSum('stocks', 'qty') // hitung total qty dari relasi stocks
-        ->orderByRaw('stocks_sum_qty = 0') // taruh stok kosong di atas
-        ->orderBy('stocks_sum_qty', 'desc') // urutkan dari stok terbesar
+        ->where('category_id', $id)
+        ->withSum('stocks', 'qty') 
+        ->orderByRaw('stocks_sum_qty = 0') 
+        ->orderBy('stocks_sum_qty', 'desc')
         ->paginate(20);
 
     return view('layouts.kategori', compact('categories', 'items'));

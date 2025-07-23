@@ -12,6 +12,9 @@
         ->build();
 
     $qrBase64 = base64_encode($result->getString());
+
+    $logoPath = public_path('assets/img/logo-komdigi.png');
+    $logoHeaderBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
 @endphp
 
 <style>
@@ -40,8 +43,9 @@
     .qr-img {
         background: #fff;
         padding: 20px;
-        display: inline-block;
-        margin-top: 20px;
+        display: block;
+        margin: 20px auto;
+        text-align: center;
     }
 </style>
 
@@ -52,7 +56,7 @@
             <strong>No. Resi:</strong> {{ $kodeResi }}
         </div>
         <div style="text-align: right;">
-            <img src="{{ asset('assets/img/logo-komdigi.png') }}" height="40" alt="Logo">
+            <img src="{{ $logoHeaderBase64 }}" height="40" alt="Logo Komdigi">
         </div>
     </div>
 
@@ -69,34 +73,16 @@
             @foreach ($pengajuan->details as $detail)
             <tr>
                 <td>{{ $detail->item->nama_barang }}</td>
-                <td>{{ $detail->qty_requested }}</td>
+                <td>{{ $detail->qty_approved }}</td>
                 <td>{{ $detail->item->satuan }}</td>
             </tr>
             @endforeach
         </tbody>
     </table>
 
-    <div class="qr-img" style="text-align:center; margin-top:20px;">
+    <div class="qr-img">
         <p style="font-size: 13px;">Scan QR untuk Konfirmasi Kurir</p>
         <img src="data:image/png;base64,{{ $qrBase64 }}" width="150">
         <div style="font-size: 12px; margin-top: 8px;">{{ $kodeResi }}</div>
     </div>
 </div>
-
-@push('scripts')
-<script>
-    function printResi(id) {
-        const resiContent = document.getElementById('resi-' + id).innerHTML;
-        const printWindow = window.open('', '', 'width=800,height=600');
-        printWindow.document.write('<html><head><title>Cetak Resi</title>');
-        printWindow.document.write('<style>body{font-family: Arial; font-size: 12px;} table{width:100%; border-collapse:collapse;} th,td{border:1px solid #000; padding:5px;}</style>');
-        printWindow.document.write('</head><body>');
-        printWindow.document.write(resiContent);
-        printWindow.document.write('</body></html>');
-        printWindow.document.close();
-        printWindow.focus();
-        printWindow.print();
-        printWindow.close();
-    }
-</script>
-@endpush

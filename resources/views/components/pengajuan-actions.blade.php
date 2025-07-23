@@ -16,15 +16,14 @@
 
 @elseif ($status === 'approved')
     <div class="d-flex justify-content-center justify-content-md-end gap-3">
-        
+
         <button onclick="printResi({{ $pengajuan->id }})" class="btn btn-sm btn-outline-primary">
             <i class="bi bi-printer"></i>
         </button>
+
         <div id="resi-{{ $pengajuan->id }}" style="display: none;">
             @include('admin.resi', ['pengajuan' => $pengajuan])
         </div>
-
-
 
         @if(!$pengajuan->itemDelivery || !$pengajuan->itemDelivery->staff_pengiriman)
             <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#assignModal-{{ $pengajuan->id }}">
@@ -39,10 +38,7 @@
     </div>
 
 @elseif ($status === 'received')
-    <a href="#', $request->id) }}"
-    <a href="#', $request->id) }}"
-    <a href="#', $request->id) }}"
-       class="btn btn-sm btn-outline-primary">
+    <a href="#" class="btn btn-sm btn-outline-primary">
         <i class="bi bi-printer" title="Cetak Nota"></i>
     </a>
 
@@ -52,3 +48,36 @@
     </div>
 @endif
 
+@push('scripts')
+<script>
+    function printResi(id) {
+        const resi = document.getElementById('resi-' + id).innerHTML;
+
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+
+        document.body.appendChild(iframe);
+
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write('<html><head><title>Print Resi</title>');
+        doc.write('<style>body{font-family: Arial; font-size: 12px;} table{width:100%; border-collapse:collapse;} th,td{border:1px solid #000; padding:5px;} .qr-img{text-align:center; margin:20px auto; display:block;}</style>');
+        doc.write('</head><body>');
+        doc.write(resi);
+        doc.write('</body></html>');
+        doc.close();
+
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+
+        setTimeout(() => {
+            document.body.removeChild(iframe);
+        }, 1000);
+    }
+</script>
+@endpush

@@ -20,16 +20,16 @@
   <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
     @forelse ($items as $item)
       @php
-        $stokHabis = $item->stok_minimum == 0;
-        $nonaktif = $stokHabis || ($opnameAktif ?? false);
+        $stokHabis = ($item->stocks->qty ?? 0) == 0;
+        $nonaktif = $opnameAktif ?? false;
       @endphp
 
       <div class="col">
         <a href="{{ $nonaktif ? '#' : route('produk.show', ['id' => $item->id]) }}"
-           class="text-decoration-none {{ $nonaktif ? 'text-muted disabled-link' : 'text-dark' }}"
+           class="text-decoration-none {{ $nonaktif ? 'text-muted disabled-link' : ($stokHabis ? 'text-muted' : 'text-dark') }}"
            style="{{ $nonaktif ? 'pointer-events: none;' : '' }}">
-          <div class="card h-100 card-3d shadow-sm position-relative {{ $nonaktif ? 'bg-light grayscale-card' : '' }}"
-               style="{{ $nonaktif ? 'opacity: 0.6;' : '' }}">
+          <div class="card h-100 card-3d shadow-sm position-relative {{ $nonaktif ? 'bg-light grayscale-card' : ($stokHabis ? 'bg-light' : '') }}"
+               style="{{ $stokHabis || $nonaktif ? 'opacity: 0.6;' : '' }}">
 
             @if($stokHabis)
               <div class="position-absolute top-0 end-0 m-2">
