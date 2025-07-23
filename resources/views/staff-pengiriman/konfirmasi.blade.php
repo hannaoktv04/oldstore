@@ -15,7 +15,7 @@
             @foreach ($pengajuan->details as $detail)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     {{ $detail->item->nama_barang }}
-                    <span>{{ $detail->qty_requested }} {{ $detail->item->satuan }}</span>
+                    <span>{{ $detail->qty_requested }} {{ $detail->item->satuan->nama_satuan }}</span>
                 </li>
             @endforeach
         </ul>

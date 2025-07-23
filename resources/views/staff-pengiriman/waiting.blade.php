@@ -32,7 +32,7 @@
 
                             <div>
                                 <div class="fw-semibold">{{ $detail->item->nama_barang }}</div>
-                                <small class="text-muted">Jumlah: {{ $detail->qty_approved }} {{ $detail->item->satuan }}</small><br>
+                                <small class="text-muted">Jumlah: {{ $detail->qty_approved }} {{ $detail->item->satuan->nama_satuan }}</small><br>
                                 @if($detail->catatan)
                                     <small class="text-muted">Catatan: {{ $detail->catatan }}</small>
                                 @endif
