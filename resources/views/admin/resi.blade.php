@@ -70,7 +70,7 @@
             <tr>
                 <td>{{ $detail->item->nama_barang }}</td>
                 <td>{{ $detail->qty_requested }}</td>
-                <td>{{ $detail->item->satuan }}</td>
+                <td>{{ $detail->item->satuan->nama_satuan }}</td>
             </tr>
             @endforeach
         </tbody>

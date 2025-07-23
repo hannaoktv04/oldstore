@@ -57,8 +57,16 @@ class AdminController extends Controller
             ->get();
 
         return view('admin.dashboard', compact(
-            'pengajuanBaru', 'perluDikirim', 'pengajuanSelesai', 'pembatalan',
-            'barangKeluarPerBulan', 'barangKeluarHarian', 'tahunDipilih', 'bulanDipilih', 'topProduk', 'topWishlist'
+            'pengajuanBaru',
+            'perluDikirim',
+            'pengajuanSelesai',
+            'pembatalan',
+            'barangKeluarPerBulan',
+            'barangKeluarHarian',
+            'tahunDipilih',
+            'bulanDipilih',
+            'topProduk',
+            'topWishlist'
         ));
     }
 
@@ -68,22 +76,36 @@ class AdminController extends Controller
             'user',
             'details.item.photo',
             'details.item.category',
-            'itemDelivery'
+            'itemDelivery.staff'
         ])
-        ->where('status', $status);
+            ->where('status', $status);
 
         if ($status === 'submitted') {
             $pengajuans->orderBy('created_at', 'asc');
         } elseif ($status === 'approved') {
             $pengajuans->orderBy('tanggal_pengiriman', 'asc')
-                       ->orderBy('id', 'asc');
+                ->orderBy('id', 'asc');
         } else {
             $pengajuans->orderBy('created_at', 'desc');
         }
 
+        if ($status === 'approved') {
+            $pengajuans->where(function ($q) {
+                $q->doesntHave('itemDelivery')
+                    ->orWhereHas('itemDelivery', function ($q) {
+                        $q->whereNull('staff_pengiriman');
+                    });
+            });
+        } elseif ($status === 'delivered') {
+            $pengajuans-> where('status', 'delivered ')->
+            whereHas('itemDelivery', function ($q) {
+                $q->whereNotNull('staff_pengiriman')->where('status', 'in_progress');
+            });
+        }
+
         $pengajuans = $pengajuans->get();
 
-        $staff_pengiriman = User::whereHas('roles', function($q){
+        $staff_pengiriman = User::whereHas('roles', function ($q) {
             $q->where('nama_role', 'staff_pengiriman');
         })->get();
 

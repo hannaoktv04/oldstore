@@ -20,7 +20,7 @@
   <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
     @forelse ($items as $item)
       @php
-        $stokHabis = $item->stok_minimum == 0;
+        $stokHabis = $item->stocks->qty == 0;
         $nonaktif = $stokHabis || ($opnameAktif ?? false);
       @endphp
 

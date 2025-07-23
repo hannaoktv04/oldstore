@@ -61,7 +61,7 @@
                 <div>
                   <small>{{ $item->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</small><br>
                   <strong>{{ $item->item->nama_barang }}</strong><br>
-                  <small>Jumlah: {{ $item->qty }} {{ $item->item->satuan }}</small>
+                  <small>Jumlah: {{ $item->qty }} {{ $item->item->satuan->nama_satuan }}</small>
                 </div>
               </div>
             @empty

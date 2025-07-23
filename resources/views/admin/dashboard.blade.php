@@ -62,7 +62,7 @@
                                     <small class="text-muted">{{ $produk->item->category->categori_name ?? 'Tanpa Kategori' }}</small>
                                 </div>
                                 <div class="mt-auto">
-                                    <span class="badge bg-success">Total: {{ $produk->total }} {{ $produk->item->satuan }}</span>
+                                    <span class="badge bg-success">Total: {{ $produk->total }} {{ $produk->item->satuan->nama_satuan }}</span>
                                 </div>
                             </div>
                         </div>

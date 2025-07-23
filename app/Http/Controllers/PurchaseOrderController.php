@@ -23,7 +23,7 @@ class PurchaseOrderController extends Controller
 
     public function create()
     {
-        $items = Item::select('id', 'kode_barang', 'nama_barang', 'satuan')->get();
+        $items = Item::select('id', 'kode_barang', 'nama_barang', 'satuan_id')->get();
 
         $prefix = 'PO-' . now()->format('Ym');
         $lastPO = PurchaseOrder::where('nomor_po', 'like', "$prefix%")->latest()->first();
@@ -124,7 +124,7 @@ class PurchaseOrderController extends Controller
 
     public function edit(PurchaseOrder $purchaseOrder)
     {
-        $items = Item::select('id', 'kode_barang', 'nama_barang', 'satuan')->get();
+        $items = Item::select('id', 'kode_barang', 'nama_barang', 'satuan_id')->get();
         $purchaseOrder->load('details.item');
         $existingItems = $purchaseOrder->details;
 

@@ -96,7 +96,7 @@
         <tr>
             <td style="text-align: center;">{{ $index + 1 }}</td>
             <td>{{ $detail->item->nama_barang }}</td>
-            <td style="text-align: center;">{{ $detail->qty_requested }} {{ $detail->item->satuan }}</td>
+            <td style="text-align: center;">{{ $detail->qty_requested }} {{ $detail->item->satuan->nama_satuan }}</td>
             <td style="text-align: center;">{{ $detail->qty_approved ?? '-' }}</td>
             <td></td>
         </tr>

@@ -38,7 +38,7 @@
     @forelse($carts as $cart)
     @php
         $item = $cart->item;
-        $stokHabis = $item->stok_minimum <= 0;
+        $stokHabis = $item->stocks->qty <= 0;
         $nonaktif = $stokHabis || $opnameAktif;
         $buttonStyle = $nonaktif ? 'btn-outline-secondary' : 'btn-outline-success';
         $borderColor = $nonaktif ? '#6c757d' : '#198754';
@@ -65,7 +65,7 @@
                     <div>
                         <div class="text-muted small">{{ $item->category->categori_name ?? '-' }}</div>
                         <div class="fw-semibold text-dark">{{ $item->nama_barang }}</div>
-                        <div class="text-muted small">Stok tersedia: {{ $item->stok_minimum }} {{ $item->satuan }}</div>
+                        <div class="text-muted small">Stok tersedia: {{ $item->stocks->qty ?? '0' }} {{ $item->satuan->nama_satuan ?? '-' }}</div>
                     </div>
                 </div>
             </a>
@@ -88,7 +88,7 @@
                                 class="btn {{ $buttonStyle }} px-2 py-1 border-0"
                                 {{ $nonaktif ? 'disabled' : '' }}>−</button>
                         <input type="number" name="manual_qty" value="{{ $cart->qty }}"
-                               min="1" max="{{ $item->stok_minimum }}"
+                               min="1" max="{{ $item->stocks->qty ?? 0 }}"
                                class="form-control text-center border-0"
                                style="width: 43px; height: 32px; padding: 0 0.1rem;"
                                {{ $nonaktif ? 'disabled' : '' }}>

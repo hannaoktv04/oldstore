@@ -9,6 +9,7 @@ use App\Models\ItemStock;
 use App\Models\ItemLog;
 use App\Models\StockNotification;
 use App\Models\StockAdjustment;
+use App\Models\Satuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -29,6 +30,7 @@ class ItemController extends Controller
     }
     public function create()
     {
+        $satuans = Satuan::all();
         return view('admin.item.create');
     }
 
@@ -42,7 +44,7 @@ class ItemController extends Controller
                 'kode_barang'    => 'required|string|max:255|unique:items,kode_barang',
                 'stok_awal'      => 'required|numeric|min:0',
                 'stok_minimum'   => 'required|numeric|min:0',
-                'satuan'         => 'required|string',
+                'satuan'      => 'required|exists:satuan,id',
                 'deskripsi'      => 'required|string',
                 'category_id'    => 'required|exists:category,id',
                 'photo_Item'     => 'required|array',
@@ -53,7 +55,7 @@ class ItemController extends Controller
                 'nama_barang'   => $validated['nama_barang'],
                 'kode_barang'   => $validated['kode_barang'],
                 'stok_minimum'  => $validated['stok_minimum'],
-                'satuan'        => $validated['satuan'],
+                'satuan_id'        => $validated['satuan'],
                 'deskripsi'     => $validated['deskripsi'],
                 'category_id'   => $validated['category_id'],
             ]);
@@ -123,8 +125,6 @@ class ItemController extends Controller
         }
     }
 
-
-
     public function update(Request $request, Item $item)
     {
         DB::beginTransaction();
@@ -132,7 +132,7 @@ class ItemController extends Controller
             $validated = $request->validate([
                 'nama_barang' => 'required|string|max:255',
                 'kode_barang' => 'required|string|max:255|unique:items,kode_barang,' . $item->id,
-                'satuan' => 'required|string',
+                'satuan' => 'required|exists:satuan,id',
                 'deskripsi' => 'required|string',
                 'stok_minimum' => 'required|integer|min:0',
                 'category_id' => 'required|exists:category,id',
@@ -142,27 +142,21 @@ class ItemController extends Controller
                 'existing_images' => 'nullable|array',
                 'existing_images.*' => 'exists:item_images,id,item_id,'.$item->id
             ]);
-
-            // Update item data
             $item->update([
                 'nama_barang' => $validated['nama_barang'],
                 'kode_barang' => $validated['kode_barang'],
-                'satuan' => $validated['satuan'],
+                'satuan_id' => $validated['satuan'],
                 'deskripsi' => $validated['deskripsi'],
                 'stok_minimum' => $validated['stok_minimum'],
                 'category_id' => $validated['category_id'],
             ]);
-
-            // Handle existing images
             $existingImages = $request->input('existing_images', []);
             $currentImages = $item->images()->pluck('id')->toArray();
 
-            // Delete images that were removed
             $imagesToDelete = array_diff($currentImages, $existingImages);
             foreach ($imagesToDelete as $imageId) {
                 $image = ItemImage::find($imageId);
                 if ($image) {
-                    // Don't delete if it's the current thumbnail
                     if ($image->id !== $item->photo_id) {
                         Storage::disk('public')->delete($image->image);
                         $image->delete();
@@ -170,7 +164,6 @@ class ItemController extends Controller
                 }
             }
 
-            // Handle new uploads (including cropped images)
             if ($request->hasFile('photo_Item')) {
                 foreach ($request->file('photo_Item') as $file) {
                     $path = $file->store('images', 'public');
@@ -181,12 +174,10 @@ class ItemController extends Controller
                 }
             }
 
-            // Handle thumbnail selection
             $thumbnailIndex = (int)$request->thumbnail_index;
             $allImages = $item->images()->orderBy('created_at')->get();
 
             if ($allImages->count() > 0) {
-                // Make sure index is within bounds
                 $selectedIndex = min($thumbnailIndex, $allImages->count() - 1);
                 $item->update(['photo_id' => $allImages[$selectedIndex]->id]);
             } else {
@@ -232,6 +223,7 @@ class ItemController extends Controller
     public function edit(Item $item)
     {
         $categories = Category::all();
+        $satuans = Satuan::all();
         return view('admin.item.edit', compact('item', 'categories'));
     }
 

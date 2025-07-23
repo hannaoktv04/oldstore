@@ -184,7 +184,7 @@ class AdminPengajuanController extends Controller
             $delivery->save();
 
             $pengajuan->update([
-                'status' => 'approved',
+                'status' => 'delivered',
                 'tanggal_pengiriman' => $request->tanggal_pengiriman,
                 'keterangan' => $request->catatan,
             ]);

@@ -13,7 +13,7 @@ class Item extends Model
         'nama_barang',
         'kode_barang',
         'category_id',
-        'satuan',
+        'satuan_id',
         'stok_minimum',
         'deskripsi',
         'photo_id',
@@ -110,6 +110,6 @@ class Item extends Model
     }
     public function satuan()
     {
-        return $this->belongsTo(Satuan::class);
+        return $this->belongsTo(Satuan::class, 'satuan_id');
     }
 }

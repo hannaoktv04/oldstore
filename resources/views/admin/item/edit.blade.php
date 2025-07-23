@@ -75,13 +75,12 @@
 
             </div>
             <div class="row">
-
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Satuan</label>
                     <select name="satuan" class="form-select" required>
-                        @foreach(['pcs','buah','rim','pack','dus','botol'] as $sat)
-                        <option value="{{ $sat }}" {{ $item->satuan === $sat ? 'selected' : '' }}>
-                            {{ ucfirst($sat) }}
+                        @foreach (App\Models\Satuan::orderBy('nama_satuan')->get() as $satuan)
+                        <option value="{{ $satuan->id }}" {{ (old('satuan_id') ?? ($item->satuan_id ?? '')) == $satuan->id ? 'selected' : '' }}>
+                            {{ ucfirst($satuan->nama_satuan) }}
                         </option>
                         @endforeach
                     </select>

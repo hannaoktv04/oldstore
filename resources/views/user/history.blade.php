@@ -31,7 +31,7 @@
             <div>
               <strong>{{ $detail->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</strong><br>
               {{ $detail->item->nama_barang }}<br>
-              Jumlah: {{ $detail->qty_requested }} {{ $detail->item->satuan }}
+              Jumlah: {{ $detail->qty_requested }} {{ $detail->item->satuan->nama_satuan ?? 'Satuan Tidak Diketahui' }}
             </div>
           </div>
           @endforeach
@@ -65,19 +65,19 @@
         <div class="col-12 col-md-3 col-lg-3 d-flex flex-column justify-content-center align-items-center text-center">
           <div>
             @switch($statusPengajuan)
-              @case('submitted') 
-                <em class="fw-semibold text-primary"><i class="bi bi-hourglass-split me-1"></i> Diproses</em> 
+              @case('submitted')
+                <em class="fw-semibold text-primary"><i class="bi bi-hourglass-split me-1"></i> Diproses</em>
                 @break
 
-              @case('approved') 
-                <em class="fw-semibold text-warning"><i class="bi bi-check2-square me-1"></i> Disetujui</em> 
+              @case('approved')
+                <em class="fw-semibold text-warning"><i class="bi bi-check2-square me-1"></i> Disetujui</em>
                 @break
 
               @case('in_progress')
-                <em class="fw-semibold text-info"><i class="bi bi-truck me-1"></i> Dikirim</em> 
+                <em class="fw-semibold text-info"><i class="bi bi-truck me-1"></i> Dikirim</em>
                 @break
 
-              @case('received') 
+              @case('received')
                 @if($request->user_confirmed)
                   <em class="fw-semibold text-success"><i class="bi bi-check-circle-fill me-1"></i> Selesai</em>
                 @else
@@ -85,11 +85,11 @@
                 @endif
                 @break
 
-              @case('rejected') 
-                <em class="fw-semibold text-danger"><i class="bi bi-x-circle me-1"></i> Ditolak</em> 
+              @case('rejected')
+                <em class="fw-semibold text-danger"><i class="bi bi-x-circle me-1"></i> Ditolak</em>
                 @break
 
-              @default 
+              @default
                 <em class="text-muted">{{ ucfirst($statusPengajuan) }}</em>
             @endswitch
             <br>
@@ -186,8 +186,8 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body text-center">
-            <img 
-              src="{{ asset('storage/' . $request->itemDelivery->bukti_foto) }}" 
+            <img
+              src="{{ asset('storage/' . $request->itemDelivery->bukti_foto) }}"
               alt="Bukti Pengiriman"
               class="img-thumbnail"
               style="max-width: 100%; width: 100%; max-height: 300px; object-fit: contain;"
