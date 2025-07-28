@@ -71,11 +71,13 @@
         </thead>
         <tbody>
             @foreach ($pengajuan->details as $detail)
-            <tr>
-                <td>{{ $detail->item->nama_barang }}</td>
-                <td>{{ $detail->qty_requested }}</td>
-                <td>{{ $detail->item->satuan->nama_satuan }}</td>
-            </tr>
+                @if ($detail->qty_approved > 0)
+                <tr>
+                    <td>{{ $detail->item->nama_barang }}</td>
+                    <td>{{ $detail->qty_approved }}</td>
+                    <td>{{ $detail->item->satuan->nama_satuan }}</td>
+                </tr>
+                @endif
             @endforeach
         </tbody>
     </table>

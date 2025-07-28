@@ -9,7 +9,7 @@
                     $cards = [
                         ['route' => 'submitted', 'icon' => 'send-check-fill', 'color' => 'success', 'title' => 'Pengajuan Baru', 'count' => $pengajuanBaru],
                         ['route' => 'approved', 'icon' => 'truck', 'color' => 'warning', 'title' => 'Perlu Dikirim', 'count' => $perluDikirim],
-                        ['route' => 'delivered', 'icon' => 'box-seam', 'color' => 'info', 'title' => 'Konfirmasi Pengiriman', 'count' => $pengajuanSelesai],
+                        ['route' => 'delivered', 'icon' => 'box-seam', 'color' => 'info', 'title' => 'Sedang Dikirim', 'count' => $pengajuanSelesai],
                         ['route' => 'rejected', 'icon' => 'x-circle-fill', 'color' => 'danger', 'title' => 'Ditolak', 'count' => $pembatalan],
                     ];
                 @endphp

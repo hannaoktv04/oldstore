@@ -43,25 +43,24 @@
                         @endforeach
                     </div>
 
-                    <div class="col-15 col-md-4 col-lg-4 text-center">
-                        @if ($request->tanggal_pengiriman)
-                            <em>{{ \Carbon\Carbon::parse($request->tanggal_pengiriman)->format('d F Y') }}</em>
-                            @if ($request->status == 'submitted')
-                                <a href="#" class="text-dark ms-2 btn-calendar"
-                                    data-request-id="{{ $request->id }}">
-                                    <i class="bi bi-calendar"></i>
-                                </a>
-                            @endif
-                        @elseif($request->status == 'submitted')
-                            <a href="#" class="text-dark btn-calendar" data-request-id="{{ $request->id }}">
-                                <em>Atur Tanggal Pengiriman</em> <i class="bi bi-calendar"></i>
-                            </a>
-                        @elseif($request->status == 'rejected')
-                            <strong class="text-danger"><em>Permintaan ditolak</em></strong>
-                        @else
-                            <strong class="text-danger"><em>Belum Dijadwalkan</em></strong>
-                        @endif
-                    </div>
+        <div class="col-15 col-md-4 col-lg-4 text-center">
+          @if($request->tanggal_pengiriman)
+              <em>{{ \Carbon\Carbon::parse($request->tanggal_pengiriman)->format('d F Y') }}</em>
+              @if($request->status == 'submitted')
+                <a href="#" class="text-dark ms-2 btn-calendar" data-request-id="{{ $request->id }}">
+                  <i class="bi bi-calendar"></i>
+                </a>
+              @endif
+          @elseif($request->status == 'submitted')
+              <a href="#" class="text-dark btn-calendar" data-request-id="{{ $request->id }}">
+                <em>Atur Tanggal Pengiriman</em> <i class="bi bi-calendar"></i>
+              </a>
+          @elseif($request->status == 'rejected')
+              <strong class="text-danger"><em>Permintaan ditolak</em></strong>
+          @else
+              <strong class="text-danger"><em>Belum Dijadwalkan</em></strong>
+          @endif
+        </div>
 
                     <div class="col-12 col-md-1 col-lg-1 d-flex flex-column align-items-center text-center">
                         <a href="#" class="btn btn-outline-secondary btn-sm" title="Bubuhi TTD">

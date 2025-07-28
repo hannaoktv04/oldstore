@@ -1,21 +1,32 @@
-@if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-        <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#3085d6',
+            });
+        @endif
 
-@if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-        <i class="bi bi-x-circle me-2"></i> {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: '{{ session('error') }}',
+                confirmButtonColor: '#d33',
+            });
+        @endif
 
-@if (session('rejected'))
-    <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
-        <i class="bi bi-exclamation-circle me-2"></i> {{ session('rejected') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
- 
+        @if (session('rejected'))
+            Swal.fire({
+                icon: 'warning',
+                title: 'Ditolak',
+                text: '{{ session('rejected') }}',
+                confirmButtonColor: '#f0ad4e',
+            });
+        @endif
+    });
+</script>
+@endpush

@@ -31,11 +31,12 @@
                             <img src="{{ $detail->item->gallery->first() 
                                 ? asset('storage/' . $detail->item->gallery->first()) 
                                 : asset('assets/img/default.png') 
-                            }}" alt="{{ $detail->item->nama_barang }}" width="50" height="50" class="rounded border me-3" style="object-fit: cover;">
+                            }}" alt="{{ $detail->item->nama_barang }}" width="60" height="60" class="rounded border me-3" style="object-fit: cover;">
 
                             <div>
                                 <div class="fw-semibold">{{ $detail->item->nama_barang }}</div>
-                                <small class="text-muted">Jumlah: {{ $detail->qty_approved }} {{ $detail->item->satuan->nama_satuan }}</small>
+                                <small class="text-muted">Jumlah: {{ $detail->qty_approved }} {{ $detail->item->satuan->nama_satuan }}</small> <br>
+                                <small class="text-muted">Catatan: {{ $item->catatan ?? 'Tidak ada catatan' }}</small>
                             </div>
                         </div>
                     @endforeach
@@ -44,7 +45,6 @@
             </div>
         </div>
 
-        <!-- Modal Detail -->
         <div class="modal fade" id="detailModal{{ $item->id }}" tabindex="-1" aria-labelledby="detailLabel{{ $item->id }}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content rounded-4">
@@ -73,7 +73,9 @@
                             <li class="mb-3">
                                 <div><i class="bi bi-clipboard-check text-danger me-2"></i><strong>Diterima</strong></div>
 
-                                <a href="{{ asset('storage/' . $item->bukti_foto) }}" target="_blank" class="text-decoration-none text-primary">Lihat Bukti Pengiriman</a> <br>
+                                <button type="button" class="btn btn-link p-0 text-primary text-decoration-none" data-bs-toggle="modal" data-bs-target="#buktiModal-{{ $item->id }}">
+                                    <i class="bi bi-image"></i> Lihat Bukti Pengiriman
+                                </button> <br>
 
                                 <small class="text-muted">
                                     Diantar oleh: <strong>{{ $item->staff->nama ?? 'Staff tidak ditemukan' }}</strong><br>
@@ -97,13 +99,31 @@
                             <i class="bi bi-check-circle-fill me-2"></i> Pesanan sudah selesai <br>
                             <small class="d-block mt-1">Waktu proses: {{ $diffText ?: 'Kurang dari 1 menit' }}</small>
                         </div>
-
-                        
-
                     </div>
                 </div>
             </div>
         </div>
+
+        @if($item->bukti_foto)
+        <div class="modal fade" id="buktiModal-{{ $item->id }}" tabindex="-1" aria-labelledby="buktiModalLabel-{{ $item->id }}" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4">
+              <div class="modal-header border-0">
+                <h5 class="modal-title" id="buktiModalLabel-{{ $item->id }}">Bukti Pengiriman</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body text-center">
+                <img
+                  src="{{ asset('storage/' . $item->bukti_foto) }}"
+                  alt="Bukti Pengiriman"
+                  class="img-thumbnail"
+                  style="max-width: 100%; width: 100%; max-height: 300px; object-fit: contain;"
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        @endif
 
     @empty
         <div class="alert alert-info text-center">

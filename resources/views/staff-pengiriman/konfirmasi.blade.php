@@ -13,10 +13,12 @@
         <h6>Daftar Barang</h6>
         <ul class="list-group">
             @foreach ($pengajuan->details as $detail)
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    {{ $detail->item->nama_barang }}
-                    <span>{{ $detail->qty_requested }} {{ $detail->item->satuan->nama_satuan }}</span>
-                </li>
+                @if ($detail->qty_approved > 0)
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ $detail->item->nama_barang }}
+                        <span>{{ $detail->qty_approved }} {{ $detail->item->satuan->nama_satuan }}</span>
+                    </li>
+                @endif
             @endforeach
         </ul>
     </div>

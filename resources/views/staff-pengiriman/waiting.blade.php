@@ -5,6 +5,13 @@
     <h4 class="mb-4">📦 Daftar Pengiriman Waiting</h4>
 
     @forelse($pengiriman as $item)
+        @php
+            $filteredDetails = $item->details->filter(function ($detail) {
+                return $detail->qty_approved > 0;
+            });
+        @endphp
+
+        @if($filteredDetails->isNotEmpty())
         <div class="card mb-4 shadow-sm border-0 rounded-4">
             <div class="card-body">
 
@@ -23,7 +30,7 @@
                 </div>
 
                 <div class="row g-3">
-                    @foreach($item->details as $detail)
+                    @foreach($filteredDetails as $detail)
                         <div class="col-12 col-md-6 d-flex align-items-start">
                             <img src="{{ $detail->item->gallery->first() 
                                 ? asset('storage/' . $detail->item->gallery->first()) 
@@ -43,6 +50,7 @@
 
             </div>
         </div>
+        @endif
     @empty
         <div class="alert alert-info text-center">
             Belum ada pengiriman waiting.
