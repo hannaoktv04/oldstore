@@ -83,7 +83,7 @@
                     <tr>
                         <td>{{ $item->kode_barang }}</td>
                         <td>{{ $item->nama_barang }}</td>
-                        <td class="text-center">{{ $item->satuan }}</td>
+                        <td class="text-center">{{ $item->satuan->nama_satuan }}</td>
                         <td class="text-end">{{ number_format($qtySistem) }}</td>
                         <td>
                             <input type="hidden" name="items[{{ $item->id }}][item_id]" value="{{ $item->id }}">
@@ -131,17 +131,14 @@
 <script>
     $(document).ready(function() {
             $('#stockOpnameTable').DataTable({
+                paging: false, // Disable paginate
                 responsive: true,
                 language: {
                     search: "Cari:",
                     lengthMenu: "Tampilkan _MENU_ ",
                     info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
                     infoEmpty: "Tidak ada data",
-                    zeroRecords: "Data tidak ditemukan",
-                    paginate: {
-                        previous: "Sebelumnya",
-                        next: "Selanjutnya"
-                    }
+                    zeroRecords: "Data tidak ditemukan"
                 },
                 columnDefs: [{
                         orderable: false,

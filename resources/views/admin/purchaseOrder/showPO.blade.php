@@ -55,7 +55,7 @@
                                 <td class="text-center">{{ $index + 1 }}</td>
                                 <td class="text-center">{{ $detail->item->kode_barang ?? '-' }}</td>
                                 <td>{{ $detail->item->nama_barang ?? '-' }}</td>
-                                <td class="text-center">{{ $detail->item->satuan ?? '-' }}</td>
+                                <td class="text-center">{{ $detail->item->satuan->nama_satuan ?? '-' }}</td>
                                 <td class="text-center">{{ number_format($detail->qty) }}</td>
                             </tr>
                         @endforeach

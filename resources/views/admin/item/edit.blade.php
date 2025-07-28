@@ -5,16 +5,6 @@
 @section('content')
 <div class="container mt-4">
     <h5 class="mb-4">Edit Item</h5>
-
-    @foreach (['success'=>'success','error'=>'danger'] as $k=>$t)
-    @if(session($k))
-    <div class="alert alert-{{ $t }} alert-dismissible fade show" role="alert">
-        {{ session($k) }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
-    @endforeach
-
     <form action="{{ route('admin.item.update', $item->id) }}" method="POST" enctype="multipart/form-data">
         @csrf @method('PUT')
 
@@ -104,39 +94,34 @@
         </div>
 
         <div class="d-flex gap-3 mb-4">
-            <a href="{{ route('admin.items') }}" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-1"></i> Kembali
+            <a href="{{ url()->previous() }}"" class="btn btn-outline-secondary hover-3d">
+            Kembali
             </a>
-            <button type="submit" class="btn btn-success">
-                <i class="bi bi-save2 me-1"></i> Update
+            <button type="submit" class="btn btn-success hover-3d">
+             Update
             </button>
         </div>
     </form>
 </div>
 <div class="modal fade" id="cropperModal" tabindex="-1" aria-labelledby="cropperModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-dialog modal-md modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Crop Gambar</h5>
+            <div class="modal-header border-0">
+                <h5 class="modal-title">Pangkas Gambar</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body row g-3">
-                <div class="col-md-8">
-                    <img id="cropperImage" class="img-fluid" />
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Preview:</label>
-                    <div class="border rounded" style="height: 200px; overflow: hidden;">
-                        <img id="cropPreview" class="img-fluid w-100 h-100" style="object-fit: cover;">
-                    </div>
+            <div class="modal-body p-0">
+                <div style="width: 100%; height: 350px; overflow: hidden;">
+                    <img id="cropperImage"
+                        style="width: 100%; height: 100%; object-fit: contain;"
+                        class="img-fluid">
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer border-0 mt-2">
                 <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                <button class="btn btn-success" id="saveCropBtn">Simpan Gambar</button>
+                <button class="btn btn-success" id="saveCropBtn">Simpan</button>
             </div>
         </div>
     </div>
 </div>
-
 @endsection

@@ -31,7 +31,7 @@
                         <option value="">Pilih Item</option>
                         @foreach ($items as $item)
                             <option value="{{ $item->id }}" data-kode="{{ $item->kode_barang }}"
-                                data-nama="{{ $item->nama_barang }}" data-satuan="{{ $item->satuan }}" data-stok="{{ $item->stocks->qty ?? 0}}">
+                                data-nama="{{ $item->nama_barang }}" data-satuan="{{ $item->satuan->nama_satuan }}" data-stok="{{ $item->stocks->qty ?? 0}}">
                                 {{ $item->nama_barang }}
                             </option>
                         @endforeach

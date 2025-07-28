@@ -65,7 +65,7 @@
                         <td class="text-center">{{ $index + 1 }}</td>
                         <td>{{ $item->kode_barang }}</td>
                         <td>{{ $item->nama_barang }}</td>
-                        <td class="text-center">{{ $item->satuan }}</td>
+                        <td class="text-center">{{ $item->satuan->nama_satuan }}</td>
                         <td class="text-center">{{ number_format($qtySistem) }}</td>
                         <td class="text-center">
                             @if (!is_null($qtyFisik))

@@ -8,8 +8,6 @@ return new class extends Migration {
     {
         Schema::table('stock_opnames', function (Blueprint $table) {
             $table->unsignedBigInteger('session_id')->after('item_id');
-
-            // Menambahkan foreign key ke opname_sessions.id
             $table->foreign('session_id')->references('id')->on('opname_sessions')->onDelete('cascade');
         });
     }

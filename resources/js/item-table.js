@@ -4,7 +4,7 @@ if (!window.__itemTableInitialized) {
     $(function () {
         let table;
         if ($.fn.DataTable.isDataTable("#itemTable")) {
-            table = $("#itemTable").DataTable(); 
+            table = $("#itemTable").DataTable();
         } else {
             table = $("#itemTable").DataTable({
                 columnDefs: [{ orderable: false, targets: [0, 3, 4] }],

@@ -9,6 +9,7 @@ window.handleImageUpload = function (input) {
     const reader = new FileReader();
     reader.onload = function (e) {
         const wrapper = document.getElementById("imageUploadWrapper");
+        if (!wrapper) return;
 
         const box = document.createElement("div");
         box.className = "upload-box";
@@ -30,6 +31,7 @@ window.handleImageUpload = function (input) {
         wrapper.insertBefore(box, wrapper.lastElementChild);
         input.value = "";
 
+        // Tambahkan trigger upload baru jika belum ada
         if (!wrapper.querySelector(".upload-trigger")) {
             const newBox = document.createElement("div");
             newBox.className = "upload-box";
@@ -49,33 +51,35 @@ window.handleImageUpload = function (input) {
 };
 
 window.removeImage = function (el, imageId = null) {
+    const box = el.closest(".upload-box");
+    if (!box) return;
+
     if (imageId) {
         if (confirm("Yakin ingin menghapus gambar ini?")) {
             fetch(`/admin/items/images/${imageId}`, {
                 method: "DELETE",
                 headers: {
-                    "X-CSRF-TOKEN": document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute("content"),
+                    "X-CSRF-TOKEN": document.querySelector(
+                        'meta[name="csrf-token"]'
+                    ).content,
                     Accept: "application/json",
                 },
             })
-                .then((response) => response.json())
+                .then((res) => res.json())
                 .then((data) => {
                     if (data.success) {
-                        el.closest(".upload-box").remove();
+                        box.remove();
                         updateThumbnailIndex();
                     } else {
                         alert(data.message || "Gagal menghapus gambar");
                     }
                 })
-                .catch((error) => {
-                    console.error("Error:", error);
+                .catch((err) => {
+                    console.error(err);
                     alert("Terjadi kesalahan saat menghapus gambar");
                 });
         }
     } else {
-        const box = el.closest(".upload-box");
         box.remove();
         updateThumbnailIndex();
     }
@@ -83,38 +87,42 @@ window.removeImage = function (el, imageId = null) {
 
 function updateThumbnailIndex() {
     const wrapper = document.getElementById("imageUploadWrapper");
-    const selectedBox = wrapper.querySelector(".selected-thumbnail");
+    const selectedBox = wrapper?.querySelector(".selected-thumbnail");
     const newIndex = selectedBox
         ? Array.from(wrapper.children).indexOf(selectedBox)
         : 0;
-    document.getElementById("thumbnail_index").value = newIndex;
+    const thumbnailIndex = document.getElementById("thumbnail_index");
+    if (thumbnailIndex) thumbnailIndex.value = newIndex;
 }
+
 window.setThumbnail = function (imgEl) {
+    const box = imgEl.closest(".upload-box");
+    if (!box) return;
+
     const allBoxes = document.querySelectorAll(
         "#imageUploadWrapper .upload-box"
     );
-    allBoxes.forEach((box) => {
-        box.classList.remove("selected-thumbnail");
-        box.querySelector(".badge")?.classList.add("d-none");
+    allBoxes.forEach((b) => {
+        b.classList.remove("selected-thumbnail");
+        b.querySelector(".badge")?.classList.add("d-none");
     });
 
-    const box = imgEl.closest(".upload-box");
     box.classList.add("selected-thumbnail");
-    box.querySelector(".badge").classList.remove("d-none");
+    box.querySelector(".badge")?.classList.remove("d-none");
 
-    const index = Array.from(
-        document.getElementById("imageUploadWrapper").children
-    ).indexOf(box);
-    document.getElementById("thumbnail_index").value = index;
+    const wrapper = document.getElementById("imageUploadWrapper");
+    const index = Array.from(wrapper.children).indexOf(box);
+    const thumbnailIndex = document.getElementById("thumbnail_index");
+    if (thumbnailIndex) thumbnailIndex.value = index;
 };
 
 window.openCropper = function (icon) {
     const box = icon.closest(".upload-box");
-    const img = box.querySelector("img.preview");
+    const img = box?.querySelector("img.preview");
     cropTargetImage = img;
     cropTargetInput = box.querySelector('input[type="file"]');
 
-    if (!cropTargetInput && box.hasAttribute("data-image-id")) {
+    if (!cropTargetInput && box?.hasAttribute("data-image-id")) {
         const input = document.createElement("input");
         input.type = "file";
         input.name = "photo_Item[]";
@@ -124,109 +132,55 @@ window.openCropper = function (icon) {
     }
 
     const cropperImage = document.getElementById("cropperImage");
-    const previewEl = document.getElementById("cropPreview");
+    if (!cropperImage || !img) return;
 
     if (cropper) {
         cropper.destroy();
         cropper = null;
     }
+
     cropperImage.src = img.src;
-    previewEl.src = img.src;
-    const modal = new bootstrap.Modal(document.getElementById("cropperModal"));
+
+    const modalEl = document.getElementById("cropperModal");
+    const modal = new bootstrap.Modal(modalEl);
     modal.show();
-    setTimeout(() => {
+
+    // Tunggu modal selesai ditampilkan
+    modalEl.addEventListener('shown.bs.modal', function onShown() {
+        modalEl.removeEventListener('shown.bs.modal', onShown);
+
         cropper = new Cropper(cropperImage, {
-            aspectRatio: 3 / 4,
+            aspectRatio: 1, // Ubah sesuai kebutuhan (1 untuk square)
             viewMode: 1,
-            preview: "#cropPreview",
-            autoCrop: false,
+            autoCrop: true,
+            autoCropArea: 1, // Isi seluruh area
+            responsive: true,
+            ready() {
+                // Set crop box size
+                this.cropper.setCropBoxData({
+                    width: 350, // Sesuaikan dengan tinggi container
+                    height: 350
+                });
+            }
         });
-    }, 300);
+    }, {once: true});
 };
 
-document.addEventListener("DOMContentLoaded", function () {
-    const saveBtn = document.getElementById("saveCropBtn");
-    if (saveBtn) {
-        saveBtn.addEventListener("click", function () {
-            if (cropper && cropTargetImage && cropTargetInput) {
-                const canvas = cropper.getCroppedCanvas({
-                    width: 500,
-                    height: 500,
-                    minWidth: 256,
-                    minHeight: 256,
-                    maxWidth: 2000,
-                    maxHeight: 2000,
-                    fillColor: "#fff",
-                    imageSmoothingEnabled: true,
-                    imageSmoothingQuality: "high",
-                });
-
-                // When saving cropped image
-                canvas.toBlob(
-                    function (blob) {
-                        const url = URL.createObjectURL(blob);
-                        cropTargetImage.src = url;
-
-                        // Create new file input if needed
-                        if (!cropTargetInput) {
-                            cropTargetInput = document.createElement("input");
-                            cropTargetInput.type = "file";
-                            cropTargetInput.name = "photo_Item[]";
-                            cropTargetInput.style.display = "none";
-                            cropTargetImage
-                                .closest(".upload-box")
-                                .appendChild(cropTargetInput);
-                        }
-
-                        // Create file from blob
-                        const file = new File(
-                            [blob],
-                            `cropped-${Date.now()}.jpg`,
-                            {
-                                type: "image/jpeg",
-                                lastModified: Date.now(),
-                            }
-                        );
-
-                        const dt = new DataTransfer();
-                        dt.items.add(file);
-                        cropTargetInput.files = dt.files;
-
-                        // Remove the existing image reference if this was a crop of an existing image
-                        const box = cropTargetImage.closest(".upload-box");
-                        if (box.hasAttribute("data-image-id")) {
-                            box.querySelector(
-                                'input[name="existing_images[]"]'
-                            ).remove();
-                        }
-
-                        // Close modal
-                        bootstrap.Modal.getInstance(
-                            document.getElementById("cropperModal")
-                        ).hide();
-                    },
-                    "image/jpeg",
-                    0.92
-                );
-            }
-        });
-    }
-
-    document
-        .getElementById("cropperModal")
-        .addEventListener("hidden.bs.modal", function () {
-            if (cropper) {
-                cropper.destroy();
-                cropper = null;
-            }
-            cropTargetImage = null;
-            cropTargetInput = null;
+document.getElementById("saveCropBtn").addEventListener("click", function() {
+    if (cropper && cropTargetImage && cropTargetInput) {
+        const canvas = cropper.getCroppedCanvas({
+            width: 500,
+            height: 500,
+            minWidth: 256,
+            minHeight: 256,
+            maxWidth: 2000,
+            maxHeight: 2000,
+            fillColor: '#fff',
+            imageSmoothingEnabled: true,
+            imageSmoothingQuality: 'high',
         });
 
-    const initialThumbnail = document.querySelector(".selected-thumbnail");
-    if (initialThumbnail) {
-        const wrapper = document.getElementById("imageUploadWrapper");
-        const index = Array.from(wrapper.children).indexOf(initialThumbnail);
-        document.getElementById("thumbnail_index").value = index;
+        canvas.toBlob(function(blob) {
+        }, 'image/jpeg', 0.92);
     }
 });

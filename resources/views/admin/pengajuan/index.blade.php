@@ -18,10 +18,11 @@
                 });
 
                 $shouldDisplay = $filteredDetails->isNotEmpty();
+                $completedDate = $pengajuan->updated_at;
             @endphp
 
             @if ($shouldDisplay)
-                <div class="mb-5 p-3 border rounded shadow-sm">
+                <div class="mb-3 p-3 border rounded shadow-sm">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
                             <h5 class="fw-bold mb-0">Pengajuan #{{ $no }}</h5>
@@ -58,15 +59,26 @@
                         </div>
 
                         <div class="col-12 col-md-4 col-lg-5 text-center text-md-center">
-                            <small class="text-muted">Jadwal Pengiriman</small><br>
-                            @if ($pengajuan->tanggal_pengiriman)
-                                <strong>{{ \Carbon\Carbon::parse($pengajuan->tanggal_pengiriman)->format('d F Y, H:i') }}</strong>
+                            @if ($status === 'received')
+                                <small class="text-muted">Tanggal Selesai</small><br>
+                                @if ($completedDate)
+                                    <strong>{{ \Carbon\Carbon::parse($completedDate)->format('d F Y, H:i') }}</strong>
+                                @else
+                                    <strong class="texta-danger">Belum Selesai</strong>
+                                @endif
                             @else
-                                <strong class="text-danger">Belum Dijadwalkan</strong>
+                                <small class="text-muted">Tanggal Pengiriman</small><br>
+                                @if ($pengajuan->tanggal_pengiriman)
+                                    <strong>{{ \Carbon\Carbon::parse($pengajuan->tanggal_pengiriman)->format('d F Y, H:i') }}</strong>
+                                @else
+                                    <strong class="text-danger">Belum Dijadwalkan</strong>
+                                @endif
                             @endif
+
                         </div>
 
-                        <div class="col-12 col-md-2 col-lg-3 d-flex flex-column align-items-center text-md-end ms-md-auto gap-2">
+                        <div
+                            class="col-12 col-md-2 col-lg-3 d-flex flex-column align-items-center text-md-end ms-md-auto gap-2">
                             <x-pengajuan-actions :pengajuan="$pengajuan" :status="$status" />
                         </div>
                     </div>
@@ -82,6 +94,10 @@
                             'staff_pengiriman' => $staff_pengiriman,
                         ])
                     @endif
+                    @if ($status === 'received')
+                        @include('admin.modals.history', ['pengajuan' => $pengajuan])
+                    @endif
+
                 </div>
             @endif
         @empty

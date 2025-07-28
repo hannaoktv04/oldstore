@@ -12,7 +12,12 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $fillable = [
-        'username', 'nama', 'nip', 'jabatan', 'email', 'password',
+        'username',
+        'nama',
+        'nip',
+        'jabatan',
+        'email',
+        'password',
     ];
 
     public function setPasswordAttribute($password)
@@ -24,7 +29,7 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'users_role');
+        return $this->belongsToMany(Role::class, 'users_role', 'user_id', 'role_id');
     }
 
     public function hasRole($roleName)

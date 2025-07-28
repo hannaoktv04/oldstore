@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\ItemRequest;
+use App\Models\User;
 
 class ItemRequestController extends Controller
 {
@@ -16,9 +17,9 @@ class ItemRequestController extends Controller
             'details.item.photo',
             'itemDelivery'
         ])
-        ->where('user_id', auth()->id())
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->where('user_id', auth()->id())
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('user.history', compact('requests'));
     }
@@ -26,7 +27,7 @@ class ItemRequestController extends Controller
     public function updateTanggalPengambilan(Request $request, $id)
     {
         dd($request->all());
-         $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'tanggal_pengiriman' => 'required|date|after_or_equal:today',
         ]);
 
@@ -61,12 +62,14 @@ class ItemRequestController extends Controller
     public function showENota($id)
     {
         $request = ItemRequest::with(['user', 'details.item.category', 'itemDelivery.staff'])->findOrFail($id);
-        
-        if ($request->user_id !== auth()->id()) {
+        $user = User::with('roles')->findOrFail(auth()->id());
+        if ($request->user_id !== $user->id && !$user->hasRole('admin')) {
             abort(403, 'Unauthorized');
         }
 
-        return view('user.enota', compact('request'));
+        return view('user.enota', [
+            'request' => $request,
+            'isAdmin' => $user->hasRole('admin')
+        ]);
     }
-
 }
