@@ -46,7 +46,6 @@
         </li>
     </ul>
 
-    {{-- Riwayat Pengajuan --}}
     <ul class="nav flex-column mb-2">
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between text-dark" data-bs-toggle="collapse"
@@ -78,7 +77,6 @@
         </li>
     </ul>
 
-    {{-- Lainnya --}}
     <ul class="nav flex-column mb-2">
         <li class="nav-item">
             <a href="{{ route('admin.purchase_orders.index') }}"

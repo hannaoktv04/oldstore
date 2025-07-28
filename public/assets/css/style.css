@@ -11,7 +11,6 @@ body {
   color: #333;
 }
 
-/* NAVBAR */
 .navbar {
   display: flex;
   align-items: center;
@@ -23,6 +22,7 @@ body {
   z-index: 100;
   flex-wrap: wrap;
 }
+
 
 .logo {
   font-size: 35px;
@@ -157,7 +157,6 @@ body {
   display: none;
 }
 
-/* HERO SECTION */
 .hero {
   position: relative;
   height: 450px;
@@ -212,7 +211,6 @@ body {
   background-color: #238d8d;
 }
 
-/* PRODUK SECTION */
 .produk {
   padding: 12px 24px;
   background: #fff;
@@ -263,7 +261,6 @@ body {
   color: #666;
 }
 
-/* RESPONSIVE BREAKPOINTS */
 @media (max-width: 1024px) {
   .produk-card {
     width: calc(33.33% - 16px);
@@ -327,7 +324,6 @@ body {
   }
 }
 
-/* Hero untuk halaman kategori */
 .kategori-hero {
   background: url('../img/hero.jpg') center/cover no-repeat;
   height: 200px;
@@ -356,7 +352,6 @@ body {
   opacity: 0.8;
 }
 
-/* Kategori Content Layout */
 .kategori-content {
   display: flex;
   gap: 32px;
@@ -365,8 +360,6 @@ body {
   padding: 0 16px;
 }
 
-
-/* Produk Grid */
 .produk-grid {
   flex: 3;
   display: grid;

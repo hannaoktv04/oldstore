@@ -76,9 +76,8 @@
       @endauth
 
       @if(Auth::check() && Auth::user()->hasRole('pegawai'))
-        <div class="dropdown position-relative">
-          <button class="icon-button text-dark bg-transparent border-0 p-0 position-relative"
-                  id="notif-icon">
+        <div class="position-relative">
+          <button class="icon-button text-dark bg-transparent border-0 p-0 position-relative" id="notif-icon">
             <i class="bi bi-bell-fill fs-5"></i>
             @if($notifikasiProdukBaru->count() > 0)
               <span class="badge bg-success rounded-pill position-absolute top-0 start-100 translate-middle">
@@ -86,28 +85,30 @@
               </span>
             @endif
           </button>
-          <ul class="dropdown-menu dropdown-menu-end shadow p-3" style="min-width: 300px;" id="notif-popup" data-popup-type="notif">
+          <div id="notif-popup"
+               class="position-absolute text-dark bg-white shadow rounded p-3 mt-2 z-3 d-none"
+               style="min-width: 300px; right: 0px; font-size: 14px;">
             <h6 class="mb-2">Produk Tersedia Kembali</h6>
             @forelse($notifikasiProdukBaru as $notif)
-              <li class="mb-2 small d-flex align-items-start">
+              <div class="mb-2 small d-flex align-items-start">
                 <i class="bi bi-box-seam text-success me-2 mt-1"></i>
                 <div>
                   <strong>{{ $notif->item->nama_barang }}</strong><br>
                   <small class="text-muted">Sekarang sudah tersedia</small>
                 </div>
-              </li>
+              </div>
             @empty
-              <li class="text-muted">Tidak ada notifikasi.</li>
+              <div class="text-muted">Tidak ada notifikasi.</div>
             @endforelse
             @if($notifikasiProdukBaru->count() > 0)
-              <li class="mt-3 text-center">
+              <div class="mt-3">
                 <form action="{{ route('notifikasi.markSeen') }}" method="POST">
                   @csrf
                   <button class="btn btn-outline-secondary btn-sm w-100" type="submit">Tandai Sudah Dibaca</button>
                 </form>
-              </li>
+              </div>
             @endif
-          </ul>
+          </div>
         </div>
       @endif
 

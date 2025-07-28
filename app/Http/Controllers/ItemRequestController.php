@@ -60,7 +60,7 @@ class ItemRequestController extends Controller
 
     public function showENota($id)
     {
-        $request = ItemRequest::with(['user', 'details.item.category', 'itemDelivery.operator'])->findOrFail($id);
+        $request = ItemRequest::with(['user', 'details.item.category', 'itemDelivery.staff'])->findOrFail($id);
         
         if ($request->user_id !== auth()->id()) {
             abort(403, 'Unauthorized');

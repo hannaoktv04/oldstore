@@ -8,7 +8,7 @@
     "devDependencies": {
         "@popperjs/core": "^2.11.6",
         "axios": "^1.6.4",
-        "bootstrap": "^5.2.3",
+        "bootstrap": "^5.3.7",
         "laravel-vite-plugin": "^1.0.0",
         "sass": "^1.56.1",
         "vite": "^5.0.0"
@@ -18,8 +18,8 @@
         "datatables.net": "^2.3.2",
         "datatables.net-bs5": "^2.3.2",
         "flatpickr": "^4.6.13",
-        "jquery": "^3.7.1",
         "html5-qrcode": "^2.3.8",
+        "jquery": "^3.7.1",
         "sweetalert2": "^11.22.2"
     }
 }

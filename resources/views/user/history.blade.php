@@ -31,13 +31,16 @@
             <div>
               <strong>{{ $detail->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</strong><br>
               {{ $detail->item->nama_barang }}<br>
-              Jumlah: {{ $detail->qty_requested }} {{ $detail->item->satuan->nama_satuan ?? 'Satuan Tidak Diketahui' }}
+              Jumlah: {{ $detail->qty_requested }} {{ $detail->item->satuan->nama_satuan ?? 'Satuan Tidak Diketahui' }}  
+              @if($request->status == 'approved')
+                | Disetujui: {{ $detail->qty_approved }} {{ $detail->item->satuan->nama_satuan ?? '' }}
+              @endif
             </div>
           </div>
           @endforeach
         </div>
 
-        <div class="col-12 col-md-4 col-lg-3 text-center">
+        <div class="col-15 col-md-4 col-lg-4 text-center">
           @if($request->tanggal_pengiriman)
               <em>{{ \Carbon\Carbon::parse($request->tanggal_pengiriman)->format('d F Y') }}</em>
               @if($request->status == 'submitted')
@@ -56,7 +59,7 @@
           @endif
         </div>
 
-        <div class="col-12 col-md-2 col-lg-2 d-flex flex-column align-items-center text-center">
+        <div class="col-12 col-md-1 col-lg-1 d-flex flex-column align-items-center text-center">
           <a href="#" class="btn btn-outline-secondary btn-sm" title="Bubuhi TTD">
             <i class="bi bi-pen-fill"></i>
           </a>
