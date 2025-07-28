@@ -5,7 +5,7 @@
 @section('content')
 <div class="card card-outline card-success">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h3 class="card-title">List of Purchase Orders</h3>
+        <h3 class="card-title">Daftar Pengajuan Barang</h3>
         <a href="{{ route('admin.purchase_orders.create') }}" class="btn btn-flat btn-success ">
             <span class="bi bi-plus-lg"> Create New</span>
         </a>
@@ -23,8 +23,8 @@
                     <col width="20%">
                     <col width="16%">
                     <col width="12%">
-                    <col width="10%">
                     <col width="18%">
+                    <col width="10%">
                 </colgroup>
                 <thead>
                     <tr>
@@ -33,8 +33,8 @@
                         <th>Kode PO</th>
                         <th>Jumlah Item</th>
                         <th>Status</th>
-                        <th>Aksi</th>
                         <th>Admin</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,11 +59,12 @@
                             @break
                             @endswitch
                         </td>
+                        <td>{{ $po->creator->nama ?? '-' }}</td>
                         <td class="text-center ">
                             <div class="dropdown">
-                                <button class="btn btn-sm btn-flat btn-default dropdown-toggle" type="button"
+                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
                                     data-bs-toggle="dropdown">
-                                    Action
+                                    <i class="bi bi-three-dots-vertical"></i>
                                 </button>
                                 <ul class="dropdown-menu">
                                     @if ($po->status === 'draft')
@@ -124,7 +125,6 @@
                                 </ul>
                             </div>
                         </td>
-                        <td class="text-center">{{ $po->creator->nama ?? '-' }}</td>
                     </tr>
                     @empty
                     <tr>
@@ -155,7 +155,7 @@
                     next: ">",
                 }
             },
-            columnDefs: [{ orderable: false, targets: [5] }],
+            columnDefs: [{ orderable: false, targets: [4] }],
             order: [[1, 'desc']]
         });
     });

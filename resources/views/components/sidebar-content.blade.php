@@ -98,5 +98,11 @@
                 <span><i class="bi bi-journal-check me-2"></i> Wishlist</span>
             </a>
         </li>
+        <li>
+            <a href="{{ route('admin.users.index') }}"
+                class="nav-link d-flex align-items-center {{ request()->routeIs('admin.users.*') ? 'active' : 'text-dark' }}">
+                <span><i class="bi bi-people me-2"></i>User</span>
+            </a>
+        </li>
     </ul>
 </div>

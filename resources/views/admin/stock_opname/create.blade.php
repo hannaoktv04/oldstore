@@ -3,7 +3,7 @@
 @section('title', 'Mulai Sesi Stock Opname')
 
 @section('content')
-<div class="container-fluid py-4">
+<div class="card container-fluid py-4 mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4>Mulai Sesi Stock Opname Baru</h4>
     </div>
@@ -47,7 +47,7 @@
                     <tr>
                         <td class="text-center">{{ $item->kode_barang }}</td>
                         <td>{{ $item->nama_barang }}</td>
-                        <td class="text-center">{{ $item->satuan }}</td>
+                        <td class="text-center">{{ $item->satuan->nama_satuan }}</td>
                         <td class="text-center">{{ number_format($item->stocks->qty ?? 0) }}</td>
                     </tr>
                     @endforeach

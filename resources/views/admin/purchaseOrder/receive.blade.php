@@ -24,7 +24,7 @@
                     @foreach ($details as $detail)
                     <tr>
                         <td>{{ $detail->item->nama_barang }}</td>
-                        <td>{{ $detail->item->satuan }}</td>
+                        <td>{{ $detail->item->satuan->nama_satuan }}</td>
                         <td>{{ $detail->qty }}</td>
                         <td>
                             <input type="number" name="details[{{ $detail->id }}]" class="form-control"
@@ -36,7 +36,7 @@
             </table>
 
             <div class="mt-4">
-                <button type="submit" class="btn btn-success">Simpan & Tambah ke Stok</button>
+                <button type="submit" class="btn btn-success">Simpan</button>
                 <a href="{{ route('admin.purchase_orders.index') }}" class="btn btn-secondary">Batal</a>
             </div>
         </form>

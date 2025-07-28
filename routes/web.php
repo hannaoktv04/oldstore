@@ -27,6 +27,7 @@ use Picqer\Barcode\BarcodeGeneratorPNG;
 use App\Http\Controllers\StaffPengirimanController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\SatuanController;
+use App\Http\Controllers\UserController;
 
 
 Route::get('/tes-barcode', function () {
@@ -96,7 +97,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('/pengajuan/{pengajuan}/assign', [AdminPengajuanController::class, 'assignStaff'])->name('admin.pengajuan.assign');
     Route::post('/pengajuan/{pengajuan}/approve', [AdminPengajuanController::class, 'approve'])->name('admin.pengajuan.approve');
     Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('admin.pengajuan.reject');
-    Route::get('/pengajuan/{id}/resi', [PengajuanController::class, 'cetakResi'])->name('pengajuan.resi');
 
     Route::get('/items', [ItemController::class, 'index'])->name('admin.items');
     Route::get('/add-item', action: [ItemController::class, 'create'])->name('admin.item.create');
@@ -104,7 +104,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/items/{item}/edit', [ItemController::class, 'edit'])->name('admin.item.edit');
     Route::put('/items/{item}', [ItemController::class, 'update'])->name('admin.item.update');
     Route::delete('/items/{item}', [ItemController::class, 'destroy'])->name('admin.items.destroy');
-
 
     Route::post('/items/bulk-action', [ItemController::class, 'bulkAction'])->name('admin.items.bulkAction');
     Route::post('/items/toggle/{item}', [ItemController::class, 'toggleState'])->name('admin.items.toggle');
@@ -141,6 +140,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
         ->name('admin.stock_opname.downloadPdf');
 
     Route::resource('satuan', SatuanController::class)->except(['show'])->names('admin.satuan');
+
+    Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::post('/users/{user}/assign-role', [UserController::class, 'assignRole'])->name('admin.users.assign-role');
+
 });
 
 // -------------------------

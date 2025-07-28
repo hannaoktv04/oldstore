@@ -1,27 +1,20 @@
 @extends('layouts.admin')
-@section('title','Daftar Barang')
-
-@push('styles')
-@endpush
-
 @section('content')
 
-<div>
-    <div class="my-4">
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Daftar Barang</li>
-            </ol>
-        </nav>
-    </div>
-    <div class="card py-2">
-        <div class="d-flex justify-content-between px-3 mt-2">
-            <h4 class="fw-bold mb-0 px-2">Daftar Barang</h4>
+<div class="container mt-4">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Daftar Barang</li>
+        </ol>
+    </nav>
+    <div>
+        <div class="d-flex justify-content-end px-3 my-2">
             <a href="{{ route('admin.item.create') }}" class="btn btn-success px-2">
                 <i class="bi bi-plus-lg me-1"></i> Tambah Barang
             </a>
-        </div>
+    </div>
+    <div class="card py-2">
 
         <div class="table-responsive">
             <table class="table table-hover" id="itemTable">
@@ -102,7 +95,6 @@
     </div>
 
 </div>
-
 
 <div class="modal fade" id="hapusModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">

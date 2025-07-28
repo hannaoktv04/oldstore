@@ -6,12 +6,15 @@ $status = $pengajuan->status;
 
 @if ($status === 'submitted')
 <div class="d-flex justify-content-center justify-content-md-end gap-3">
-    <a href="#" class="text-success" data-bs-toggle="modal" data-bs-target="#approveModal-{{ $pengajuan->id }}">
-        <i class="bi bi-check-circle fs-5" title="Setujui"></i>
-    </a>
-    <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#rejectModal-{{ $pengajuan->id }}">
-        <i class="bi bi-x-circle fs-5" title="Tolak"></i>
-    </a>
+    <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+        data-bs-target="#approveModal-{{ $pengajuan->id }}" title="Setujui">
+        <i class="bi bi-check-lg"></i>
+    </button>
+
+    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
+        data-bs-target="#rejectModal-{{ $pengajuan->id }}" title="Tolak">
+        <i class="bi bi-x-lg"></i>
+    </button>
 </div>
 
 @elseif ($status === 'approved')
@@ -36,8 +39,9 @@ $status = $pengajuan->status;
 </div>
 
 @elseif ($status === 'received')
-<button class="btn btn-sm btn-outline-primary">
-    <i class="bi bi-printer" title="Cetak Nota"></i>
+<button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+    data-bs-target="#detailTransaksiModal-{{ $pengajuan->id }}">
+    <i class="bi bi-three-dots" title="Cetak Nota"></i>
 </button>
 
 @elseif ($status === 'rejected')
