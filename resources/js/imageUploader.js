@@ -145,20 +145,18 @@ window.openCropper = function (icon) {
     const modal = new bootstrap.Modal(modalEl);
     modal.show();
 
-    // Tunggu modal selesai ditampilkan
     modalEl.addEventListener('shown.bs.modal', function onShown() {
         modalEl.removeEventListener('shown.bs.modal', onShown);
 
         cropper = new Cropper(cropperImage, {
-            aspectRatio: 1, // Ubah sesuai kebutuhan (1 untuk square)
+            aspectRatio: 1,
             viewMode: 1,
             autoCrop: true,
-            autoCropArea: 1, // Isi seluruh area
+            autoCropArea: 1,
             responsive: true,
             ready() {
-                // Set crop box size
                 this.cropper.setCropBoxData({
-                    width: 350, // Sesuaikan dengan tinggi container
+                    width: 350, 
                     height: 350
                 });
             }
@@ -181,6 +179,14 @@ document.getElementById("saveCropBtn").addEventListener("click", function() {
         });
 
         canvas.toBlob(function(blob) {
+            cropTargetImage.src = canvas.toDataURL('image/jpeg', 0.92);
+            const file = new File([blob], 'cropped-image.jpg', { type: 'image/jpeg' });
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            cropTargetInput.files = dt.files;
+            bootstrap.Modal.getInstance(document.getElementById('cropperModal')).hide();
+            cropper.destroy();
+            cropper = null;
         }, 'image/jpeg', 0.92);
     }
 });
