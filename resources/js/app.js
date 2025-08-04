@@ -12,3 +12,6 @@ import './category-table.js';
 import './formPO.js';
 import './showPO.js';
 import './scan-resi.js';
+
+
+import './product-list.js';

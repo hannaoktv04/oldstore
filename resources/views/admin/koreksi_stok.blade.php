@@ -1,38 +1,46 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container py-4">
-    <h4 class="mb-4">Koreksi Stok Barang</h4>
+    <div class="container py-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Koreksi Stok Barang</h5>
+            </div>
+            <div class="card-body">
+                @if (session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @elseif (session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
 
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @elseif (session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
-    @endif
+                <form action="{{ route('admin.stok.koreksi.store') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="item_id" class="form-label">Pilih Barang</label>
+                        <select name="item_id" id="item_id" class="form-select" required>
+                            <option value="">Pilih Item</option>
+                            @foreach ($items as $item)
+                                <option value="{{ $item->id }}">{{ $item->nama_barang }} (Stok:
+                                    {{ $item->stocks->qty ?? 0 }})</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-    <form action="{{ route('admin.stok.koreksi.store') }}" method="POST">
-        @csrf
-        <div class="mb-3">
-            <label for="item_id" class="form-label">Pilih Barang</label>
-            <select name="item_id" id="item_id" class="form-select" required>
-                <option value="">-- Pilih --</option>
-                @foreach ($items as $item)
-                    <option value="{{ $item->id }}">{{ $item->nama_barang }} (Stok: {{ $item->stocks->qty ?? 0 }})</option>
-                @endforeach
-            </select>
+                    <div class="mb-3">
+                        <label for="qty_fisik" class="form-label">Stok Fisik Saat Ini</label>
+                        <input type="number" step="0.01" name="qty_fisik" id="qty_fisik" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="keterangan" class="form-label">Catatan / Keterangan</label>
+                        <textarea name="keterangan" class="form-control"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Simpan Koreksi</button>
+                </form>
+            </div>
+
         </div>
 
-        <div class="mb-3">
-            <label for="qty_fisik" class="form-label">Stok Fisik Saat Ini</label>
-            <input type="number" step="0.01" name="qty_fisik" id="qty_fisik" class="form-control" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="keterangan" class="form-label">Catatan / Keterangan</label>
-            <textarea name="keterangan" class="form-control"></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-success">Simpan Koreksi</button>
-    </form>
-</div>
+    </div>
 @endsection

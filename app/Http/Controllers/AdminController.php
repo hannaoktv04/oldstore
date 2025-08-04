@@ -56,7 +56,7 @@ class AdminController extends Controller
             ->take(12)
             ->get();
 
-        return view('admin.dashboard', compact(
+        return view('admin.dashboard.index', compact(
             'pengajuanBaru',
             'perluDikirim',
             'pengajuanSelesai',

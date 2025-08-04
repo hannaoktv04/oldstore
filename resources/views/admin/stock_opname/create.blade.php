@@ -10,13 +10,13 @@
 
     <form action="{{ route('admin.stock_opname.store') }}" method="POST">
         @csrf
-        <div class="row mb-4 border-bottom pb-4">
-            <div class="col-md-4 mb-3">
+        <div class="row mb-12 border-bottom pb-4">
+            <div class="col-md-6 mb-3">
                 <label class="form-label small text-muted">Periode Bulan</label>
                 <input type="text" name="periode_bulan" class="form-control form-control-sm" required>
             </div>
 
-            <div class="col-md-4 mb-3">
+            <div class="col-md-6 mb-3">
                 <label class="form-label small text-muted">Tanggal Mulai</label>
                 <input type="date" name="tanggal_mulai" class="form-control form-control-sm"
                     value="{{ now()->format('Y-m-d') }}"
@@ -34,21 +34,21 @@
 
         <div class="table-responsive mb-4">
             <table class="table table-bordered" id="datatable-opname">
-                <thead class="table-light">
+                <thead>
                     <tr>
-                        <th>Kode Barang</th>
-                        <th>Nama Barang</th>
-                        <th>Satuan</th>
-                        <th>Stok Sistem</th>
+                        <th class="text-center">Kode Barang</th>
+                        <th class="text-center">Nama Barang</th>
+                        <th class="text-center">Satuan</th>
+                        <th class="text-center">Stok Sistem</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($items as $item)
                     <tr>
-                        <td class="text-center">{{ $item->kode_barang }}</td>
+                        <td class="text-start">{{ $item->kode_barang }}</td>
                         <td>{{ $item->nama_barang }}</td>
                         <td class="text-center">{{ $item->satuan->nama_satuan }}</td>
-                        <td class="text-center">{{ number_format($item->stocks->qty ?? 0) }}</td>
+                        <td class="text-end">{{ number_format($item->stocks->qty ?? 0) }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -71,7 +71,7 @@
 <script>
     $(document).ready(function () {
         $('#datatable-opname').DataTable({
-            paging: true,
+            paging: false,
             searching: true,
             ordering: true,
             info: false,
@@ -83,11 +83,7 @@
                 lengthMenu: "Tampilkan _MENU_ entri",
                 zeroRecords: "Data tidak ditemukan",
                 info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-                infoEmpty: "Tidak ada data tersedia",
-                paginate: {
-                    previous: "Sebelumnya",
-                    next: "Berikutnya"
-                }
+                infoEmpty: "Tidak ada data tersedia"
             }
         });
     });

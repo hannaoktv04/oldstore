@@ -129,15 +129,21 @@
               <small class="text-muted">{{ Auth::user()->role }}</small>
             </div>
             <hr>
-            @if(Auth::user()->hasRole('admin'))
-              <a class="dropdown-item d-block" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+           @if(Auth::user()->hasRole('admin'))
+              <a href="{{ route('admin.dashboard') }}"
+                class="dropdown-item d-block bg-white nav-link {{ Request::routeIs('admin.dashboard') ? 'text-success fw-semibold' : 'text-dark' }}">
+                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+              </a>
             @else
-              <a class="dropdown-item d-block" href="{{ route('user.wishlist') }}"><i class="bi bi-heart me-2"></i>My Wishlist</a>
+              <a href="{{ route('user.wishlist') }}"
+                class="dropdown-item d-block bg-white nav-link {{ Request::routeIs('user.wishlist') ? 'text-success fw-semibold' : 'text-dark' }}">
+                <i class="bi bi-heart me-2"></i>My Wishlist
+              </a>
             @endif
             <hr>
             <form action="{{ route('logout') }}" method="POST">
               @csrf
-              <button type="submit" class="dropdown-item text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
+              <button type="submit" class="dropdown-item bg-white text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
             </form>
           @endguest
         </div>
@@ -162,4 +168,3 @@
     </form>
   </div>
 </div>
-

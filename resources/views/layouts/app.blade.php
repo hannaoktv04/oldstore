@@ -136,9 +136,6 @@
                 @if(!(Auth::check() && Auth::user()->role === 'admin'))
                     @include('components.footer')
                 @endif
-                @if(!(Auth::check() && Auth::user()->role === 'admin'))
-                    @include('components.footer')
-                @endif
 
                 <div class="content-backdrop fade"></div>
             </div>

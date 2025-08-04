@@ -1,109 +1,133 @@
 @extends('layouts.admin')
 
-@section('title', 'Manajemen Stock Opname')
-
 @section('content')
-<div class="py-4">
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Stock Opname</li>
-        </ol>
-    </nav>
-    <div class="container-fluid mb-2 d-flex justify-content-between">
-        <h4>Riwayat Stock Opname</h4>
-        <a href="{{ route('admin.stock_opname.create') }}" class="btn btn-sm btn-primary">+ Mulai Sesi Baru</a>
-    </div>
-    <div style="overflow-x: auto;">
-        <table class="table table-bordered table-striped" id="opnameTable" style="width:100%">
-            <thead class="text-center">
-                <tr>
-                    <th>Periode</th>
-                    <th>Tanggal Mulai</th>
-                    <th>Tanggal Selesai</th>
-                    <th>Admin</th>
-                    <th>Status</th>
-                    <th>Keterangan</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($sessions as $session)
-                <tr class="text-center">
-                    <td>{{ $session->periode_bulan }}</td>
-                    <td>{{ $session->tanggal_mulai->format('Y-m-d') }}</td>
-                    <td>{{ $session->tanggal_selesai ? $session->tanggal_selesai->format('Y-m-d') : '-' }}</td>
-                    <td>{{ $session->opener->nama ?? '-' }}</td>
-                    <td>
-                        <span class="badge bg-{{ $session->status === 'aktif' ? 'success' : 'secondary' }}">
-                            {{ ucfirst($session->status) }}
-                        </span>
-                    </td>
-                    <td class="text-wrap text-start">{{ $session->catatan }}</td>
-                    <td>
-                        @switch($session->status)
-                        @case('aktif')
-                        <a href="{{ route('admin.stock_opname.edit', $session) }}"
-                            class="btn btn-sm btn-outline-warning me-1" title="Edit">
-                            <i class="bi bi-pencil-square"></i>
-                        </a>
-                        <form action="{{ route('admin.stock_opname.endSession', $session) }}" method="POST"
-                            class="d-inline">
-                            @csrf
-                            <input type="hidden" name="tanggal_selesai" value="{{ now()->toDateString() }}">
-                            <button type="submit" class="btn btn-sm btn-outline-success me-1" title="Tutup Sesi">
-                                <i class="bi bi-check2"></i>
-                            </button>
-                        </form>
-                        <form action="{{ route('admin.stock_opname.destroy', $session) }}" method="POST"
-                            class="d-inline form-delete">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger me-1"
-                                onclick="return confirm('Akhiri sesi ini?')" title="Hapus">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </form>
-                        @break
-                        @case('menunggu')
-                        <a href="{{ route('admin.stock_opname.edit', $session) }}"
-                            class="btn btn-sm btn-outline-warning me-1" title="Edit">
-                            <i class="bi bi-pencil-square"></i>
-                        </a>
-                        <form action="{{ route('admin.stock_opname.destroy', $session) }}" method="POST"
-                            class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger me-1"
-                                onclick="return confirm('Hapus sesi ini?')" title="Hapus">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </form>
-                        @break
-                        @default
-                        <a href="{{ route('admin.stock_opname.show', $session) }}"
-                            class="btn btn-sm btn-outline-info me-1" title="Lihat">
-                            <i class="bi bi-file-earmark-text"></i>
-                        </a>
-                        @endswitch
-                    </td>
+    <div class="container">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Daftar Sesi Stock Opname</h4>
+                <a href="{{ route('admin.stock_opname.create') }}" class="btn btn-primary">
+                    <i class="ri ri-add-line"> </i> Mulai Sesi
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="opnameTable">
+                        <thead class="text-center">
+                            <tr>
+                                <th>Periode</th>
+                                <th>Tanggal Mulai</th>
+                                <th>Tanggal Selesai</th>
+                                <th>Admin</th>
+                                <th>Status</th>
+                                <th>Keterangan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($sessions as $session)
+                                <tr class="text-center">
+                                    <td>{{ $session->periode_bulan }}</td>
+                                    <td>{{ $session->tanggal_mulai->format('Y-m-d') }}</td>
+                                    <td>{{ $session->tanggal_selesai ? $session->tanggal_selesai->format('Y-m-d') : '-' }}
+                                    </td>
+                                    <td>{{ $session->opener->nama ?? '-' }}</td>
+                                    <td>
+                                        <span
+                                            class="badge bg-{{ $session->status === 'aktif' ? 'success' : ($session->status === 'selesai' ? 'secondary' : 'warning') }}">
+                                            {{ ucfirst($session->status) }}
+                                        </span>
+                                    </td>
+                                    <td class="text-wrap text-start">{{ $session->catatan }}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-icon rounded-pill waves-effect" type="button"
+                                            data-bs-strategy="fixed" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="ri-more-2-line fs-5"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            @if ($session->status === 'aktif')
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('admin.stock_opname.edit', $session) }}">
+                                                        Edit
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <form action="{{ route('admin.stock_opname.endSession', $session) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="tanggal_selesai"
+                                                            value="{{ now()->toDateString() }}">
+                                                        <button type="submit" class="dropdown-item">
+                                                            </i>Tutup Sesi
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <form action="{{ route('admin.stock_opname.destroy', $session) }}"
+                                                        method="POST" class="form-delete">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="dropdown-item text-danger"
+                                                            onclick="return confirm('Anda yakin ingin menghapus sesi ini?')">
+                                                            Hapus
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            @elseif ($session->status === 'menunggu')
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('admin.stock_opname.edit', $session) }}">
+                                                        Edit
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <form action="{{ route('admin.stock_opname.destroy', $session) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="dropdown-item text-danger"
+                                                            onclick="return confirm('Anda yakin ingin menghapus sesi ini?')">
+                                                            Hapus
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            @else
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('admin.stock_opname.show', $session) }}">
+                                                        Lihat Detail
+                                                    </a>
+                                                </li>
+                                            @endif
+                                        </ul>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+
+        </div>
+
     </div>
-</div>
 @endsection
 
 @push('scripts')
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             $('#opnameTable').DataTable({
-                scrollX: true,
                 responsive: true,
                 language: {
                     search: "Cari:",
+                    responsive: true,
                     lengthMenu: "Tampilkan _MENU_ data",
                     info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
                     infoEmpty: "Tidak ada data yang tersedia",
@@ -122,5 +146,5 @@
                 ]
             });
         });
-</script>
+    </script>
 @endpush

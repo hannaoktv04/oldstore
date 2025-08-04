@@ -13,7 +13,7 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-   public function login(Request $request)
+    public function login(Request $request)
     {
         $credentials = $request->only('username', 'password');
 
@@ -21,7 +21,7 @@ class LoginController extends Controller
             $user = Auth::user();
 
             if ($user->hasRole('admin')) {
-                return redirect()->route('admin.dashboard');
+                return redirect()->route('admin.dashboard.index');
             } elseif ($user->hasRole('staff_pengiriman')) {
                 return redirect()->route('staff-pengiriman.dashboard');
             } else {
@@ -43,6 +43,4 @@ class LoginController extends Controller
 
         return redirect()->route('login');
     }
-
-
 }
