@@ -13,20 +13,12 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-   public function login(Request $request)
+    public function login(Request $request)
     {
         $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-
-            if ($user->hasRole('admin')) {
-                return redirect()->route('admin.dashboard');
-            } elseif ($user->hasRole('staff_pengiriman')) {
-                return redirect()->route('staff-pengiriman.dashboard');
-            } else {
-                return redirect()->route('home');
-            }
+            return redirect()->route('portal'); // 👈 diarahkan ke route portal
         }
 
         return back()->withErrors([
@@ -37,12 +29,9 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect()->route('login');
     }
-
-
 }

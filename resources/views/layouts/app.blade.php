@@ -132,13 +132,8 @@
                 <div class="container-xxl flex-grow-1 container-p-y">
                     @yield('content')
                 </div>
-
-                @if(!(Auth::check() && Auth::user()->role === 'admin'))
-                    @include('components.footer')
-                @endif
-                @if(!(Auth::check() && Auth::user()->role === 'admin'))
-                    @include('components.footer')
-                @endif
+               
+                @include('components.footer')
 
                 <div class="content-backdrop fade"></div>
             </div>

@@ -15,5 +15,6 @@ class NotifikasiController extends Controller
         }
 
         return back()->with('error', 'Akses ditolak.');
+    
     }
 }

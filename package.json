@@ -7,10 +7,13 @@
     },
     "devDependencies": {
         "@popperjs/core": "^2.11.6",
+        "autoprefixer": "^10.4.21",
         "axios": "^1.6.4",
         "bootstrap": "^5.3.7",
         "laravel-vite-plugin": "^1.0.0",
+        "postcss": "^8.5.6",
         "sass": "^1.56.1",
+        "tailwindcss": "^4.1.11",
         "vite": "^5.0.0"
     },
     "dependencies": {
@@ -21,5 +24,23 @@
         "html5-qrcode": "^2.3.8",
         "jquery": "^3.7.1",
         "sweetalert2": "^11.22.2"
-    }
+    },
+    "name": "e-persediaan-new",
+    "version": "1.0.0",
+    "description": "",
+    "main": "vite.config.js",
+    "directories": {
+        "test": "tests"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/hannaoktv04/e-persediaan.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/hannaoktv04/e-persediaan/issues"
+    },
+    "homepage": "https://github.com/hannaoktv04/e-persediaan#readme"
 }

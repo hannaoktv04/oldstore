@@ -46,9 +46,11 @@
       <ul class="list-group list-group-flush">
         @foreach ($categories as $category)
           <li class="list-group-item px-3 py-2">
-            <a href="{{ route('kategori.show', $category->id) }}" class="text-decoration-none d-flex justify-content-between align-items-center w-100">
-              {{ $category->categori_name }}
-              <span class="badge bg-success rounded-pill">{{ $category->items_count }}</span>
+            <a href="{{ route('kategori.show', $category->id) }}"
+              class="nav-link text-decoration-none d-flex justify-content-between align-items-center w-100
+                      {{ request()->routeIs('kategori.show') && request()->route('id') == $category->id ? 'text-success fw-semibold' : 'text-dark' }}">
+                {{ $category->categori_name }}
+                <span class="badge bg-success rounded-pill">{{ $category->items_count }}</span>
             </a>
           </li>
         @endforeach
