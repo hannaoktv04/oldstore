@@ -1,14 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container mt-4">
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('admin.items') }}">Daftar Barang</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Tambah Barang</li>
-        </ol>
-    </nav>
+<div class="container">
 
     @foreach (['success' => 'success', 'error' => 'danger'] as $key => $type)
     @if (session($key))
@@ -19,9 +12,8 @@
     @endif
     @endforeach
 
-    <form action="{{ route('admin.item.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.items.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-
         <input type="hidden" name="thumbnail_index" id="thumbnail_index" value="0">
         <div class="card shadow-sm p-4 mb-4">
             <h6 class="fw-semibold mb-3">Foto Item <span class="text-danger">*</span></h6>
@@ -31,7 +23,7 @@
                         <input type="file" name="photo_Item[]" accept="image/*" class="d-none"
                             onchange="handleImageUpload(this)" multiple>
                         <div class="upload-placeholder">
-                            <i class="bi bi-image fs-2 d-block text-secondary"></i>
+                            <i class="ri-image-add-line"></i>
                         </div>
                     </label>
                 </div>
@@ -40,12 +32,10 @@
 
         <div class="card shadow-sm p-4 mb-4">
             <h6 class="fw-semibold mb-3">Informasi Item</h6>
-
             <div class="mb-3">
                 <label for="nama_barang" class="form-label">Nama Item <span class="text-danger">*</span></label>
                 <input type="text" name="nama_barang" id="nama_barang" class="form-control" maxlength="100" required>
             </div>
-
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label for="kode_barang" class="form-label">Kode Item <span class="text-danger">*</span></label>
@@ -72,7 +62,6 @@
                 </div>
 
             </div>
-
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="stok_awal" class="form-label">Stok Awal <span class="text-danger">*</span></label>
@@ -102,7 +91,6 @@
             </button>
         </div>
     </form>
-
     <div class="modal fade" id="cropperModal" tabindex="-1" aria-labelledby="cropperModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content border-0">
@@ -126,3 +114,197 @@
 </div>
 @endsection
 
+@push('scripts')
+<script>
+    let cropper = null;
+let cropTargetImage = null;
+let cropTargetInput = null;
+
+window.handleImageUpload = function (input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const wrapper = document.getElementById("imageUploadWrapper");
+        if (!wrapper) return;
+
+        const box = document.createElement("div");
+        box.className = "upload-box";
+        box.innerHTML = `
+            <img src="${e.target.result}" class="preview" onclick="setThumbnail(this)">
+            <div class="tools">
+                <i class="ri-crop-line" onclick="openCropper(this)"></i>
+                <i class="ri-delete-bin-7-line" onclick="removeImage(this)"></i>
+            </div>
+            <span class="badge bg-success position-absolute top-0 start-0 m-1 d-none">Thumbnail</span>
+            <input type="file" name="photo_Item[]" accept="image/*" style="display:none;">
+        `;
+
+        const hiddenInput = box.querySelector('input[type="file"]');
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        hiddenInput.files = dt.files;
+
+        wrapper.insertBefore(box, wrapper.lastElementChild);
+        input.value = "";
+        if (!wrapper.querySelector(".upload-trigger")) {
+            const newBox = document.createElement("div");
+            newBox.className = "upload-box";
+            newBox.innerHTML = `
+                <label class="upload-trigger">
+                    <input type="file" accept="image/*" class="d-none" onchange="handleImageUpload(this)">
+                    <div class="upload-placeholder">
+                        <i class="bi bi-image fs-2 d-block text-secondary"></i>
+                        <span class="text-secondary small">Tambah Gambar</span>
+                    </div>
+                </label>
+            `;
+            wrapper.appendChild(newBox);
+        }
+    };
+    reader.readAsDataURL(file);
+};
+
+window.removeImage = function (el, imageId = null) {
+    const box = el.closest(".upload-box");
+    if (!box) return;
+
+    if (imageId) {
+        if (confirm("Yakin ingin menghapus gambar ini?")) {
+            fetch(`/admin/items/images/${imageId}`, {
+                method: "DELETE",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector(
+                        'meta[name="csrf-token"]'
+                    ).content,
+                    Accept: "application/json",
+                },
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.success) {
+                        box.remove();
+                        updateThumbnailIndex();
+                    } else {
+                        alert(data.message || "Gagal menghapus gambar");
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                    alert("Terjadi kesalahan saat menghapus gambar");
+                });
+        }
+    } else {
+        box.remove();
+        updateThumbnailIndex();
+    }
+};
+
+function updateThumbnailIndex() {
+    const wrapper = document.getElementById("imageUploadWrapper");
+    const selectedBox = wrapper?.querySelector(".selected-thumbnail");
+    const newIndex = selectedBox
+        ? Array.from(wrapper.children).indexOf(selectedBox)
+        : 0;
+    const thumbnailIndex = document.getElementById("thumbnail_index");
+    if (thumbnailIndex) thumbnailIndex.value = newIndex;
+}
+
+window.setThumbnail = function (imgEl) {
+    const box = imgEl.closest(".upload-box");
+    if (!box) return;
+
+    const allBoxes = document.querySelectorAll(
+        "#imageUploadWrapper .upload-box"
+    );
+    allBoxes.forEach((b) => {
+        b.classList.remove("selected-thumbnail");
+        b.querySelector(".badge")?.classList.add("d-none");
+    });
+
+    box.classList.add("selected-thumbnail");
+    box.querySelector(".badge")?.classList.remove("d-none");
+
+    const wrapper = document.getElementById("imageUploadWrapper");
+    const index = Array.from(wrapper.children).indexOf(box);
+    const thumbnailIndex = document.getElementById("thumbnail_index");
+    if (thumbnailIndex) thumbnailIndex.value = index;
+};
+
+window.openCropper = function (icon) {
+    const box = icon.closest(".upload-box");
+    const img = box?.querySelector("img.preview");
+    cropTargetImage = img;
+    cropTargetInput = box.querySelector('input[type="file"]');
+
+    if (!cropTargetInput && box?.hasAttribute("data-image-id")) {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.name = "photo_Item[]";
+        input.style.display = "none";
+        box.appendChild(input);
+        cropTargetInput = input;
+    }
+
+    const cropperImage = document.getElementById("cropperImage");
+    if (!cropperImage || !img) return;
+
+    if (cropper) {
+        cropper.destroy();
+        cropper = null;
+    }
+
+    cropperImage.src = img.src;
+
+    const modalEl = document.getElementById("cropperModal");
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
+
+    modalEl.addEventListener('shown.bs.modal', function onShown() {
+        modalEl.removeEventListener('shown.bs.modal', onShown);
+
+        cropper = new Cropper(cropperImage, {
+            aspectRatio: 1,
+            viewMode: 1,
+            autoCrop: true,
+            autoCropArea: 1,
+            responsive: true,
+            ready() {
+                this.cropper.setCropBoxData({
+                    width: 350, 
+                    height: 350
+                });
+            }
+        });
+    }, {once: true});
+};
+
+document.getElementById("saveCropBtn").addEventListener("click", function() {
+    if (cropper && cropTargetImage && cropTargetInput) {
+        const canvas = cropper.getCroppedCanvas({
+            width: 500,
+            height: 500,
+            minWidth: 256,
+            minHeight: 256,
+            maxWidth: 2000,
+            maxHeight: 2000,
+            fillColor: '#fff',
+            imageSmoothingEnabled: true,
+            imageSmoothingQuality: 'high',
+        });
+
+        canvas.toBlob(function(blob) {
+            cropTargetImage.src = canvas.toDataURL('image/jpeg', 0.92);
+            const file = new File([blob], 'cropped-image.jpg', { type: 'image/jpeg' });
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            cropTargetInput.files = dt.files;
+            bootstrap.Modal.getInstance(document.getElementById('cropperModal')).hide();
+            cropper.destroy();
+            cropper = null;
+        }, 'image/jpeg', 0.92);
+    }
+});
+</script>
+@endpush

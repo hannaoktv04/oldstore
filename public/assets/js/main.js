@@ -54,6 +54,7 @@ if (document.getElementById('layout-menu')) {
     onScroll();
   };
 
+
   setTimeout(function () {
     window.Helpers.initCustomOptionCheck();
   }, 1000);

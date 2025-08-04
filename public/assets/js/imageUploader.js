@@ -149,10 +149,17 @@ window.openCropper = function (icon) {
         modalEl.removeEventListener('shown.bs.modal', onShown);
 
         cropper = new Cropper(cropperImage, {
+<<<<<<< HEAD:resources/js/imageUploader.js
             aspectRatio: 1, 
             viewMode: 1,
             autoCrop: true,
             autoCropArea: 1, 
+=======
+            aspectRatio: 1,
+            viewMode: 1,
+            autoCrop: true,
+            autoCropArea: 1,
+>>>>>>> 40a1877c487ca4bf4bf56a8b1e1d46a642ae8b7b:public/assets/js/imageUploader.js
             responsive: true,
             ready() {
                 this.cropper.setCropBoxData({
@@ -179,6 +186,14 @@ document.getElementById("saveCropBtn").addEventListener("click", function() {
         });
 
         canvas.toBlob(function(blob) {
+            cropTargetImage.src = canvas.toDataURL('image/jpeg', 0.92);
+            const file = new File([blob], 'cropped-image.jpg', { type: 'image/jpeg' });
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            cropTargetInput.files = dt.files;
+            bootstrap.Modal.getInstance(document.getElementById('cropperModal')).hide();
+            cropper.destroy();
+            cropper = null;
         }, 'image/jpeg', 0.92);
     }
 });

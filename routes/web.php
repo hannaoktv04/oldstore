@@ -28,6 +28,7 @@ use App\Http\Controllers\StaffPengirimanController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DataTableController;
 
 
 
@@ -85,7 +86,7 @@ Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('
 Route::get('/', function () {
     if (auth()->check()) {
         return auth()->user()->role === 'admin'
-            ? redirect()->route('admin.dashboard')
+            ? redirect()->route('admin.dashboard.index')
             : redirect()->route('home');
     }
     return redirect()->route('login');
@@ -95,7 +96,7 @@ Route::get('/', function () {
 // ADMIN ROUTES (ADMIN-ONLY)
 // -------------------------
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard.index');
 
     Route::get('/pengajuan/status/{status}', action: [AdminController::class, 'pengajuanByStatus'])->name('admin.pengajuan.status');
     Route::get('/pengajuan/{pengajuan}/nota', [AdminPengajuanController::class, 'nota'])->name('admin.pengajuan.nota');
@@ -104,15 +105,14 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('/pengajuan/{pengajuan}/approve', [AdminPengajuanController::class, 'approve'])->name('admin.pengajuan.approve');
     Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('admin.pengajuan.reject');
 
-    Route::get('/items', [ItemController::class, 'index'])->name('admin.items');
-    Route::get('/add-item', action: [ItemController::class, 'create'])->name('admin.item.create');
-    Route::post('/add-item', [ItemController::class, 'store'])->name('admin.item.store');
-    Route::get('/items/{item}/edit', [ItemController::class, 'edit'])->name('admin.item.edit');
-    Route::put('/items/{item}', [ItemController::class, 'update'])->name('admin.item.update');
-    Route::delete('/items/{item}', [ItemController::class, 'destroy'])->name('admin.items.destroy');
 
+    Route::resource('/items', ItemController::class, ['as' => 'admin'
+    ]);
+    Route::get('/items-data', [ItemController::class, 'data'])->name('admin.items.data');
     Route::post('/items/bulk-action', [ItemController::class, 'bulkAction'])->name('admin.items.bulkAction');
-    Route::post('/items/toggle/{item}', [ItemController::class, 'toggleState'])->name('admin.items.toggle');
+    Route::post('/items/{item}/toggle-archive', [ItemController::class, 'toggleArchive'])->name('admin.items.toggleArchive');
+
+
     Route::delete('/items/images/{image}', [ItemController::class, 'deleteImage'])->name('admin.items.images.delete');
 
     Route::get('/wishlist', [AdminWishlistController::class, 'index'])->name('admin.wishlist.index');
@@ -149,7 +149,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
     Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::post('/users/{user}/assign-role', [UserController::class, 'assignRole'])->name('admin.users.assign-role');
-
 });
 
 // -------------------------
@@ -182,10 +181,15 @@ Route::middleware(['auth', 'role:staff_pengiriman'])->prefix('staff-pengiriman')
     Route::get('/waiting', [StaffPengirimanController::class, 'waiting'])->name('staff-pengiriman.waiting');
     Route::get('/selesai', [StaffPengirimanController::class, 'selesai'])->name('staff-pengiriman.selesai');
     Route::post('/assign/{id}', [StaffPengirimanController::class, 'assignToMe'])->name('staff-pengiriman.assign');
-
 });
 
 
 Route::get('/portal', function () {
     return view('portal.index');
 })->name('portal')->middleware('auth');
+
+
+Route::get('/portal', function () {
+    return view('portal.index');
+})->name('portal')->middleware('auth');
+

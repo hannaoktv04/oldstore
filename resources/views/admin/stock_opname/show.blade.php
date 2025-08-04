@@ -3,10 +3,10 @@
 @section('title', 'Detail Stock Opname')
 
 @section('content')
-<div class="my-4">
+<div class="mb-4">
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard.index') }}">Dashboard</a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.stock_opname.index') }}">Stock Opname</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ $session->periode_bulan }}</li>
         </ol>

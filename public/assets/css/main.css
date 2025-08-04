@@ -344,15 +344,6 @@ td .form-check {
 }
 
 
-.table th {
-    text-align: center !important;
-    font-weight: 700;
-    color: #1b1b1b !important;
-}
-.table td{
-    background-color: #ffffff !important;
-}
-
 .dataTables_wrapper .row {
     margin-left: 0;
     margin-right: 0;
@@ -539,12 +530,6 @@ td .form-check {
     }
 }
 
-.dataTables_filter input {
-    margin-left: 0.5em !important;
-}
-table.dataTable tbody td {
-    vertical-align: middle;
-}
 .form-label.small {
     font-size: 0.8rem;
     margin-bottom: 0.3rem;
@@ -560,8 +545,6 @@ table.dataTable tbody td {
 .qty-fisik {
     min-width: 100px;
 }
-
-
 
 
 .grayscale-card {

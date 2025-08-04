@@ -6,7 +6,7 @@
         <div class="card-body">
             <div class="table-responsive-sm">
                 <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
-                    <thead>
+                    <thead class="text-center">
                         <tr>
                             <th>No</th>
                             <th>Nama</th>
@@ -20,24 +20,24 @@
                     <tbody>
                         @foreach($users as $index => $user)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
+                            <td class="text-center">{{ $index + 1 }}</td>
                             <td>{{ $user->nama }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->username }}</td>
                             <td>
                                 @foreach($user->roles as $role)
-                                <span class="badge bg-primary">{{ $role->nama_role }}</span>
+                                <span class="badge bg-label-primary">{{ $role->nama_role }}</span>
                                 @endforeach
                             </td>
                             <td>
-                                <span class="badge {{ $user->active ? 'bg-success' : 'bg-danger' }}">
+                                <span class="badge {{ $user->active ? 'bg-label-success' : 'bg-label-danger' }}">
                                     {{ $user->active ? 'Aktif' : 'Nonaktif' }}
                                 </span>
                             </td>
                             <td>
-                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                <button class="btn" data-bs-toggle="modal"
                                     data-bs-target="#roleModal{{ $user->id }}">
-                                    <i class="bi bi-three-dots-vertical"></i>
+                                    <i class="ri-more-2-line"></i>
                                 </button>
                             </td>
                         </tr>
