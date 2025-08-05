@@ -130,8 +130,8 @@
             </div>
             <hr>
            @if(Auth::user()->hasRole('admin'))
-              <a href="{{ route('admin.dashboard') }}"
-                class="dropdown-item d-block bg-white nav-link {{ Request::routeIs('admin.dashboard') ? 'text-success fw-semibold' : 'text-dark' }}">
+              <a href="{{ route('admin.dashboard.index') }}"
+                class="dropdown-item d-block bg-white nav-link {{ Request::routeIs('admin.dashboard.index') ? 'text-success fw-semibold' : 'text-dark' }}">
                 <i class="bi bi-speedometer2 me-2"></i>Dashboard
               </a>
             @else

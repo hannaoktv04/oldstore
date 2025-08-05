@@ -1,7 +1,7 @@
 @props(['pengajuan'])
 
 <div class="modal fade" id="detailTransaksiModal-{{ $pengajuan->id }}" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-sm">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded-4 p-3">
       <div class="modal-header">
         <h5 class="modal-title">Detail Pengajuan</h5>

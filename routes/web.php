@@ -31,6 +31,12 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DataTableController;
 
 
+
+Route::get('/portal', function () {
+    return view('portal.index');
+})->name('portal.index');
+
+
 Route::get('/tes-barcode', function () {
     $generator = new BarcodeGeneratorPNG();
     $barcode = base64_encode($generator->getBarcode('1234567890', $generator::TYPE_CODE_128));
@@ -177,8 +183,13 @@ Route::middleware(['auth', 'role:staff_pengiriman'])->prefix('staff-pengiriman')
     Route::post('/assign/{id}', [StaffPengirimanController::class, 'assignToMe'])->name('staff-pengiriman.assign');
 });
 
-// VERSI 2
 
-// -------------------------
-// ADMIN ROUTES (ADMIN-ONLY)
-// -------------------------
+Route::get('/portal', function () {
+    return view('portal.index');
+})->name('portal')->middleware('auth');
+
+
+Route::get('/portal', function () {
+    return view('portal.index');
+})->name('portal')->middleware('auth');
+

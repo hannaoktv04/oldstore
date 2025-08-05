@@ -10,7 +10,6 @@
 @endphp
 
 <div class="sidebar-admin">
-    {{-- Produk --}}
     <ul class="nav flex-column mb-2">
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between text-dark" data-bs-toggle="collapse"

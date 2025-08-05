@@ -112,7 +112,7 @@
 
             <div class="modal fade" id="statusModal-{{ $request->id }}" tabindex="-1"
                 aria-labelledby="statusModalLabel-{{ $request->id }}" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content rounded-4 p-3">
                         <div class="modal-header border-0">
                             <h5 class="modal-title">Status Pesanan</h5>
