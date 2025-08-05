@@ -3,11 +3,11 @@
 <div class="modal fade" id="detailTransaksiModal-{{ $pengajuan->id }}" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-sm">
     <div class="modal-content rounded-4 p-3">
-      <div class="modal-header border-0">
+      <div class="modal-header">
         <h5 class="modal-title">Detail Pengajuan</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body px-3">
+      <div class="modal-body">
         <ul class="list-unstyled small">
           <li class="mb-3">
             <strong>✅ Pengajuan Diajukan</strong><br>
