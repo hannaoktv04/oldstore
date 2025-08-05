@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\User;
 use App\Models\ItemLog;
 use App\Models\ItemRequest;
 use App\Models\ItemRequestDetail;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
 use App\Models\ItemWishlist;
-use App\Models\User;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -17,8 +16,14 @@ class AdminController extends Controller
     {
         $pengajuanBaru = ItemRequest::where('status', 'submitted')->count();
         $perluDikirim = ItemRequest::where('status', 'approved')->count();
+        $sedangDikirim = ItemRequest::where('status', 'delivered')->count(); 
         $pengajuanSelesai = ItemRequest::where('status', 'received')->count();
         $pembatalan = ItemRequest::where('status', 'rejected')->count();
+
+        $totalBarang = Item::count();
+        $stokKritis = Item::whereHas('stocks', function ($query) {
+            $query->where('qty', '<=', 5);
+        })->count();
 
         $tahunDipilih = $request->input('tahun', date('Y'));
         $bulanDipilih = $request->input('bulan', date('m'));
@@ -45,7 +50,7 @@ class AdminController extends Controller
             ->groupBy('item_id')
             ->orderByDesc('total')
             ->with('item.category', 'item.photo')
-            ->take(12)
+            ->take(10)
             ->get();
 
         $topWishlist = ItemWishlist::whereYear('created_at', $tahunDipilih)
@@ -53,20 +58,40 @@ class AdminController extends Controller
             ->groupBy('nama_barang', 'category_id')
             ->orderByDesc('total')
             ->with('category')
-            ->take(12)
+            ->take(10)
             ->get();
+
+        $bulanList = [
+            1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr',
+            5 => 'Mei', 6 => 'Jun', 7 => 'Jul', 8 => 'Agu',
+            9 => 'Sep', 10 => 'Okt', 11 => 'Nov', 12 => 'Des'
+        ];
+
+        $grafikBulanan = [];
+        foreach (range(1, 12) as $i) {
+            $grafikBulanan[] = $barangKeluarPerBulan[$i] ?? 0;
+        }
+
+        $notifikasi = [];
+        if ($stokKritis > 0) $notifikasi[] = "Ada {$stokKritis} barang dengan stok menipis.";
+        if ($perluDikirim > 0) $notifikasi[] = "{$perluDikirim} pengajuan perlu dikirim.";
 
         return view('admin.dashboard.index', compact(
             'pengajuanBaru',
             'perluDikirim',
             'pengajuanSelesai',
+            'sedangDikirim',
             'pembatalan',
-            'barangKeluarPerBulan',
-            'barangKeluarHarian',
+            'totalBarang',
+            'stokKritis',
             'tahunDipilih',
             'bulanDipilih',
+            'grafikBulanan',
+            'bulanList',
+            'barangKeluarHarian',
             'topProduk',
-            'topWishlist'
+            'topWishlist',
+            'notifikasi'
         ));
     }
 

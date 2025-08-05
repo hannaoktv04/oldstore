@@ -12,7 +12,7 @@
     $user = Auth::user();
     $route = 'home'; // default
     if ($user && $user->hasRole('admin')) {
-        $route = 'admin.dashboard';
+        $route = 'admin.dashboard.index';
     } elseif ($user && $user->hasRole('staff_pengiriman')) {
         $route = 'staff-pengiriman.dashboard';
     }
