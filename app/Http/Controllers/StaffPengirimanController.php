@@ -135,6 +135,11 @@ class StaffPengirimanController extends Controller
             ]
         );
 
+        $pengajuan->update([
+            'status' => 'delivered',
+            'tanggal_pengiriman' => now(),
+        ]);
+
         return redirect()->route('staff-pengiriman.onprogress')->with('success', 'Pengiriman berhasil diambil oleh Anda.');
     }
 

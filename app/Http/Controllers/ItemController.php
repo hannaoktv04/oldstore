@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\ItemImage;
 use App\Models\ItemStock;
 use App\Models\ItemLog;
+use App\Models\ItemState;
 use App\Models\StockNotification;
 use App\Models\StockAdjustment;
 use App\Models\Satuan;
@@ -53,14 +54,21 @@ class ItemController extends Controller
                 'nama_barang'   => $validated['nama_barang'],
                 'kode_barang'   => $validated['kode_barang'],
                 'stok_minimum'  => $validated['stok_minimum'],
-                'satuan_id'        => $validated['satuan'],
+                'satuan_id'     => $validated['satuan'],
                 'deskripsi'     => $validated['deskripsi'],
                 'category_id'   => $validated['category_id'],
             ]);
 
+
+
             ItemStock::create([
                 'item_id' => $item->id,
                 'qty'     => $validated['stok_awal'],
+            ]);
+
+            ItemState::create([
+                'item_id' => $item->id,
+                'is_archived' => false,
             ]);
 
             if ($validated['stok_awal'] > 0) {
@@ -210,12 +218,9 @@ class ItemController extends Controller
 
     public function data(Request $request)
     {
-        // $items = Item::with(['category', 'stocks', 'state'])->select('items.*');
-         $items = Item::with(['category', 'stocks', 'state'])
-                     ->leftJoin('item_stocks', 'items.id', '=', 'item_stocks.item_id')
-                     ->select('items.*');
-
-        // Terapkan filter berdasarkan input dari request
+        $items = Item::with(['category', 'stocks', 'state'])
+            ->leftJoin('item_stocks', 'items.id', '=', 'item_stocks.item_id')
+            ->select('items.*');
         $items->when($request->get('kategori'), function ($query, $categoryId) {
             return $query->where('items.category_id', $categoryId);
         });
@@ -239,7 +244,7 @@ class ItemController extends Controller
                 return $query->where('item_stocks.qty', '=', 0);
             } elseif ($stok === 'menipis') {
                 return $query->where('item_stocks.qty', '>', 0)
-                             ->whereRaw('item_stocks.qty <= items.stok_minimum');
+                    ->whereRaw('item_stocks.qty <= items.stok_minimum');
             } elseif ($stok === 'aman') {
                 return $query->whereRaw('item_stocks.qty > items.stok_minimum');
             }
@@ -298,34 +303,23 @@ class ItemController extends Controller
             ->rawColumns(['checkbox', 'produk', 'stok', 'status', 'action'])
             ->make(true);
     }
-    // public function show(Item $item)
-    // {
-    //     $item->load(['images', 'category', 'stocks', 'satuan', 'state']);
-    //     $item->full_photo_url = $item->photo_url ? asset('storage/' . $item->photo_url) : asset('assets/img/default.png');
 
-    //     if (request()->ajax()) {
-    //         return response()->json($item);
-    //     }
-    //     return view('admin.item.show');
-    // }
+    public function show(Item $item)
+    {
+        $item->load(['images', 'category', 'stocks', 'satuan', 'state']);
+        $item->full_photo_url = $item->photo_url ? asset('storage/' . $item->photo_url) : asset('assets/img/default.png');
+        $galleryUrls = [];
+        foreach ($item->images as $image) {
+            $galleryUrls[] = asset('storage/' . $image->image);
+        }
+        $item->gallery_urls = $galleryUrls;
 
+        if (request()->ajax()) {
+            return response()->json($item);
+        }
 
-public function show(Item $item)
-{
-    $item->load(['images', 'category', 'stocks', 'satuan', 'state']);
-    $item->full_photo_url = $item->photo_url ? asset('storage/' . $item->photo_url) : asset('assets/img/default.png');
-    $galleryUrls = [];
-    foreach ($item->images as $image) {
-        $galleryUrls[] = asset('storage/' . $image->image);
+        return view('admin.items.show', compact('item'));
     }
-    $item->gallery_urls = $galleryUrls;
-
-    if (request()->ajax()) {
-        return response()->json($item);
-    }
-
-    return view('admin.items.show', compact('item'));
-}
 
 
     public function toggleArchive(Item $item)
@@ -358,7 +352,7 @@ public function show(Item $item)
                 else $item->state->update(['is_archived' => false]);
             }
         }
-        return response()->json(['success' => true, 'message' => count($items) . ' item berhasil di'.$action]);
+        return response()->json(['success' => true, 'message' => count($items) . ' item berhasil di' . $action]);
     }
 
     public function deleteImage(ItemImage $image)

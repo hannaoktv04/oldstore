@@ -8,19 +8,19 @@
     <div class="d-flex justify-content-center justify-content-md-end gap-3">
         <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
         data-bs-target="#approveModal-{{ $pengajuan->id }}" title="Setujui">
-            <i class="bi bi-check-lg"></i>
+            <i class="ri-check-line"></i>
         </button>
 
         <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
         data-bs-target="#rejectModal-{{ $pengajuan->id }}" title="Tolak">
-            <i class="bi bi-x-lg"></i>
+            <i class="ri-close-line"></i>
         </button>
     </div>
 
 @elseif ($status === 'approved')
     <div class="d-flex justify-content-center justify-content-md-end gap-3 align-items-center">
         <button onclick="printResi({{ $pengajuan->id }})" class="btn btn-sm btn-outline-primary">
-            <i class="bi bi-printer" title="Cetak Resi"></i>
+            <i class="ri-printer-line" title="Cetak Resi"></i>
         </button>
 
         <div id="resi-{{ $pengajuan->id }}" style="display: none;">
@@ -29,11 +29,11 @@
 
         @if(!$pengajuan->itemDelivery || !$pengajuan->itemDelivery->staff_pengiriman)
             <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#assignModal-{{ $pengajuan->id }}">
-                <i class="bi bi-truck" title="Assign Staff Pengiriman"></i>
+                <i class="ri-truck-line" title="Assign Staff Pengiriman"></i>
             </button>
         @else
             <small class="text-muted">
-                Sudah diassign ke: 
+                Sudah diassign ke:
                 <strong>{{ $pengajuan->itemDelivery->staff->nama ?? 'Staff tidak ditemukan' }}</strong>
             </small>
         @endif
@@ -49,7 +49,7 @@
 @elseif ($status === 'received')
 <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
     data-bs-target="#detailTransaksiModal-{{ $pengajuan->id }}">
-    <i class="bi bi-three-dots" title="Cetak Nota"></i>
+    <i class="ri-more-2-line" title="Cetak Nota"></i>
 </button>
 
 @elseif ($status === 'rejected')

@@ -31,7 +31,7 @@ class StockAdjustmentController extends Controller
             $qtySebelum = $stock->qty ?? 0;
             $qtySelisih = $qtyFisik - $qtySebelum;
 
-            $adjustment = StockAdjustment::create([
+            $adjustment = StockAdjustment::create(attributes: [
                 'item_id' => $itemId,
                 'qty_sebelum' => $qtySebelum,
                 'qty_fisik' => $qtyFisik,
@@ -53,12 +53,6 @@ class StockAdjustmentController extends Controller
                 'sumber_id' => $adjustment->id,
                 'deskripsi' => 'Koreksi stok',
             ]);
-
-            $item = Item::find($itemId);
-            if ($item) {
-                $item->stok_minimum = $qtyFisik;
-                $item->save();
-            }
 
             if ($qtySebelum <= 0 && $qtyFisik > 0) {
                 StockNotification::create([

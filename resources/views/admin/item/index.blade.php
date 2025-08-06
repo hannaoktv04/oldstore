@@ -203,7 +203,7 @@
                         data.gallery_urls.forEach(function(url) {
                             photoHtml += `
                                 <a href="${url}" target="_blank">
-                                    <img src="${url}" class="img-thumbnail" alt="Gambar Produk" style="height: 100px; width: auto; object-fit: cover;">
+                                    <img src="${url}" class="img-thumbnail rounded-4" alt="Gambar Produk" style="height: 100px; width: 100px; object-fit: cover;">
                                 </a>
                             `;
                         });

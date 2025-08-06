@@ -28,9 +28,9 @@
                 <div class="list-group list-group-flush">
                     @foreach($item->request->details as $detail)
                         <div class="list-group-item d-flex align-items-center py-2">
-                            <img src="{{ $detail->item->gallery->first() 
-                                ? asset('storage/' . $detail->item->gallery->first()) 
-                                : asset('assets/img/default.png') 
+                            <img src="{{ $detail->item->gallery->first()
+                                ? asset('storage/' . $detail->item->gallery->first())
+                                : asset('assets/img/default.png')
                             }}" alt="{{ $detail->item->nama_barang }}" width="60" height="60" class="rounded border me-3" style="object-fit: cover;">
 
                             <div>
