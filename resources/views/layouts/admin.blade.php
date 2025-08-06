@@ -132,6 +132,8 @@
     <!-- Main JS -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
     <!-- Page JS -->
     @stack('scripts')
     @include('partials.swal')
