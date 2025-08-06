@@ -51,7 +51,7 @@ class Item extends Model
 
     public function state()
     {
-        return $this->hasOne(ItemState::class);
+        return $this->hasOne(ItemState::class, 'item_id');
     }
 
     public function purchaseOrderDetails()

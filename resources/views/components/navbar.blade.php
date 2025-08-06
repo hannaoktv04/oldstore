@@ -57,7 +57,7 @@
             <h6 class="mb-3">Barang yang ada di Keranjang</h6>
             @forelse($cartItems as $item)
               <div class="d-flex align-items-start mb-2">
-                <img src="{{ asset('storage/' . ($item->item->photo->image ?? 'placeholder.jpg')) }}" width="50" class="me-2 rounded">
+                <img src="{{ asset('storage/' . ($item->item->photo->image ?? 'placeholder.jpg')) }}" width="50" class="me-2 rounded" style="object-fit: cover;">
                 <div>
                   <small>{{ $item->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</small><br>
                   <strong>{{ $item->item->nama_barang }}</strong><br>

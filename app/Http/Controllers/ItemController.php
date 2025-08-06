@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\ItemImage;
 use App\Models\ItemStock;
 use App\Models\ItemLog;
+use App\Models\ItemState;
 use App\Models\StockNotification;
 use App\Models\StockAdjustment;
 use App\Models\Satuan;
@@ -53,14 +54,21 @@ class ItemController extends Controller
                 'nama_barang'   => $validated['nama_barang'],
                 'kode_barang'   => $validated['kode_barang'],
                 'stok_minimum'  => $validated['stok_minimum'],
-                'satuan_id'        => $validated['satuan'],
+                'satuan_id'     => $validated['satuan'],
                 'deskripsi'     => $validated['deskripsi'],
                 'category_id'   => $validated['category_id'],
             ]);
 
+
+
             ItemStock::create([
                 'item_id' => $item->id,
                 'qty'     => $validated['stok_awal'],
+            ]);
+
+            ItemState::create([
+                'item_id' => $item->id,
+                'is_archived' => false,
             ]);
 
             if ($validated['stok_awal'] > 0) {

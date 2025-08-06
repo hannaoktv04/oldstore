@@ -105,9 +105,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('/pengajuan/{pengajuan}/approve', [AdminPengajuanController::class, 'approve'])->name('admin.pengajuan.approve');
     Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('admin.pengajuan.reject');
 
-
-    Route::resource('/items', ItemController::class, ['as' => 'admin'
-    ]);
+    Route::resource('/items', ItemController::class, ['as' => 'admin']);
     Route::get('/items-data', [ItemController::class, 'data'])->name('admin.items.data');
     Route::post('/items/bulk-action', [ItemController::class, 'bulkAction'])->name('admin.items.bulkAction');
     Route::post('/items/{item}/toggle-archive', [ItemController::class, 'toggleArchive'])->name('admin.items.toggleArchive');
@@ -192,4 +190,3 @@ Route::get('/portal', function () {
 Route::get('/portal', function () {
     return view('portal.index');
 })->name('portal')->middleware('auth');
-
