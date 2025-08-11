@@ -30,6 +30,9 @@ use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DataTableController;
 
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
 
 
 Route::get('/portal', function () {
@@ -105,12 +108,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('/pengajuan/{pengajuan}/approve', [AdminPengajuanController::class, 'approve'])->name('admin.pengajuan.approve');
     Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('admin.pengajuan.reject');
 
+    // Route::post('admin/items/{item}', [ItemController::class, 'update'])->name('admin.items.update.post');
     Route::resource('/items', ItemController::class, ['as' => 'admin']);
     Route::get('/items-data', [ItemController::class, 'data'])->name('admin.items.data');
     Route::post('/items/bulk-action', [ItemController::class, 'bulkAction'])->name('admin.items.bulkAction');
     Route::post('/items/{item}/toggle-archive', [ItemController::class, 'toggleArchive'])->name('admin.items.toggleArchive');
-
-
     Route::delete('/items/images/{image}', [ItemController::class, 'deleteImage'])->name('admin.items.images.delete');
 
     Route::get('/wishlist', [AdminWishlistController::class, 'index'])->name('admin.wishlist.index');

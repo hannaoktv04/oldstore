@@ -4,15 +4,9 @@
     <div class="container py-4">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Koreksi Stok Barang</h5>
+                <h4 class="mb-0">Koreksi Stok Barang</h4>
             </div>
             <div class="card-body">
-                @if (session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                @elseif (session('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
-                @endif
-
                 <form action="{{ route('admin.stok.koreksi.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
@@ -36,7 +30,7 @@
                         <textarea name="keterangan" class="form-control"></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-success">Simpan Koreksi</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>
             </div>
 

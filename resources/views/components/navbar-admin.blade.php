@@ -73,7 +73,7 @@
                       class="position-absolute top-0 start-50 translate-middle-y badge badge-dot bg-danger mt-2 border"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end py-0">
-                    <li class="dropdown-menu-header border-bottom py-50">
+                    {{-- <li class="dropdown-menu-header border-bottom py-50">
                       <div class="dropdown-header d-flex align-items-center py-2">
                         <h6 class="mb-0 me-auto">Notification</h6>
                         <div class="d-flex align-items-center">
@@ -300,7 +300,7 @@
                           </div>
                         </li>
                       </ul>
-                    </li>
+                    </li> --}}
                     <li class="border-top">
                       <div class="d-grid p-4">
                         <a class="btn btn-primary btn-sm d-flex" href="javascript:void(0);">
@@ -320,7 +320,7 @@
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
+                    {{-- <li>
                       <a class="dropdown-item" href="pages-account-settings-account.html">
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-2">
@@ -334,7 +334,7 @@
                           </div>
                         </div>
                       </a>
-                    </li>
+                    </li> --}}
                     <li>
                       <div class="dropdown-divider"></div>
                     </li>

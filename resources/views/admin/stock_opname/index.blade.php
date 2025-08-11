@@ -12,8 +12,8 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="opnameTable">
-                        <thead class="text-center">
-                            <tr>
+                        <thead>
+                            <tr class="text-center">
                                 <th>Periode</th>
                                 <th>Tanggal Mulai</th>
                                 <th>Tanggal Selesai</th>
@@ -25,7 +25,7 @@
                         </thead>
                         <tbody>
                             @foreach ($sessions as $session)
-                                <tr class="text-center">
+                                <tr>
                                     <td>{{ $session->periode_bulan }}</td>
                                     <td>{{ $session->tanggal_mulai->format('Y-m-d') }}</td>
                                     <td>{{ $session->tanggal_selesai ? $session->tanggal_selesai->format('Y-m-d') : '-' }}
@@ -70,8 +70,7 @@
                                                         method="POST" class="form-delete">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="dropdown-item text-danger"
-                                                            onclick="return confirm('Anda yakin ingin menghapus sesi ini?')">
+                                                        <button type="submit" class="dropdown-item text-danger btn-delete">
                                                             Hapus
                                                         </button>
                                                     </form>
@@ -91,8 +90,7 @@
                                                         method="POST">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="dropdown-item text-danger"
-                                                            onclick="return confirm('Anda yakin ingin menghapus sesi ini?')">
+                                                        <button type="submit" class="dropdown-item text-danger btn-delete">
                                                             Hapus
                                                         </button>
                                                     </form>
@@ -144,6 +142,20 @@
                 order: [
                     [0, 'desc']
                 ]
+            });
+            $(document).on('click', '.btn-delete', async function(e) {
+                e.preventDefault();
+                const form = $(this).closest('form');
+
+                const confirmed = await swalConfirm(
+                    'Sesi ini akan dihapus dan tidak dapat dikembalikan.', {
+                        confirmText: 'Ya, hapus',
+                        cancelText: 'Batal'
+                    });
+
+                if (confirmed) {
+                    form.submit();
+                }
             });
         });
     </script>

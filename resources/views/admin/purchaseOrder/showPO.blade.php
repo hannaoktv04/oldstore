@@ -111,11 +111,11 @@
 
             <div class="text-start mt-4 mb-2">
                 <a href="{{ route('admin.purchase_orders.downloadPdf', $purchaseOrder->id) }}"
-                    class="btn btn-flat btn-success" target="_blank">
-                    <i class="fas fa-file-pdf"></i> Print
+                    class="btn btn-flat btn-primary" target="_blank">
+                    <i></i> Print
                 </a>
                 <a href="{{ route('admin.purchase_orders.index') }}" class="btn btn-flat btn-dark">
-                    <i class="fas fa-arrow-left"></i> Back
+                    <i></i> Back
                 </a>
             </div>
         </div>
