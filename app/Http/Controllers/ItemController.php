@@ -47,7 +47,7 @@ class ItemController extends Controller
                 'deskripsi'      => 'required|string',
                 'category_id'    => 'required|exists:category,id',
                 'photo_Item'     => 'required|array',
-                'photo_Item.*'   => 'image|mimes:jpeg,png,jpg|max:2048',
+                'photo_Item.*'   => 'image|mimes:jpeg,png,jpg|max:5140',
             ]);
 
             $item = Item::create([
@@ -150,7 +150,7 @@ class ItemController extends Controller
                 'stok_minimum' => 'required|integer|min:0',
                 'category_id' => 'required|exists:category,id',
                 'photo_Item' => 'nullable|array|max:5',
-                'photo_Item.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+                'photo_Item.*' => 'image|mimes:jpeg,png,jpg|max:5140',
                 'thumbnail_index' => 'required|integer|min:0',
                 'existing_images' => 'nullable|array',
                 'existing_images.*' => 'exists:item_images,id,item_id,' . $item->id

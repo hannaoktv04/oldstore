@@ -11,11 +11,19 @@ class StockNotification extends Model
 
     protected $fillable = [
         'item_id',
-        'seen',
+        'judul',
+        'pesan',
+        'url',
+        'seen'
     ];
 
     public function item()
     {
         return $this->belongsTo(Item::class);
+    }
+
+    public function itemRequest()
+    {
+        return $this->belongsTo(ItemRequest::class);
     }
 }

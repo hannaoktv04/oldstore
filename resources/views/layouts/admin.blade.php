@@ -12,7 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>PERI</title>
 
-        <!-- Favicon -->=
+        <!-- Favicon -->
         <link rel='icon' href='{{ asset(' assets/img/favicon/favicon.ico') }}' type='image/x-icon' />
 
         <!-- Fonts -->
@@ -131,6 +131,7 @@
     <script src="{{ asset('assets/js/main.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="{{ asset('assets/js/notifications.js') }}"></script>
 
     <!-- Page JS -->
     @stack('scripts')

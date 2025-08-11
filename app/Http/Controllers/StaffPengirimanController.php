@@ -66,7 +66,7 @@ class StaffPengirimanController extends Controller
         $pengajuan = ItemRequest::with('itemDelivery')->findOrFail($id);
 
         $request->validate([
-            'bukti_foto' => 'required|image|max:2048',
+            'bukti_foto' => 'required|image|max:5120',
             'catatan' => 'nullable|string|max:255',
         ]);
 

@@ -47,7 +47,7 @@
                     <tr>
                         <td class="text-start">{{ $item->kode_barang }}</td>
                         <td>{{ $item->nama_barang }}</td>
-                        <td class="text-center">{{ $item->satuan->nama_satuan }}</td>
+                        <td class="text-center">{{ $item->satuan->nama_satuan ?? '-' }}</td>
                         <td class="text-end">{{ number_format($item->stocks->qty ?? 0) }}</td>
                     </tr>
                     @endforeach

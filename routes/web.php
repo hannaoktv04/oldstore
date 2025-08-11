@@ -29,6 +29,7 @@ use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DataTableController;
+use App\Http\Controllers\UserNotifikasiController;
 
 
 
@@ -91,6 +92,11 @@ Route::get('/', function () {
     }
     return redirect()->route('login');
 })->name('root');
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
+    Route::post('/notifikasi/baca/{id?}', [NotifikasiController::class, 'markAsRead']);
+});
 
 // -------------------------
 // ADMIN ROUTES (ADMIN-ONLY)
@@ -190,3 +196,12 @@ Route::get('/portal', function () {
 Route::get('/portal', function () {
     return view('portal.index');
 })->name('portal')->middleware('auth');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/notifikasi/user/produk', [UserNotifikasiController::class, 'produk'])->name('user.notif.produk');
+    Route::get('/notifikasi/user/pengiriman', [UserNotifikasiController::class, 'pengiriman'])->name('user.notif.pengiriman');
+
+    Route::post('/notifikasi/user/produk/baca/{id?}', [UserNotifikasiController::class, 'markProdukAsRead'])->name('user.notif.produk.baca');
+    Route::post('/notifikasi/user/pengiriman/baca/{id?}', [UserNotifikasiController::class, 'markPengirimanAsRead'])->name('user.notif.pengiriman.baca');
+});

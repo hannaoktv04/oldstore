@@ -2,11 +2,9 @@
 
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
-    <!-- Status Cards Row -->
     <div class="row g-6 mb-6">
-        <!-- Pengajuan Baru -->
         <div class="col-lg-3 col-sm-6">
-            <div class="card h-100">
+            <div class="card h-100 cursor-pointer" onclick="window.location.href='{{ route('admin.pengajuan.status', 'submitted') }}'">
                 <div class="card-body">
                     <div class="d-flex align-items-center gap-3">
                         <div class="avatar">
@@ -23,9 +21,8 @@
             </div>
         </div>
 
-        <!-- Perlu Dikirim -->
         <div class="col-lg-3 col-sm-6">
-            <div class="card h-100">
+            <div class="card h-100 cursor-pointer" onclick="window.location.href='{{ route('admin.pengajuan.status', 'approved') }}'">
                 <div class="card-body">
                     <div class="d-flex align-items-center gap-3">
                         <div class="avatar">
@@ -42,13 +39,12 @@
             </div>
         </div>
 
-        <!-- Sedang Dikirim -->
         <div class="col-lg-3 col-sm-6">
-            <div class="card h-100">
+            <div class="card h-100 cursor-pointer" onclick="window.location.href='{{ route('admin.pengajuan.status', 'delivered') }}'">
                 <div class="card-body">
                     <div class="d-flex align-items-center gap-3">
                         <div class="avatar">
-                            <div class="avatar-initial bg-label-success rounded">
+                            <div class="avatar-initial bg-label-danger rounded">
                                 <i class="ri-truck-line ri-24px"></i>
                             </div>
                         </div>
@@ -61,13 +57,12 @@
             </div>
         </div>
 
-        <!-- Pengajuan Selesai -->
         <div class="col-lg-3 col-sm-6">
-            <div class="card h-100">
+            <div class="card h-100 cursor-pointer" onclick="window.location.href='{{ route('admin.pengajuan.status', 'received') }}'">
                 <div class="card-body">
                     <div class="d-flex align-items-center gap-3">
                         <div class="avatar">
-                            <div class="avatar-initial bg-label-danger rounded">
+                            <div class="avatar-initial bg-label-success rounded">
                                 <i class="ri-checkbox-circle-line ri-24px"></i>
                             </div>
                         </div>
@@ -81,30 +76,28 @@
         </div>
     </div>
 
-    <!-- Inventory and Chart Row -->
     <div class="row g-6 mb-6">
-        <!-- Total Barang & Stok Kritis -->
         <div class="col-lg-6">
             <div class="card h-100">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-1">Inventaris Barang</h5>
-                    <div class="d-flex align-items-center card-subtitle">
-                        <div class="me-2">Total {{ $totalBarang }} Barang</div>
-                        @if($stokKritis > 0)
-                        <div class="d-flex align-items-center text-danger">
-                            <p class="mb-0 fw-medium">{{ $stokKritis }} Stok Menipis</p>
-                        </div>
-                        @endif
-                        @if($stokHabis > 0)
-                        <div class="d-flex align-items-center text-danger ms-2">
-                            <p class="mb-0 fw-medium">{{ $stokHabis }} Stok Habis</p>
-                        </div>
-                        @endif
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="inventarisFilter" data-bs-toggle="dropdown" aria-expanded="false">
+                            @if($inventarisFilter == 'all') Semua Barang 
+                            @elseif($inventarisFilter == 'critical') Stok Menipis 
+                            @else Stok Habis 
+                            @endif
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="inventarisFilter">
+                            <li><a class="dropdown-item" href="?inventaris=all">Semua Barang</a></li>
+                            <li><a class="dropdown-item" href="?inventaris=critical">Stok Menipis</a></li>
+                            <li><a class="dropdown-item" href="?inventaris=out_of_stock">Stok Habis</a></li>
+                        </ul>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between flex-wrap gap-4 mb-4">
-                        <div class="d-flex align-items-center gap-3">
+                        <div class="d-flex align-items-center gap-3 cursor-pointer" onclick="window.location.href='?inventaris=all'">
                             <div class="avatar">
                                 <div class="avatar-initial bg-label-info rounded">
                                     <i class="ri-box-3-line ri-24px"></i>
@@ -115,7 +108,7 @@
                                 <p class="mb-0">Total Barang</p>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center gap-3">
+                        <div class="d-flex align-items-center gap-3 cursor-pointer" onclick="window.location.href='?inventaris=critical'">
                             <div class="avatar">
                                 <div class="avatar-initial bg-label-warning rounded">
                                     <i class="ri-alert-line ri-24px"></i>
@@ -126,7 +119,7 @@
                                 <p class="mb-0">Stok Menipis</p>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center gap-3">
+                        <div class="d-flex align-items-center gap-3 cursor-pointer" onclick="window.location.href='?inventaris=out_of_stock'">
                             <div class="avatar">
                                 <div class="avatar-initial bg-label-danger rounded">
                                     <i class="ri-close-circle-line ri-24px"></i>
@@ -139,14 +132,32 @@
                         </div>
                     </div>
 
-                    @if($stokHabis > 0)
                     <div class="border-top pt-3">
-                        <h6 class="mb-3">Produk dengan Stok Habis:</h6>
+                        <h6 class="mb-3">
+                            @if($inventarisFilter == 'all')
+                                Produk Terbaru
+                            @elseif($inventarisFilter == 'critical')
+                                Produk dengan Stok Menipis
+                            @else
+                                Produk dengan Stok Habis
+                            @endif
+                        </h6>
                         <div class="d-flex flex-column gap-2">
-                            @foreach($produkStokHabis->take(5) as $produk)
+                            @php
+                                $produkToShow = [];
+                                if ($inventarisFilter == 'all') {
+                                    $produkToShow = $produkTerbaru->take(5);
+                                } elseif ($inventarisFilter == 'critical') {
+                                    $produkToShow = $produkStokKritis->take(5);
+                                } else {
+                                    $produkToShow = $produkStokHabis->take(5);
+                                }
+                            @endphp
+                            
+                            @forelse($produkToShow as $produk)
                             <div class="d-flex align-items-center gap-2">
                                 @if($produk->photo)
-                                    <img src="{{ asset('storage/' . $produk->photo->image) }}" alt="{{ $produk->nama_barang }}" width="50" class="rounded">
+                                    <img src="{{ asset('storage/' . $produk->photo->image) }}" alt="{{ $produk->nama_barang }}" width="50" height="50" class="rounded" style="object-fit: cover;">
                                 @else
                                     <span class="avatar-initial rounded bg-label-secondary">{{ substr($produk->nama_barang, 0, 1) }}</span>
                                 @endif
@@ -154,22 +165,32 @@
                                     <p class="mb-0 fw-medium">{{ $produk->nama_barang }}</p>
                                     <small class="text-muted">{{ $produk->category->categori_name }}</small>
                                 </div>
-                                <span class="badge bg-label-danger">0</span>
+                                <span class="badge 
+                                    @if($produk->stocks->qty <= 0) bg-label-danger
+                                    @elseif($produk->stocks->qty <= $produk->stok_minimum) bg-label-warning
+                                    @else bg-label-success @endif">
+                                    {{ $produk->stocks->qty }}
+                                </span>
                             </div>
-                            @endforeach
+                            @empty
+                            <div class="text-center py-3">
+                                <p class="text-muted">Tidak ada produk</p>
+                            </div>
+                            @endforelse
                         </div>
-                        @if($stokHabis > 3)
+                        
+                        @if(($inventarisFilter == 'all' && $totalBarang > 5) || 
+                        ($inventarisFilter == 'critical' && $stokKritis > 5) || 
+                        ($inventarisFilter == 'out_of_stock' && $stokHabis > 5))
                         <div class="text-end mt-2">
-                            <a href="{{ route('admin.items.index', ['filter' => 'out_of_stock']) }}" class="btn btn-sm btn-outline-danger">Lihat Semua</a>
+                            <a href="{{ route('admin.items.index') }}?filter={{ $inventarisFilter }}" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
                         </div>
                         @endif
                     </div>
-                    @endif
                 </div>
             </div>
         </div>
         
-        <!-- Grafik Barang Keluar -->
         <div class="col-lg-6">
             <div class="card h-100">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -195,9 +216,7 @@
         </div>
     </div>
 
-    <!-- Top 5 Sections - First Row -->
     <div class="row g-6 mb-6">
-        <!-- Top 5 Produk -->
         <div class="col-lg-6" id="topProdukSection">
             <div class="card h-100">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -228,7 +247,7 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>No</th>
                                 <th>Produk</th>
                                 <th>Kategori</th>
                                 <th class="text-end">Jumlah</th>
@@ -240,7 +259,7 @@
                                 <td>{{ $index + 1 }}</td>
                                 <td>
                                     @if($produk->item->photo)
-                                        <img src="{{ asset('storage/' . $produk->item->photo->image) }}" alt="{{ $produk->item->nama_barang }}" width="40" class="rounded me-2">
+                                        <img src="{{ asset('storage/' . $produk->item->photo->image) }}" alt="{{ $produk->item->nama_barang }}" width="50" height="50" class="rounded" style="object-fit: cover;">
                                     @endif
                                     {{ $produk->item->nama_barang }}
                                 </td>
@@ -254,7 +273,6 @@
             </div>
         </div>
 
-        <!-- Top 5 Wishlist -->
         <div class="col-lg-6" id="topWishlistSection">
             <div class="card h-100">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -285,7 +303,7 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>No</th>
                                 <th>Nama Barang</th>
                                 <th>Kategori</th>
                                 <th class="text-end">Permintaan</th>
@@ -296,11 +314,6 @@
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>
-                                    @if(isset($wishlist->item) && $wishlist->item->photo)
-                                        <img src="{{ asset('storage/' . $wishlist->item->photo) }}" alt="{{ $wishlist->nama_barang }}" width="30" class="rounded me-2">
-                                    @else
-                                        <span class="avatar-initial rounded bg-label-secondary">{{ substr($wishlist->nama_barang, 0, 1) }}</span>
-                                    @endif
                                     {{ $wishlist->nama_barang }}
                                 </td>
                                 <td>{{ $wishlist->category->categori_name }}</td>
@@ -314,9 +327,7 @@
         </div>
     </div>
 
-    <!-- Top 5 Sections - Second Row -->
     <div class="row g-6">
-        <!-- Top 5 Staff Pengiriman -->
         <div class="col-lg-6" id="topStaffSection">
             <div class="card h-100">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -347,7 +358,7 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>No</th>
                                 <th>Nama Staff</th>
                                 <th class="text-end">Jumlah Pengiriman</th>
                             </tr>
@@ -357,11 +368,6 @@
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>
-                                    @if($staff->staff && $staff->staff->photo)
-                                        <img src="{{ asset('storage/' . $staff->staff->photo) }}" alt="{{ $staff->staff->name }}" width="30" class="rounded-circle me-2">
-                                    @else
-                                        <span class="avatar-initial rounded-circle bg-label-secondary">{{ substr($staff->staff->nama ?? 'S', 0, 1) }}</span>
-                                    @endif
                                     {{ $staff->staff->nama ?? '-' }}
                                 </td>
                                 <td class="text-end">{{ $staff->total }}</td>
@@ -373,7 +379,6 @@
             </div>
         </div>
 
-        <!-- Top 5 User Paling Banyak Meminta -->
         <div class="col-lg-6" id="topUserSection">
             <div class="card h-100">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -404,7 +409,7 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>No</th>
                                 <th>Nama User</th>
                                 <th class="text-end">Jumlah Permintaan</th>
                             </tr>
@@ -414,11 +419,6 @@
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>
-                                    @if($user->user->photo)
-                                        <img src="{{ asset('storage/' . $user->user->photo) }}" alt="{{ $user->user->nama }}" width="30" class="rounded-circle me-2">
-                                    @else
-                                        <span class="avatar-initial rounded-circle bg-label-secondary">{{ substr($user->user->nama, 0, 1) }}</span>
-                                    @endif
                                     {{ $user->user->nama }}
                                 </td>
                                 <td class="text-end">{{ $user->total }}</td>

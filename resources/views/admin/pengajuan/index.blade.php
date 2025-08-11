@@ -64,7 +64,7 @@
                                 @if ($completedDate)
                                     <strong>{{ \Carbon\Carbon::parse($completedDate)->format('d F Y, H:i') }}</strong>
                                 @else
-                                    <strong class="texta-danger">Belum Selesai</strong>
+                                    <strong class="text-danger">Belum Selesai</strong>
                                 @endif
                             @else
                                 <small class="text-muted">Tanggal Pengiriman</small><br>

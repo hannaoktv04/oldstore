@@ -10,7 +10,8 @@
 
       <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
         <img src="{{ asset('assets/img/peri.png') }}" alt="PERI Logo" style="height: 50px;">
-        @if(Auth::user()->hasRole('admin'))
+        {{-- FIX: tambahkan Auth::check() --}}
+        @if(Auth::check() && Auth::user()->hasRole('admin'))
           <span class="fw-normal text-secondary fs-6 ms-2">Admin</span>
         @endif
       </a>
@@ -30,11 +31,22 @@
     @php
       use App\Models\Cart;
       use App\Models\StockNotification;
+      use App\Models\ItemDelivery;
       $cartItems = Auth::check() ? Cart::where('user_id', Auth::id())->get() : collect();
       $jumlahKeranjang = $cartItems->count();
-      $notifikasiProdukBaru = Auth::check() && Auth::user()->hasRole('pegawai')
-        ? StockNotification::where('seen', false)->with('item')->latest()->get()
+
+      $notifikasiProdukBaru = (Auth::check() && Auth::user()->hasRole('pegawai'))
+        ? StockNotification::where('seen', false)->with('item')->latest()->take(10)->get()
         : collect();
+
+      $notifikasiPengiriman = (Auth::check() && Auth::user()->hasRole('pegawai'))
+        ? ItemDelivery::whereHas('request', fn($q) => $q->where('user_id', Auth::id()))
+            ->whereIn('status', ['assigned','on_progress']) 
+            ->with('request:id,kode_request,user_id')
+            ->latest()->take(10)->get()
+        : collect();
+
+      $totalNotifUser = $notifikasiProdukBaru->count() + $notifikasiPengiriman->count();
     @endphp
 
     <div class="d-flex align-items-center gap-2">
@@ -75,42 +87,73 @@
         </div>
       @endauth
 
+      {{-- NOTIFIKASI USER (pegawai): Produk + Pengiriman --}}
       @if(Auth::check() && Auth::user()->hasRole('pegawai'))
         <div class="position-relative">
           <button class="icon-button text-dark bg-transparent border-0 p-0 position-relative" id="notif-icon">
             <i class="bi bi-bell-fill fs-5"></i>
-            @if($notifikasiProdukBaru->count() > 0)
+            @if($totalNotifUser > 0)
               <span class="badge bg-success rounded-pill position-absolute top-0 start-100 translate-middle">
-                {{ $notifikasiProdukBaru->count() }}
+                {{ $totalNotifUser }}
               </span>
             @endif
           </button>
+
           <div id="notif-popup"
                class="position-absolute text-dark bg-white shadow rounded p-3 mt-2 z-3 d-none"
-               style="min-width: 300px; right: 0px; font-size: 14px;">
+               style="min-width: 320px; right: 0px; font-size: 14px;">
+
+            {{-- Section: Produk tersedia kembali --}}
             <h6 class="mb-2">Produk Tersedia Kembali</h6>
             @forelse($notifikasiProdukBaru as $notif)
               <div class="mb-2 small d-flex align-items-start">
                 <i class="bi bi-box-seam text-success me-2 mt-1"></i>
                 <div>
-                  <strong>{{ $notif->item->nama_barang }}</strong><br>
-                  <small class="text-muted">Sekarang sudah tersedia</small>
+                  <strong>{{ $notif->item->nama_barang ?? ($notif->judul ?? 'Update Produk') }}</strong><br>
+                  <small class="text-muted">{{ $notif->pesan ?? 'Sekarang sudah tersedia' }}</small>
                 </div>
               </div>
             @empty
-              <div class="text-muted">Tidak ada notifikasi.</div>
+              <div class="text-muted">Tidak ada update produk.</div>
             @endforelse
+
             @if($notifikasiProdukBaru->count() > 0)
-              <div class="mt-3">
+              <div class="mt-2">
                 <form action="{{ route('notifikasi.markSeen') }}" method="POST">
                   @csrf
-                  <button class="btn btn-outline-secondary btn-sm w-100" type="submit">Tandai Sudah Dibaca</button>
+                  <button class="btn btn-outline-secondary btn-sm w-100" type="submit">Tandai Produk: Sudah Dibaca</button>
                 </form>
+              </div>
+            @endif
+
+            <hr class="my-3">
+
+            {{-- Section: Barang sedang dikirim --}}
+            <h6 class="mb-2">Barang Sedang Dikirim</h6>
+            @forelse($notifikasiPengiriman as $deliv)
+              <div class="mb-2 small d-flex align-items-start">
+                <i class="bi bi-truck me-2 mt-1"></i>
+                <div>
+                  <strong>{{ $deliv->itemRequest->kode_request ?? 'Pengiriman' }}</strong><br>
+                  <small class="text-muted">
+                    Status: {{ ucfirst(str_replace('_',' ', $deliv->status)) }} •
+                    {{ \Carbon\Carbon::parse($deliv->updated_at ?? $deliv->created_at)->diffForHumans() }}
+                  </small>
+                </div>
+              </div>
+            @empty
+              <div class="text-muted">Tidak ada pengiriman aktif.</div>
+            @endforelse
+
+            @if($notifikasiPengiriman->count() > 0)
+              <div class="mt-2">
+                <a href="{{ route('user.history') }}" class="btn btn-outline-success btn-sm w-100">Lihat Detail Pengiriman</a>
               </div>
             @endif
           </div>
         </div>
       @endif
+      {{-- /NOTIFIKASI USER --}}
 
       <div class="position-relative">
         <button id="user-icon" class="icon-button text-dark bg-transparent border-0 pe-3">
@@ -151,20 +194,3 @@
     </div>
   </div>
 </nav>
-
-<div class="modal fade" id="searchModalMobile" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <form method="GET" action="{{ route('search') }}" class="modal-content border-0">
-      <div class="modal-header border-0">
-        <h5 class="modal-title" id="searchModalLabel">Cari Barang</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-      </div>
-      <div class="modal-body">
-        <input type="search" name="q" class="form-control" placeholder="Cari barang..." required>
-      </div>
-      <div class="modal-footer border-0">
-        <button type="submit" class="btn btn-success w-100">Cari Sekarang</button>
-      </div>
-    </form>
-  </div>
-</div>

@@ -86,7 +86,7 @@
                                     <tr>
                                         <td>{{ $item->kode_barang }}</td>
                                         <td>{{ $item->nama_barang }}</td>
-                                        <td class="text-center">{{ $item->satuan->nama_satuan }}</td>
+                                        <td class="text-center">{{ $item->satuan->nama_satuan ?? '-' }}</td>
                                         <td class="text-end">{{ number_format($qtySistem) }}</td>
                                         <td>
                                             <input type="hidden" name="items[{{ $item->id }}][item_id]"
