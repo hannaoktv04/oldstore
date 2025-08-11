@@ -5,16 +5,15 @@
     <div class="container-fluid py-4">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Daftar Satuan</h5>
+                <h4 class="mb-0">Daftar Satuan</h4>
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#satuanModal">
                     <i class="ri ri-add-line"></i>Tambah Satuan
                 </button>
             </div>
             <div class="card-body">
                 @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show">
+                    <div>
                         {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 @endif
                 <div class="table-responsive">
@@ -33,17 +32,16 @@
                                     <td>{{ $s->nama_satuan }}</td>
                                     <td class="text-center col-md-2">
                                         <button
-                                            class="btn btn-sm btn-icon btn-text-warning rounded-pill waves-effect edit-btn"
+                                            class="btn btn-sm btn-icon btn-text-primary rounded-pill waves-effect edit-btn"
                                             data-id="{{ $s->id }}" data-name="{{ $s->nama_satuan }}"
                                             data-bs-toggle="modal" data-bs-target="#satuanModal">
-                                            <i class="ri-pencil-line ri-20px"></i>
+                                            <i class="ri-pencil-line ri-20px text-primary"></i>
                                         </button>
                                         <button
                                             class="btn btn-sm btn-icon btn-text-danger rounded-pill waves-effect delete-btn"
                                             data-id="{{ $s->id }}" data-name="{{ $s->nama_satuan }}">
                                             <i class="ri-delete-bin-7-line ri-20px"></i>
                                     </td>
-
                                 </tr>
                             @endforeach
                         </tbody>
@@ -88,10 +86,27 @@
     <script>
         $(document).ready(function() {
             $('#satuanTable').DataTable({
+                columnDefs: [{
+                    orderable: false,
+                    targets: [2]
+                }],
+                order: [
+                    [0, "asc"]
+                ],
                 language: {
-                    url: "//cdn.datatables.net/plug-ins/1.11.5/i18n/Indonesian.json"
+                    search: "Cari:",
+                    lengthMenu: "_MENU_ data",
+                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                    infoEmpty: "Tidak ada data",
+                    infoFiltered: "(difilter dari _MAX_ total data)",
+                    zeroRecords: "Data tidak ditemukan",
+                    paginate: {
+                        previous: "<",
+                        next: ">"
+                    }
                 }
             });
+
 
             const satuanForm = $('#satuanForm');
             const deleteForm = $('#deleteForm');

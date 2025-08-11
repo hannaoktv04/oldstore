@@ -1,11 +1,10 @@
 @extends('layouts.admin')
-@section('title', 'Daftar Kategori')
 
 @section('content')
 <div class="container py-4 position-relative">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0">Daftar Kategori</h5>
+            <h4 class="card-title mb-0">Daftar Kategori</h4>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahKategori">
                 <i class="ri-add-line me-1"></i> Tambah Kategori
             </button>
@@ -31,11 +30,11 @@
                             <td class="text-center">{{ $category->items_count }}</td>
                             <td class="text-center">
                                 <button
-                                    class="btn btn-sm btn-icon btn-text-warning rounded-pill waves-effect btnEditKategori"
+                                    class="btn btn-sm btn-icon btn-text-primary rounded-pill waves-effect btnEditKategori"
                                     data-name="{{ $category->categori_name }}"
                                     data-action="{{ route('admin.categories.update', $category->id) }}"
                                     data-bs-toggle="modal" data-bs-target="#modalEditKategori" title="Edit">
-                                    <i class="ri-pencil-line ri-20px"></i>
+                                    <i class="ri-pencil-line ri-20px text-primary"></i>
                                 </button>
                                 <button
                                     class="btn btn-sm btn-icon btn-text-danger rounded-pill waves-effect btnHapusKategori"
@@ -139,7 +138,7 @@
                     lengthMenu: "_MENU_ data",
                     info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
                     infoEmpty: "Tidak ada data",
-                    infoFiltered: "(difilter dari _MAX_ total data)",
+                    infoFiltered: "",
                     zeroRecords: "Data tidak ditemukan",
                     paginate: {
                         previous: "<",

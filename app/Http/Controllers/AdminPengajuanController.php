@@ -120,7 +120,7 @@ class AdminPengajuanController extends Controller
     public function markAsReceived(Request $request, ItemRequest $pengajuan)
     {
         $request->validate([
-            'bukti_foto' => 'required|image|max:5140',
+            'bukti_foto' => 'required|image|max:5120',
             'catatan' => 'nullable|string',
         ]);
 

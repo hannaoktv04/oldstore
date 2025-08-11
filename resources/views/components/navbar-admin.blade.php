@@ -90,7 +90,7 @@
                           <p class="mb-0 mt-2">Memuat notifikasi...</p>
                         </li>
                       </ul>
-                    </li>
+                    </li> --}}
                     <li class="border-top">
                       <div class="d-grid p-4">
                         <a class="btn btn-primary btn-sm d-flex justify-content-center" href="#">
@@ -111,7 +111,7 @@
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
+                    {{-- <li>
                       <a class="dropdown-item" href="pages-account-settings-account.html">
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-2">
@@ -125,7 +125,7 @@
                           </div>
                         </div>
                       </a>
-                    </li>
+                    </li> --}}
                     <li>
                       <div class="dropdown-divider"></div>
                     </li>

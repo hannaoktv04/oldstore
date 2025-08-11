@@ -61,7 +61,7 @@ class PurchaseOrderController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.purchase_orders.index')->with('success', 'Purchase Order created successfully.');
+        return redirect()->route('admin.purchase_orders.index')->with('success', 'Daftar Pengajuan Berhasil Dibuat');
     }
     public function show(PurchaseOrder $purchaseOrder)
     {
@@ -75,7 +75,7 @@ class PurchaseOrderController extends Controller
         }
         $purchaseOrder->update(['status' => 'submitted']);
 
-        return redirect()->back()->with('success', 'Purchase Order has been successfully submitted.');
+        return redirect()->back()->with('success', 'Pengajuan barang sudah diajukan.');
     }
 
     public function destroy(PurchaseOrder $purchaseOrder)
@@ -128,7 +128,7 @@ class PurchaseOrderController extends Controller
         $purchaseOrder->load('details.item');
         $existingItems = $purchaseOrder->details;
 
-        return view('admin.purchaseOrder.editPO', compact('purchaseOrder', 'items', 'existingItems'));
+        return view('admin.purchaseOrder.edit', compact('purchaseOrder', 'items', 'existingItems'));
     }
 
     public function update(Request $request, PurchaseOrder $purchaseOrder)

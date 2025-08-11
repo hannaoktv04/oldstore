@@ -7,7 +7,7 @@
         <h4 class="card-title">Input Stok Fisik - {{ $purchaseOrder->periode_bulan }}</h4>
     </div>
     <div class="card-body">
-        <form action="{{ route('admin.purchase-order.edit', $purchaseOrder->id) }}" method="POST">
+        <form action="{{ route('admin.purchase_orders.update', $purchaseOrder->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="row mb-4">
@@ -15,7 +15,7 @@
                     <label>Pilih Item</label>
                     <select name="item_id" class="form-select" required>
                         <option value="">-- Pilih Item --</option>
-                        @foreach($availableItems as $item)
+                        @foreach($items as $item)
                             <option value="{{ $item->id }}">{{ $item->kode_barang }} - {{ $item->nama_barang }}</option>
                         @endforeach
                     </select>
@@ -68,3 +68,7 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="{{ asset('assets/js/peri/purchase-order.js') }}"></script>
+@endpush
