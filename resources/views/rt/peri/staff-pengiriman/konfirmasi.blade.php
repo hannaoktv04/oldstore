@@ -1,4 +1,4 @@
-@extends('layouts.staff')
+@extends('peri::layouts.staff')
 
 @section('content')
 <div class="container py-4">
