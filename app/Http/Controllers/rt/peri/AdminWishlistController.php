@@ -1,7 +1,6 @@
 <?php
-
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\rt\peri;
+use App\Http\Controllers\Controller;  
 use Illuminate\Http\Request;
 use App\Models\ItemWishlist;
 
@@ -13,7 +12,7 @@ class AdminWishlistController extends Controller
             ->orderByDesc('created_at')
             ->paginate(10); // Menambahkan pagination dengan 10 item per halaman
         
-        return view('admin.wishlist', compact('wishlists'));
+        return view('peri::admin.wishlist', compact('wishlists'));
     }
 
     public function akomodasi($id)

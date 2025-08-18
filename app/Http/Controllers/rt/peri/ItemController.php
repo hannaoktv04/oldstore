@@ -1,7 +1,6 @@
 <?php
-
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\rt\peri;
+use App\Http\Controllers\Controller;  
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\ItemImage;
@@ -25,12 +24,12 @@ class ItemController extends Controller
     public function index()
     {
         $categories = Category::orderBy('categori_name')->get();
-        return view('admin.item.index', compact('categories'));
+        return view('peri::admin.item.index', compact('categories'));
     }
     public function create()
     {
         $satuans = Satuan::all();
-        return view('admin.item.create');
+        return view('peri::admin.item.create');
     }
 
     public function store(Request $request)
@@ -134,7 +133,7 @@ class ItemController extends Controller
     {
         $categories = Category::all();
         $satuans = Satuan::all();
-        return view('admin.item.edit', compact('item', 'categories'));
+        return view('peri::admin.item.edit', compact('item', 'categories'));
     }
 
     public function update(Request $request, Item $item)
@@ -326,7 +325,7 @@ class ItemController extends Controller
             return response()->json($item);
         }
 
-        return view('admin.items.show', compact('item'));
+        return view('peri::admin.items.show', compact('item'));
     }
 
 

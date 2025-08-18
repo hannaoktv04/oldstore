@@ -1,7 +1,6 @@
 <?php
-
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\rt\peri;
+use App\Http\Controllers\Controller;  
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\ItemStock;
@@ -16,7 +15,7 @@ class StockAdjustmentController extends Controller
     public function create()
     {
         $items = Item::with('stocks')->get();
-        return view('admin.koreksi_stok', compact('items'));
+        return view('peri::admin.koreksi_stok', compact('items'));
     }
 
     public function store(Request $request)

@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('peri::layouts.admin')
 
 @section('title', 'Receive PO')
 

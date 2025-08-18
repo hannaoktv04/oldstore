@@ -1,7 +1,6 @@
 <?php
-
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\rt\peri;
+use App\Http\Controllers\Controller;  
 use App\Models\OpnameSession;
 use App\Models\Item;
 use Illuminate\Http\Request;
@@ -14,7 +13,7 @@ class OpnameSessionController extends Controller
     public function index()
     {
         $sessions = OpnameSession::with('opener')->latest()->get();
-        return view('admin.stock_opname.index', compact('sessions'));
+        return view('peri::admin.stock_opname.index', compact('sessions'));
     }
     public function endSession(Request $request, OpnameSession $stock_opname)
     {

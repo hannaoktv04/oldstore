@@ -66,14 +66,14 @@
         <div class="layout-container">
             <!-- Menu -->
 
-            @include('components.sidebar')
+            @include('peri::components.sidebar')
             <!-- / Menu -->
 
             <!-- Layout container -->
             <div class="layout-page">
                 <!-- Navbar -->
 
-                @include('components.navbar-admin')
+                @include('peri::components.navbar-admin')
 
                 <!-- / Navbar -->
 
@@ -136,7 +136,7 @@
 
     <!-- Page JS -->
     @stack('scripts')
-    @include('partials.swal')
+    @include('peri::partials.swal')
 </body>
 
 </html>

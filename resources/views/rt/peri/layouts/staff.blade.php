@@ -17,7 +17,7 @@
 </head>
 <body class="bg-light">
 
-  @include('components.navbar-staff')
+  @include('peri::components.navbar-staff')
 
   <main class="py-4">
     @yield('content')

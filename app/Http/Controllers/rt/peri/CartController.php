@@ -1,7 +1,6 @@
 <?php
-
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\rt\peri;
+use App\Http\Controllers\Controller;  
 use App\Models\Cart;
 use App\Models\Item;
 use App\Models\ItemRequest;
@@ -23,7 +22,7 @@ class CartController extends Controller
         $cartItems = \App\Models\Cart::where('user_id', Auth::id())->get();
         $jumlahKeranjang = $cartItems->count();
         
-        return view('cart.index', compact('carts', 'jumlahKeranjang'));
+        return view('peri::cart.index', compact('carts', 'jumlahKeranjang'));
     }
 
     public function store(Request $request, $id)

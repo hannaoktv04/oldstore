@@ -57,7 +57,7 @@
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
         <div class="layout-page">
-            @include('components.navbar')
+            @include('peri::components.navbar')
 
             @if (isset($opnameAktif) && $opnameAktif)
                 @php
@@ -133,7 +133,7 @@
                     @yield('content')
                 </div>
                
-                @include('components.footer')
+                @include('peri::components.footer')
 
                 <div class="content-backdrop fade"></div>
             </div>

@@ -1,7 +1,6 @@
 <?php
-
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\rt\peri;
+use App\Http\Controllers\Controller;  
 use Illuminate\Http\Request;
 use App\Models\Satuan;
 
@@ -10,7 +9,7 @@ class SatuanController extends Controller
     public function index()
     {
         $satuan = Satuan::all();
-        return view('admin.satuan.index', compact('satuan'));
+        return view('peri::admin.satuan.index', compact('satuan'));
     }
 
     public function store(Request $request)

@@ -1,4 +1,4 @@
-@extends('layouts.auth')
+@extends('peri::layouts.auth')
 
 @section('content')
 <div class="auth-wrapper d-flex align-items-stretch justify-content-center vh-100 vw-100">
