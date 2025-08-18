@@ -2,34 +2,34 @@
 
 use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AdminPengajuanController;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\rt\peri\AdminController; 
+use App\Http\Controllers\rt\peri\AdminPengajuanController;
+use App\Http\Controllers\rt\peri\ItemController;
+use App\Http\Controllers\rt\peri\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\ItemRequestController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\UserSettingsController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\AdminWishlistController;
-use App\Http\Controllers\WishlistController;
-use App\Http\Controllers\PurchaseOrderController;
-use App\Http\Controllers\StockAdjustmentController;
-use App\Http\Controllers\PengajuanController;
-use App\Http\Controllers\OpnameSessionController;
-use App\Http\Controllers\StockOpnameController;
+use App\Http\Controllers\rt\peri\ItemRequestController;
+use App\Http\Controllers\rt\peri\CartController;
+use App\Http\Controllers\rt\peri\HomeController;
+use App\Http\Controllers\rt\peri\UserSettingsController;
+use App\Http\Controllers\rt\peri\CategoryController;
+use App\Http\Controllers\rt\peri\AdminWishlistController;
+use App\Http\Controllers\rt\peri\WishlistController;
+use App\Http\Controllers\rt\peri\PurchaseOrderController;
+use App\Http\Controllers\rt\peri\StockAdjustmentController;
+use App\Http\Controllers\rt\peri\PengajuanController;
+use App\Http\Controllers\rt\peri\OpnameSessionController;
+use App\Http\Controllers\rt\peri\StockOpnameController;
 use App\Models\OpnameSession;
 use Picqer\Barcode\BarcodeGeneratorPNG;
-use App\Http\Controllers\StaffPengirimanController;
-use App\Http\Controllers\NotifikasiController;
-use App\Http\Controllers\SatuanController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\DataTableController;
-use App\Http\Controllers\UserNotifikasiController;
+use App\Http\Controllers\rt\peri\StaffPengirimanController;
+use App\Http\Controllers\rt\peri\NotifikasiController;
+use App\Http\Controllers\rt\peri\SatuanController;
+use App\Http\Controllers\rt\peri\UserController;
+use App\Http\Controllers\rt\peri\DataTableController;
+use App\Http\Controllers\rt\peri\UserNotifikasiController;
 
 Route::get('/phpinfo', function () {
     phpinfo();
@@ -37,7 +37,7 @@ Route::get('/phpinfo', function () {
 
 
 Route::get('/portal', function () {
-    return view('portal.index');
+    return view('peri::portal.index');
 })->name('portal.index');
 
 
@@ -191,12 +191,12 @@ Route::middleware(['auth', 'role:staff_pengiriman'])->prefix('staff-pengiriman')
 
 
 Route::get('/portal', function () {
-    return view('portal.index');
+    return view('peri::portal.index');
 })->name('portal')->middleware('auth');
 
 
 Route::get('/portal', function () {
-    return view('portal.index');
+    return view('peri::portal.index');
 })->name('portal')->middleware('auth');
 
 

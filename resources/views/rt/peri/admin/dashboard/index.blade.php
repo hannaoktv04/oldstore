@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('peri::layouts.admin')
 
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">

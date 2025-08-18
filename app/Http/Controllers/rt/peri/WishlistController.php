@@ -1,7 +1,6 @@
 <?php
-
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\rt\peri;
+use App\Http\Controllers\Controller;  
 use Illuminate\Http\Request;
 use App\Models\ItemWishlist;
 
@@ -14,7 +13,7 @@ class WishlistController extends Controller
                       ->orderByDesc('created_at')
                       ->get();
 
-        return view('user.wishlist', compact('wishlists'));
+        return view('peri::user.wishlist', compact('wishlists'));
     }
 
     public function addToWishlist(Request $request, $id)

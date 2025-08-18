@@ -1,7 +1,6 @@
 <?php
-
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\rt\peri;
+use App\Http\Controllers\Controller;  
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Item;
@@ -191,7 +190,7 @@ class AdminController extends Controller
         if ($perluDikirim > 0) $notifikasi[] = "{$perluDikirim} pengajuan perlu dikirim.";
         if ($stokHabis > 0) $notifikasi[] = "Ada {$stokHabis} barang yang stoknya habis.";
 
-        return view('admin.dashboard.index', compact(
+        return view('peri::admin.dashboard.index', compact(
             'pengajuanBaru',
             'perluDikirim',
             'pengajuanSelesai',
@@ -252,6 +251,6 @@ class AdminController extends Controller
         $staff_pengiriman = User::whereHas('roles', fn ($q) =>
             $q->where('nama_role', 'staff_pengiriman'))->get();
 
-        return view('admin.pengajuan.index', compact('pengajuans', 'status', 'staff_pengiriman'));
+        return view('peri::admin.pengajuan.index', compact('pengajuans', 'status', 'staff_pengiriman'));
     }
 }

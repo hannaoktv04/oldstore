@@ -1,7 +1,5 @@
 <?php
-
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\rt\peri;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -21,7 +19,7 @@ class ItemRequestController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('user.history', compact('requests'));
+        return view('peri::user.history', compact('requests'));
     }
 
     public function updateTanggalPengambilan(Request $request, $id)
@@ -67,7 +65,7 @@ class ItemRequestController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        return view('user.enota', [
+        return view('peri::user.enota', [
             'request' => $request,
             'isAdmin' => $user->hasRole('admin')
         ]);

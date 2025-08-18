@@ -1,4 +1,4 @@
-@extends('layouts.auth')
+@extends('peri::layouts.auth')
 
 @section('content')
 <div class="card shadow p-4" style="width: 360px;">

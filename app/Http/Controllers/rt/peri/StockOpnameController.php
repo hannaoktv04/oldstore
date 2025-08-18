@@ -1,7 +1,6 @@
 <?php
-
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\rt\peri;
+use App\Http\Controllers\Controller;  
 use App\Models\Item;
 use App\Models\StockOpname;
 use App\Models\OpnameSession;
@@ -16,7 +15,7 @@ class StockOpnameController extends Controller
     public function create()
     {
         $items = Item::with('stocks')->get();
-        return view('admin.stock_opname.create', compact('items'));
+        return view('peri::admin.stock_opname.create', compact('items'));
     }
     public function store(Request $request)
     {
@@ -45,7 +44,7 @@ class StockOpnameController extends Controller
         $items = Item::with(['stocks', 'stockOpnames' => function ($q) use ($stock_opname) {
             $q->where('session_id', $stock_opname->id);
         }])->get();
-        return view('admin.stock_opname.edit', [
+        return view('peri::admin.stock_opname.edit', [
             'session' => $stock_opname,
             'items' => $items
         ]);
@@ -134,7 +133,7 @@ class StockOpnameController extends Controller
 
         $stock_opname->load(['opener']);
 
-        return view('admin.stock_opname.show', [
+        return view('peri::admin.stock_opname.show', [
             'session' => $stock_opname,
             'items' => $allItems,
             'currentDate' => Carbon::now()

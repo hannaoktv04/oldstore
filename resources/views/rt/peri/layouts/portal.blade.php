@@ -38,7 +38,7 @@
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
         <div class="layout-page">
-            @include('components.navbar-test')
+            @include('peri::components.navbar-test')
 
             <div class="container-xxl flex-grow-1 container-p-y">
                 @yield('content')

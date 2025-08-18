@@ -1,4 +1,4 @@
-@extends('layouts.portal')
+@extends('peri::layouts.portal')
 
 @section('content')
 <div class="container">

@@ -1,7 +1,6 @@
 <?php
-
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\rt\peri;
+use App\Http\Controllers\Controller;  
 use App\Models\ItemRequest;
 use App\Models\ItemRequestDetail;
 use App\Models\ItemDelivery;
@@ -40,7 +39,7 @@ class AdminPengajuanController extends Controller
             $q->where('name', 'staff_pengiriman');
         })->get();
 
-        return view('admin.pengajuan.index', compact('pengajuans', 'status', 'staff_pengiriman'));
+        return view('peri::admin.pengajuan.index', compact('pengajuans', 'status', 'staff_pengiriman'));
     }
 
     public function approve(Request $request, ItemRequest $pengajuan)

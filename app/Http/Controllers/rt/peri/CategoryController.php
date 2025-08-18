@@ -1,7 +1,6 @@
 <?php
-
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\rt\peri;
+use App\Http\Controllers\Controller;  
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\ItemStock;
@@ -20,7 +19,7 @@ class CategoryController extends Controller
         ->orderBy('stocks_sum_qty', 'desc') 
         ->paginate(20);
 
-    return view('layouts.kategori', compact('categories', 'items'));
+    return view('peri::layouts.kategori', compact('categories', 'items'));
 }
 
 
@@ -85,7 +84,7 @@ class CategoryController extends Controller
         ->orderBy('stocks_sum_qty', 'desc')
         ->paginate(20);
 
-    return view('layouts.kategori', compact('categories', 'items'));
+    return view('peri::layouts.kategori', compact('categories', 'items'));
     }
 
     public function publicView()
@@ -97,6 +96,6 @@ class CategoryController extends Controller
             ->orderBy('stok_minimum', 'desc')
             ->get();
 
-        return view('admin.category.index', compact('categories', 'items'));
+        return view('peri::admin.category.index', compact('categories', 'items'));
     }
 }

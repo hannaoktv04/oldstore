@@ -1,7 +1,6 @@
 <?php
-
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\rt\peri;
+use App\Http\Controllers\Controller;  
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderDetail;
 use App\Models\Item;
@@ -18,7 +17,7 @@ class PurchaseOrderController extends Controller
     public function index()
     {
         $purchaseOrders = PurchaseOrder::with('details.item', 'creator')->latest()->get();
-        return view('admin.purchaseOrder.index', compact('purchaseOrders'));
+        return view('peri::admin.purchaseOrder.index', compact('purchaseOrders'));
     }
 
     public function create()
@@ -30,7 +29,7 @@ class PurchaseOrderController extends Controller
         $counter = $lastPO ? (int) Str::afterLast($lastPO->nomor_po, '-') + 1 : 1;
         $nomor_po = $prefix . '-' . str_pad($counter, 3, '0', STR_PAD_LEFT);
 
-        return view('admin.purchaseOrder.createPO', compact('items', 'nomor_po'));
+        return view('peri::admin.purchaseOrder.createPO', compact('items', 'nomor_po'));
     }
 
     public function store(Request $request)
@@ -66,7 +65,7 @@ class PurchaseOrderController extends Controller
     public function show(PurchaseOrder $purchaseOrder)
     {
         $purchaseOrder->load('details.item');
-        return view('admin.purchaseOrder.showPO', compact('purchaseOrder'));
+        return view('peri::admin.purchaseOrder.showPO', compact('purchaseOrder'));
     }
     public function submit(PurchaseOrder $purchaseOrder)
     {
@@ -87,7 +86,7 @@ class PurchaseOrderController extends Controller
     public function receiveForm(PurchaseOrder $purchaseOrder)
     {
         $details = $purchaseOrder->details()->with('item')->get();
-        return view('admin.purchaseOrder.receive', compact('purchaseOrder', 'details'));
+        return view('peri::admin.purchaseOrder.receive', compact('purchaseOrder', 'details'));
     }
     public function processReceive(Request $request, PurchaseOrder $purchaseOrder)
     {
@@ -128,7 +127,7 @@ class PurchaseOrderController extends Controller
         $purchaseOrder->load('details.item');
         $existingItems = $purchaseOrder->details;
 
-        return view('admin.purchaseOrder.edit', compact('purchaseOrder', 'items', 'existingItems'));
+        return view('peri::admin.purchaseOrder.edit', compact('purchaseOrder', 'items', 'existingItems'));
     }
 
     public function update(Request $request, PurchaseOrder $purchaseOrder)
