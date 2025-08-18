@@ -19,7 +19,7 @@ class UserNotifikasiController extends Controller
         $notifikasiProdukUser = collect();
         $notifikasiPengiriman = collect();
 
-        if (Auth::check() && Auth::user()->hasRole('pegawai')) {
+        if (Auth::check() && Auth::user()->role === 'pegawai') {
             $notifikasiProdukUser = StockNotification::query()
                 ->where('seen', false)
                 ->where(function ($q) {
