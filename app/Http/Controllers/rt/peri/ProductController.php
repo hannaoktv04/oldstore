@@ -20,7 +20,7 @@ class ProductController extends Controller
 
         $produk = Item::where('nama_barang', 'like', '%' . $keyword . '%')->get();
 
-        return view('search.results', compact('produk', 'keyword'));
+        return view('peri::search.results', compact('produk', 'keyword'));
     }
 
     public function tambahWishlist($id, Request $request)

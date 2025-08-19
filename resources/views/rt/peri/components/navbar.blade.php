@@ -194,3 +194,7 @@
     </div>
   </div>
 </nav>
+
+@push('scripts')
+<script src="{{ asset('js/peri/navbar.js') }}"></script>
+@endpush

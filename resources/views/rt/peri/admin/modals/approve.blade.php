@@ -54,3 +54,7 @@
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script src="{{ asset('js/peri/pengajuan.js') }}"></script>
+@endpush
