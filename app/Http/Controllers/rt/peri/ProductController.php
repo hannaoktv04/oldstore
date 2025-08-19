@@ -10,7 +10,7 @@ class ProductController extends Controller
     public function show($id)
     {
         $produk = Item::with(['photo', 'category'])->findOrFail($id);
-        return view('produk.detail', compact('produk'));
+        return view('peri::produk.detail', compact('produk'));
     }
 
 

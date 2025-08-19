@@ -82,16 +82,11 @@
                         <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                        <div class="d-grid px-4 pt-2 pb-1">
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-danger d-flex">
-                                    <small class="align-middle">Logout</small>
-                                    <i class="ri-logout-box-r-line ms-2 ri-16px"></i>
-                                </button>
-                            </form>
-                        </div>
-
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="dropdown-item text-danger"><i
+                                    class="ri-logout-box-r-line align-middle ri-22px me-3"></i>Logout</button>
+                        </form>
                     </li>
                 </ul>
             </li>
