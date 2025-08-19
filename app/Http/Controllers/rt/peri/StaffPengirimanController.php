@@ -22,7 +22,7 @@ class StaffPengirimanController extends Controller
             ->latest()
             ->get();
 
-        return view('staff-pengiriman.dashboard', compact('user', 'pengiriman'));
+        return view('peri::staff-pengiriman.dashboard', compact('user', 'pengiriman'));
     }
 
     public function show($kodeResi)
@@ -56,7 +56,7 @@ class StaffPengirimanController extends Controller
             }
         }
 
-        return view('staff-pengiriman.konfirmasi', compact('pengajuan', 'kodeResi'));
+        return view('peri::staff-pengiriman.konfirmasi', compact('pengajuan', 'kodeResi'));
     }
 
     public function submit(Request $request, $kodeResi)
@@ -96,7 +96,7 @@ class StaffPengirimanController extends Controller
             ->latest()
             ->get();
 
-        return view('staff-pengiriman.onprogress', compact('pengiriman'));
+        return view('peri::staff-pengiriman.onprogress', compact('pengiriman'));
     }
 
     public function waiting()
@@ -111,7 +111,7 @@ class StaffPengirimanController extends Controller
             ->latest()
             ->get();
 
-        return view('staff-pengiriman.waiting', compact('pengiriman'));
+        return view('peri::staff-pengiriman.waiting', compact('pengiriman'));
     }
 
     public function assignToMe($id)
@@ -157,6 +157,6 @@ class StaffPengirimanController extends Controller
 
         $pengiriman = $query->latest()->get();
 
-        return view('staff-pengiriman.selesai', compact('pengiriman'));
+        return view('peri::staff-pengiriman.selesai', compact('pengiriman'));
     }
 }
