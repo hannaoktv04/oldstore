@@ -48,7 +48,7 @@ class ProfileController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'profile_picture' => $user->profile_picture
-                ?: asset('images/avatars/jay.jpg'),
+                ?: asset('assets/img/avatars/jay.jpg'),
         ]);
     }
 }
