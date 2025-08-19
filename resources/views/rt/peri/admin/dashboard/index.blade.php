@@ -367,8 +367,15 @@
                             @foreach($topStaffPengiriman->take(5) as $index => $staff)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td>
-                                    {{ $staff->staff->nama ?? '-' }}
+                                <td class="d-flex align-items-center gap-2">
+                                    @php
+                                        $foto = ($staff->staff->profile_picture ?? '') !== ''
+                                            ? $staff->staff->profile_picture
+                                            : '/assets/img/avatars/jay.jpg';
+                                    @endphp
+                                    <img src="{{ $foto }}" alt="{{ $staff->staff->nama ?? '-' }}"
+                                        width="30" height="30" class="rounded-circle" style="object-fit:cover;">
+                                    <span>{{ $staff->staff->nama ?? '-' }}</span>
                                 </td>
                                 <td class="text-end">{{ $staff->total }}</td>
                             </tr>
@@ -418,8 +425,15 @@
                             @foreach($topUserRequest->take(5) as $index => $user)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td>
-                                    {{ $user->user->nama }}
+                                <td class="d-flex align-items-center gap-2">
+                                    @php
+                                        $foto = ($user->user->profile_picture ?? '') !== ''
+                                            ? $user->user->profile_picture
+                                            : '/assets/img/avatars/jay.jpg';
+                                    @endphp
+                                    <img src="{{ $foto }}" alt="{{ $user->user->nama }}"
+                                        width="30" height="30" class="rounded-circle" style="object-fit:cover;">
+                                    <span>{{ $user->user->nama }}</span>
                                 </td>
                                 <td class="text-end">{{ $user->total }}</td>
                             </tr>
