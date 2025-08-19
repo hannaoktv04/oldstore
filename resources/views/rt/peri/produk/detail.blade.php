@@ -162,3 +162,7 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="{{ asset('js/peri/detail.js') }}"></script>
+@endpush

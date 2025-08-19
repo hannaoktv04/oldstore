@@ -159,3 +159,7 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="{{ asset('js/peri/cart.js') }}"></script>
+@endpush

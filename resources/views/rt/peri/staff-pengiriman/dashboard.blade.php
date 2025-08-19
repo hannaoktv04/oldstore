@@ -6,7 +6,10 @@
         <div class="col-12 col-md-8 col-lg-6">
             <div class="card shadow-sm rounded-4 border-0">
                 <div class="card-body text-center">
-                    <h5 class="mb-3 text-success fw-semibold">📦 Scan Resi Pengiriman</h5>
+                    <h5 class="mb-3 text-success fw-semibold">
+                        <i class="ri-qr-scan-2-line align-middle me-2"></i>
+                        Scan Resi Pengiriman
+                    </h5>
                     <p class="text-muted small mb-4">
                         Arahkan kamera ke barcode resi untuk memproses konfirmasi pengiriman.
                     </p>
@@ -59,3 +62,6 @@
     });
 </script>
 @endsection
+@push('scripts')
+<script src="{{ asset('js/peri/scan-resi.js') }}"></script>
+@endpush

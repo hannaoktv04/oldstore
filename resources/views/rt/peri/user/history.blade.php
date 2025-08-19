@@ -218,3 +218,7 @@
             @endforelse
         </div>
     @endsection
+
+@push('scripts')
+<script src="{{ asset('js/peri/history.js') }}"></script>
+@endpush

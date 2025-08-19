@@ -36,7 +36,6 @@
     <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
     <script src="{{ asset('assets/js/config.js') }}"></script>
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> --}}
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @stack('style')
     @stack('scripts')
 </head>
@@ -155,6 +154,20 @@
 <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
 <script src="{{ asset('assets/js/produk-detail.js') }}"></script>
+{{-- CSS eksternal (Materialize/RemixIcon kamu) --}}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+{{-- ... html konten ... --}}
+
+{{-- JS vendor dulu --}}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+{{-- JS kamu --}}
+<script src="{{ asset('js/peri/purchase_order.js') }}" defer></script>
+<script src="{{ asset('js/peri/category-table.js') }}" defer></script>
+<script src="{{ asset('js/peri/formPO.js') }}" defer></script>
+<script src="{{ asset('js/peri/showPO.js') }}" defer></script>
+
 @stack('scripts')
 </body>
 </html>
