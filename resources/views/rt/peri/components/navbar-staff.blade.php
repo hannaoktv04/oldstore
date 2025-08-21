@@ -115,5 +115,5 @@
 </div>
 
 @push('scripts')
-<script src="{{ asset('js/peri/navbar.js') }}"></script>
+<script src="{{ asset('assets/js/peri/navbar.js') }}"></script>
 @endpush

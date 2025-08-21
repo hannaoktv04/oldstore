@@ -37,7 +37,6 @@
     <script src="{{ asset('assets/js/config.js') }}"></script>
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> --}}
     @stack('style')
-    @stack('scripts')
 </head>
 <body>
 
@@ -163,10 +162,11 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 {{-- JS kamu --}}
-<script src="{{ asset('js/peri/purchase_order.js') }}" defer></script>
-<script src="{{ asset('js/peri/category-table.js') }}" defer></script>
-<script src="{{ asset('js/peri/formPO.js') }}" defer></script>
-<script src="{{ asset('js/peri/showPO.js') }}" defer></script>
+<script src="{{ asset('assets/js/peri/purchase_order.js') }}" defer></script>
+<script src="{{ asset('assets/js/peri/category-table.js') }}" defer></script>
+<script src="{{ asset('assets/js/peri/formPO.js') }}" defer></script>
+<script src="{{ asset('assets/js/peri/showPO.js') }}" defer></script>
+
 
 @stack('scripts')
 </body>

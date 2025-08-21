@@ -60,7 +60,6 @@ class AdminPengajuanController extends Controller
                 }
 
                 $detail->update(['qty_approved' => $approvedQty]);
-                $detail->item->decrement('stok_minimum', $approvedQty);
                 $stock = ItemStock::where('item_id', $detail->item_id)->first();
 
                 if ($stock) {

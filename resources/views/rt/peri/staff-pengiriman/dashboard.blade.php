@@ -63,5 +63,5 @@
 </script>
 @endsection
 @push('scripts')
-<script src="{{ asset('js/peri/scan-resi.js') }}"></script>
+<script src="{{ asset('assets/js/peri/scan-resi.js') }}"></script>
 @endpush

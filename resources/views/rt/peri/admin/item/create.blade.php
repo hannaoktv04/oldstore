@@ -16,7 +16,7 @@
             <input type="hidden" name="thumbnail_index" id="thumbnail_index" value="0">
             <div class="card shadow-sm p-4 mb-4">
                 <h5 class="fw-semibold mb-3">Foto Item <span class="text-danger">*</span></h5>
-                <div id="imageUploadWrapper" class="d-flex flex-wrap gap-2">
+                <div id="imageUploadWrapper" class="d-flex flex-wrap gap-2 upload-scroller">
                     <div class="upload-box">
                         <label class="upload-trigger">
                             <input type="file" name="photo_Item[]" accept="image/*" class="d-none"
@@ -27,7 +27,9 @@
                         </label>
                     </div>
                 </div>
+                <small class="text-muted d-block mt-2">Klik gambar untuk memilih thumbnail. Format JPEG/PNG max 5MB.</small>
             </div>
+
             <div class="card shadow-sm p-4 mb-4">
                 <h5 class="fw-semibold mb-3">Informasi Item</h5>
                 <div class="mb-3">
@@ -112,5 +114,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/peri/admin-item.js') }}"></script>
+<script src="{{ asset('assets/js/peri/crud-item.js') }}"></script>
 @endpush

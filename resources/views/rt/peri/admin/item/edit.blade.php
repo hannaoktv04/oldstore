@@ -14,7 +14,7 @@
 
         <div class="card shadow-sm p-4 mb-4">
             <h5 class="fw-semibold mb-3">Foto Item</h5>
-            <div id="imageUploadWrapper" class="d-flex flex-wrap gap-2">
+            <div id="imageUploadWrapper" class="d-flex flex-wrap gap-2 ">
                 @foreach ($item->images as $index => $img)
                 <div class="upload-box {{ $img->id == $item->photo_id ? 'selected-thumbnail' : '' }}"
                     data-image-id="{{ $img->id }}">
@@ -40,7 +40,7 @@
                     </label>
                 </div>
             </div>
-            <small class="text-muted d-block mt-2">Klik gambar untuk memilih thumbnail. Format JPEG/PNG max 2MB.</small>
+            <small class="text-muted d-block mt-2">Klik gambar untuk memilih thumbnail. Format JPEG/PNG max 5MB.</small>
         </div>
         <div class="card shadow-sm p-4 mb-4">
             <h5 class="fw-semibold mb-3">Informasi Item</h5>
@@ -124,5 +124,5 @@
 
 
 @push('scripts')
-<script src="{{ asset('assets/js/peri/admin-item.js') }}"></script>
+<script src="{{ asset('assets/js/peri/crud-item.js') }}"></script>
 @endpush

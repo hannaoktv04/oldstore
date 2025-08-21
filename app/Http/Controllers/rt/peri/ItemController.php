@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Http\Controllers\rt\peri;
-use App\Http\Controllers\Controller;  
+
+use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\ItemImage;
@@ -196,11 +198,11 @@ class ItemController extends Controller
             }
 
             DB::commit();
-            if ($request->expectsJson()) {
+            if ($request->ajax() || $request->wantsJson() || $request->expectsJson()) {
                 return response()->json([
                     'success' => true,
                     'message' => 'Item berhasil diperbarui!',
-                    'redirect_url' => route('admin.items.index')
+                    'redirect_url' => route('admin.items.index'),
                 ]);
             }
             return redirect()->route('admin.items.index')->with('success', 'Item berhasil diperbarui!');

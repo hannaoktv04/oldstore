@@ -220,5 +220,5 @@
     @endsection
 
 @push('scripts')
-<script src="{{ asset('js/peri/history.js') }}"></script>
+<script src="{{ asset('assets/js/peri/history.js') }}"></script>
 @endpush

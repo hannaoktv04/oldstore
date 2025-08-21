@@ -56,5 +56,5 @@
 </div>
 
 @push('scripts')
-<script src="{{ asset('js/peri/pengajuan.js') }}"></script>
+<script src="{{ asset('assets/js/peri/pengajuan.js') }}"></script>
 @endpush
