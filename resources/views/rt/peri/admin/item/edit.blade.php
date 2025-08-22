@@ -24,7 +24,7 @@
                         <i class="ri-delete-bin-7-line" onclick="removeImage(this, {{ $img->id }})"></i>
                     </div>
                     <span
-                        class="badge bg-success position-absolute top-0 start-0 m-1 {{ $img->id == $item->photo_id ? '' : 'd-none' }}">Thumbnail</span>
+                        class="badge bg-primary position-absolute top-0 start-0 m-1 {{ $img->id == $item->photo_id ? '' : 'd-none' }}">Thumbnail</span>
                     <input type="hidden" name="existing_images[]" value="{{ $img->id }}">
                     <input type="file" name="photo_Item[]" class="d-none">
                 </div>
@@ -40,7 +40,7 @@
                     </label>
                 </div>
             </div>
-            <small class="text-muted d-block mt-2">Klik gambar untuk memilih thumbnail. Format JPEG/PNG max 5MB.</small>
+            <small class="text-muted d-block mt-2">Klik gambar untuk memilih thumbnail. Format JPEG/PNG max 5 MB.</small>
         </div>
         <div class="card shadow-sm p-4 mb-4">
             <h5 class="fw-semibold mb-3">Informasi Item</h5>
@@ -91,13 +91,13 @@
                     required>{{ old('deskripsi', $item->deskripsi) }}</textarea>
             </div>
         </div>
-        <div class="d-flex gap-3 mb-4">
+        <div class="d-flex gap-3 mb-4 justify-content-end">
+            <button id="submitBtn" type="submit" class="btn btn-primary hover-3d">
+                Simpan
+            </button>
             <a href="{{ url()->previous() }}"" class=" btn btn-outline-secondary hover-3d">
                 Kembali
             </a>
-            <button id="submitBtn" type="submit" class="btn btn-primary hover-3d">
-                Update
-            </button>
         </div>
     </form>
 </div>
@@ -114,8 +114,9 @@
                 </div>
             </div>
             <div class="modal-footer border-0 mt-2">
+                <button class="btn btn-primary" id="saveCropBtn">Simpan</button>
                 <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                <button class="btn btn-success" id="saveCropBtn">Simpan</button>
+                
             </div>
         </div>
     </div>

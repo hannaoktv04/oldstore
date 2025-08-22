@@ -10,27 +10,27 @@
       <div class="modal-body">
         <ul class="list-unstyled small">
           <li class="mb-3">
-            <strong>✅ Pengajuan Diajukan</strong><br>
+            <strong><i class="ri-checkbox-circle-line me-1"></i> Pengajuan Diajukan</strong><br>
             {{ \Carbon\Carbon::parse($pengajuan->created_at)->format('H:i:s, d M Y') }}
           </li>
 
           @if(in_array($pengajuan->status, ['approved', 'delivered', 'received']) && $pengajuan->itemDelivery)
           <li class="mb-3">
-            <strong>📦 Disetujui</strong><br>
+            <strong><i class="ri-box-3-fill text-primary me-1"></i> Disetujui</strong><br>
             {{ \Carbon\Carbon::parse($pengajuan->itemDelivery->created_at)->format('H:i:s, d M Y') }}
           </li>
           @endif
 
           @if($pengajuan->tanggal_pengiriman)
           <li class="mb-3">
-            <strong>📅 Dikirimkan sesuai jadwal pengiriman</strong><br>
+            <strong><i class="ri-calendar-event-fill text-info me-1"></i> Dikirimkan sesuai jadwal pengiriman</strong><br>
             {{ \Carbon\Carbon::parse($pengajuan->tanggal_pengiriman)->format('H:i, d M Y') }}
           </li>
           @endif
 
           @if($pengajuan->itemDelivery && $pengajuan->itemDelivery->status === 'in_progress')
           <li class="mb-3">
-            <strong>🚚 Dalam Pengiriman</strong><br>
+            <strong><i class="ri-truck-fill text-warning me-1"></i> Dalam Pengiriman</strong><br>
             Sedang diantar oleh <strong>{{ $pengajuan->itemDelivery->staff->nama ?? 'Staff tidak ditemukan' }}</strong><br>
             {{ \Carbon\Carbon::parse($pengajuan->itemDelivery->tanggal_kirim)->format('H:i:s, d M Y') }}
           </li>
@@ -38,7 +38,7 @@
 
           @if($pengajuan->status === 'received' && $pengajuan->itemDelivery && $pengajuan->itemDelivery->bukti_foto)
           <li class="mb-3">
-            <strong>📥 Diterima</strong><br>
+            <strong><i class="ri-download-2-fill text-success me-1"></i> Diterima</strong><br>
             <a href="#" data-bs-toggle="modal" data-bs-target="#buktiModal-{{ $pengajuan->id }}">
               Lihat Bukti Pengiriman
             </a><br>
@@ -49,7 +49,7 @@
 
           @if($pengajuan->status == 'rejected')
           <li class="mb-3 text-danger">
-            <strong>❌ Ditolak</strong><br>
+            <strong><i class="ri-close-circle-fill text-danger me-1"></i> Ditolak</strong><br>
             {{ $pengajuan->keterangan ?? 'Tidak ada keterangan' }}<br>
             {{ \Carbon\Carbon::parse($pengajuan->updated_at)->format('H:i:s, d M Y') }}
           </li>
@@ -82,12 +82,8 @@
              alt="Bukti Pengiriman"
              class="img-thumbnail"
              style="max-width: 100%; max-height: 300px; object-fit: contain;">
-
         </div>
       </div>
     </div>
   </div>
 </div>
-
-@if($pengajuan->itemDelivery && $pengajuan->itemDelivery->bukti_foto)
-@endif

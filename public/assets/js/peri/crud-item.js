@@ -161,13 +161,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   };
 
-  (function normalizeEditBadges(){
-    document.querySelectorAll("#imageUploadWrapper .upload-box .badge").forEach(b=>{
-      b.classList.remove("bg-success","bg-danger","bg-secondary");
-      b.classList.add("bg-primary");
-    });
-  })();
-
   function updateThumbnailIndex() {
     if (!wrapper) return;
     const boxes = Array.from(wrapper.querySelectorAll('.upload-box'))

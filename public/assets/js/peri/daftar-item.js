@@ -60,15 +60,11 @@ document.addEventListener("DOMContentLoaded", function () {
       zeroRecords: "Data tidak ditemukan"
     }
   });
-
-  // Filter
   $('#filter-kategori, #filter-status, #filter-stok').on('change', function () {
     table.draw();
   });
 
   function reloadTable() { table.ajax.reload(null, false); }
-
-  // Detail
   $(document).on('click', '.btn-detail', function () {
     const itemId = $(this).data('id');
     $('#detailModalBody').html(
@@ -107,7 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Delete
   $(document).on('click', '.btn-delete', function () {
     const itemId   = $(this).data('id');
     const itemName = $(this).data('nama') || '';
@@ -139,7 +134,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Toggle archive
   $(document).on('click', '.btn-archive', function () {
     const itemId = $(this).data('id');
     $.post('/admin/items/' + itemId + '/toggle-archive', function (resp) {
@@ -149,8 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
-
-  // Bulk offcanvas
+  
   const bulkOffcanvasEl = document.getElementById('bulkActionsOffcanvas');
   const bulkOffcanvas   = bulkOffcanvasEl ? new bootstrap.Offcanvas(bulkOffcanvasEl) : null;
 

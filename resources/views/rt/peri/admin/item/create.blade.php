@@ -27,7 +27,7 @@
                         </label>
                     </div>
                 </div>
-                <small class="text-muted d-block mt-2">Klik gambar untuk memilih thumbnail. Format JPEG/PNG max 5MB.</small>
+                <small class="text-muted d-block mt-2">Klik gambar untuk memilih thumbnail. Format JPEG/PNG max 5 MB.</small>
             </div>
 
             <div class="card shadow-sm p-4 mb-4">
@@ -80,13 +80,14 @@
                     <small class="text-muted">Maksimal 500 karakter.</small>
                 </div>
             </div>
-            <div class="d-flex gap-3 mb-4">
-                <a href="{{ url()->previous() }}" class="btn btn-outline-secondary px-4 hover-3d">
-                    Batal
-                </a>
-                <button id="submitBtn" type="submit" class="btn btn-primary px-4 hover-3d">
+            <div class="d-flex gap-3 mb-4 justify-content-end">
+                <button id="submitBtn" type="submit" class="btn btn-primary px-4">
                     Simpan
                 </button>
+                <a href="{{ url()->previous() }}" class="btn btn-outline-secondary px-4">
+                    Batal
+                </a>
+                
             </div>
         </form>
         <div class="modal fade" id="cropperModal" tabindex="-1" aria-labelledby="cropperModalLabel"
@@ -104,8 +105,9 @@
                         </div>
                     </div>
                     <div class="modal-footer border-0 mt-2">
+                        <button class="btn btn-primary" id="saveCropBtn">Simpan</button>
                         <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button class="btn btn-success" id="saveCropBtn">Simpan</button>
+                        
                     </div>
                 </div>
             </div>
