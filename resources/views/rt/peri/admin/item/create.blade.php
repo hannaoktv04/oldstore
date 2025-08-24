@@ -16,7 +16,7 @@
             <input type="hidden" name="thumbnail_index" id="thumbnail_index" value="0">
             <div class="card shadow-sm p-4 mb-4">
                 <h5 class="fw-semibold mb-3">Foto Item <span class="text-danger">*</span></h5>
-                <div id="imageUploadWrapper" class="d-flex flex-wrap gap-2">
+                <div id="imageUploadWrapper" class="d-flex flex-wrap gap-2 upload-scroller">
                     <div class="upload-box">
                         <label class="upload-trigger">
                             <input type="file" name="photo_Item[]" accept="image/*" class="d-none"
@@ -27,7 +27,9 @@
                         </label>
                     </div>
                 </div>
+                <small class="text-muted d-block mt-2">Klik gambar untuk memilih thumbnail. Format JPEG/PNG max 5 MB.</small>
             </div>
+
             <div class="card shadow-sm p-4 mb-4">
                 <h5 class="fw-semibold mb-3">Informasi Item</h5>
                 <div class="mb-3">
@@ -78,13 +80,14 @@
                     <small class="text-muted">Maksimal 500 karakter.</small>
                 </div>
             </div>
-            <div class="d-flex gap-3 mb-4">
-                <a href="{{ url()->previous() }}" class="btn btn-outline-secondary px-4 hover-3d">
-                    Batal
-                </a>
-                <button id="submitBtn" type="submit" class="btn btn-primary px-4 hover-3d">
+            <div class="d-flex gap-3 mb-4 justify-content-end">
+                <button id="submitBtn" type="submit" class="btn btn-primary px-4">
                     Simpan
                 </button>
+                <a href="{{ url()->previous() }}" class="btn btn-outline-secondary px-4">
+                    Batal
+                </a>
+                
             </div>
         </form>
         <div class="modal fade" id="cropperModal" tabindex="-1" aria-labelledby="cropperModalLabel"
@@ -102,8 +105,9 @@
                         </div>
                     </div>
                     <div class="modal-footer border-0 mt-2">
+                        <button class="btn btn-primary" id="saveCropBtn">Simpan</button>
                         <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button class="btn btn-success" id="saveCropBtn">Simpan</button>
+                        
                     </div>
                 </div>
             </div>
@@ -112,5 +116,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/peri/admin-item.js') }}"></script>
+<script src="{{ asset('assets/js/peri/crud-item.js') }}"></script>
 @endpush

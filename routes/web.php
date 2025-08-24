@@ -114,7 +114,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('/pengajuan/{pengajuan}/approve', [AdminPengajuanController::class, 'approve'])->name('admin.pengajuan.approve');
     Route::post('/pengajuan/{pengajuan}/reject', [AdminPengajuanController::class, 'reject'])->name('admin.pengajuan.reject');
 
-    // Route::post('admin/items/{item}', [ItemController::class, 'update'])->name('admin.items.update.post');
     Route::resource('/items', ItemController::class, ['as' => 'admin']);
     Route::get('/items-data', [ItemController::class, 'data'])->name('admin.items.data');
     Route::post('/items/bulk-action', [ItemController::class, 'bulkAction'])->name('admin.items.bulkAction');

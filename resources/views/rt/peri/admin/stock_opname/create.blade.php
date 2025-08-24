@@ -56,7 +56,7 @@
         </div>
 
         <div>
-            <a href="{{ route('admin.stock_opname.index') }}" class="btn btn-secondary">
+            <a href="{{ route('admin.stock_opname.index') }}" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left me-1"></i> Kembali
             </a>
             <button type="submit" class="btn btn-primary">

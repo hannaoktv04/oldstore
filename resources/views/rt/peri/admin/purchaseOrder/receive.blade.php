@@ -5,7 +5,7 @@
 @section('content')
 <div class="card px-2 py-3">
     <div class="card-header">
-        <h4 class="card-title">Receive PO - {{ $purchaseOrder->nomor_po }}</h4>
+        <h4 class="card-title">Input Stok Fisik - {{ $purchaseOrder->nomor_po }}</h4>
     </div>
     <div class="card-body">
         <form action="{{ route('admin.purchase_orders.processReceive', $purchaseOrder->id) }}" method="POST">
@@ -35,9 +35,9 @@
                 </tbody>
             </table>
 
-            <div class="mt-4">
-                <button type="submit" class="btn btn-success">Simpan</button>
-                <a href="{{ route('admin.purchase_orders.index') }}" class="btn btn-secondary">Batal</a>
+            <div class="mt-4 text-end">
+                <button type="submit" class="btn btn-primary">Simpan</button>
+                <a href="{{ route('admin.purchase_orders.index') }}" class="btn btn-outline-secondary">Batal</a>
             </div>
         </form>
     </div>

@@ -36,7 +36,7 @@
             </div>
             <hr>
             <div class="table-responsive px-3 mb-2">
-                <table class="table table-hover" id="itemTable">
+                <table class="table table-hover" id="itemTable" data-source="{{ route('admin.items.data') }}">
                     <thead>
                         <tr>
                             <th></th>
@@ -91,8 +91,8 @@
             </div>
         </div>
     </div>
+<input type="hidden" id="bulkActionRoute" value="{{ route('admin.items.bulkAction') }}">
 @endsection
-
 @push('scripts')
-<script src="{{ asset('js/peri/item-table.js') }}"></script>
+  <script src="{{ asset('assets/js/peri/daftar-item.js') }}" defer></script>
 @endpush

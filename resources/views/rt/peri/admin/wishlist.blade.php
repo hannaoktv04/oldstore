@@ -43,23 +43,23 @@
                                     @if($wishlist->status == 'pending')
                                         <span class="badge bg-warning text-dark">Pending</span>
                                     @elseif($wishlist->status == 'diakomodasi')
-                                        <span class="badge bg-success">Diakomodasi</span>
+                                        <span class="badge bg-primary text-white">Diakomodasi</span>
                                     @else
-                                        <span class="badge bg-danger">Ditolak</span>
+                                        <span class="badge bg-danger text-white">Ditolak</span>
                                     @endif
                                 </td>
                                 <td class="text-center">
                                     @if($wishlist->status == 'pending')
-                                        <div class="btn-group btn-group-sm" role="group">
+                                        <div class="d-flex gap-2" role="group">
                                             <form action="{{ route('admin.wishlist.akomodasi', $wishlist->id) }}" method="POST">
                                                 @csrf
-                                                <button type="submit" class="btn btn-success" title="Akomodasi">
-                                                    <i class="fas fa-check"></i>
+                                                <button type="submit" class="btn btn-outline-success rounded-circle p-2" title="Akomodasi">
+                                                    <i class="ri-check-line"></i>
                                                 </button>
                                             </form>
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" 
+                                            <button type="button" class="btn btn-outline-danger rounded-circle p-2" data-bs-toggle="modal" 
                                                 data-bs-target="#rejectModal{{ $wishlist->id }}" title="Tolak">
-                                                <i class="fas fa-times"></i>
+                                                <i class="ri-close-line"></i>
                                             </button>
                                         </div>
                                         
@@ -79,7 +79,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
                                                             <button type="submit" class="btn btn-danger">Konfirmasi Tolak</button>
                                                         </div>
                                                     </form>

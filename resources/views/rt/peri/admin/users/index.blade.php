@@ -89,7 +89,7 @@
 
                 <div class="modal-footer justify-content-center border-0">
                     <button type="submit" class="btn btn-md btn-primary">Submit</button>
-                    <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-md btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div>

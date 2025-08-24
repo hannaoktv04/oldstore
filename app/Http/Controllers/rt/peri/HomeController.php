@@ -14,8 +14,10 @@ class HomeController extends Controller
     public function index()
     {
         $items = Item::with(['category', 'photo'])
+            ->withSum('stocks', 'qty')
             ->withSum('details', 'qty_requested')
-            ->orderByRaw('stok_minimum = 0')
+            ->whereHas('state', fn($q) => $q->where('is_archived', '0'))
+            ->orderByRaw('(COALESCE(stocks_sum_qty, 0) = 0) ASC')
             ->orderByDesc('details_sum_qty_requested')
             ->take(24)
             ->get();

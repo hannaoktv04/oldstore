@@ -109,13 +109,13 @@
                 </div>
             </div>
 
-            <div class="text-start mt-4 mb-2">
+            <div class="text-end mt-4 mb-2">
                 <a href="{{ route('admin.purchase_orders.downloadPdf', $purchaseOrder->id) }}"
                     class="btn btn-flat btn-primary" target="_blank">
-                    <i></i> Print
+                    <i></i> Cetak
                 </a>
-                <a href="{{ route('admin.purchase_orders.index') }}" class="btn btn-flat btn-dark">
-                    <i></i> Back
+                <a href="{{ route('admin.purchase_orders.index') }}" class="btn btn-flat btn-outline-secondary">
+                    <i></i> Kembali
                 </a>
             </div>
         </div>

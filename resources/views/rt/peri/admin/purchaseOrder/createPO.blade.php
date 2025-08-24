@@ -5,7 +5,7 @@
 @section('content')
 <div class="card px-1 py-3">
     <div class="card-header">
-        <h4 class="card-title">Create New Purchase Order</h4>
+        <h4 class="card-title">Buat Daftar Pengajuan</h4>
     </div>
     <div class="card-body">
         <form action="{{ route('admin.purchase_orders.store') }}" method="POST">
@@ -69,9 +69,9 @@
                 <tbody id="table-body"></tbody>
             </table>
 
-            <div class="mt-4">
+            <div class="mt-4 text-end">
                 <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ route('admin.purchase_orders.index') }}" class="btn btn-secondary">Batal</a>
+                <a href="{{ route('admin.purchase_orders.index') }}" class="btn btn-outline-secondary">Batal</a>
             </div>
         </form>
     </div>

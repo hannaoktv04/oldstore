@@ -1,12 +1,12 @@
 <nav class="navbar navbar-expand-lg bg-white shadow-sm py-2 sticky-top">
-  <div class="container d-flex justify-content-between align-items-center">
+    <div class="container d-flex justify-content-between align-items-center">
 
-    <div class="d-flex align-items-center">
-      @if(Auth::check() && Auth::user()->hasRole('admin'))
-        <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
-          <i class="bi bi-list fs-4"></i>
-        </button>
-      @endif
+        <div class="d-flex align-items-center">
+            @if (Auth::check() && Auth::user()->hasRole('admin'))
+                <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
+                    <i class="bi bi-list fs-4"></i>
+                </button>
+            @endif
 
       <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
         <img src="{{ asset('assets/img/peri.png') }}" alt="PERI Logo" style="height: 50px;">
@@ -15,17 +15,18 @@
         @endif
       </a>
 
-      <a class="nav-link fw-medium ms-3" href="{{ url('/kategori') }}">Kategori</a>
-    </div>
+            <a class="nav-link fw-medium ms-3" href="{{ url('/kategori') }}">Kategori</a>
+        </div>
 
-    <form class="d-none d-lg-flex flex-grow-1 mx-3" method="GET" action="{{ route('search') }}">
-      <div class="input-group position-relative w-100">
-        <input name="q" class="form-control rounded-pill ps-4" type="search" placeholder="Cari barang..." value="{{ request('q') }}">
-        <span class="position-absolute top-50 end-0 translate-middle-y me-3 text-muted">
-          <i class="bi bi-search"></i>
-        </span>
-      </div>
-    </form>
+        <form class="d-none d-lg-flex flex-grow-1 mx-3" method="GET" action="{{ route('search') }}">
+            <div class="input-group position-relative w-100">
+                <input name="q" class="form-control rounded-pill ps-4" type="search" placeholder="Cari barang..."
+                    value="{{ request('q') }}">
+                <span class="position-absolute top-50 end-0 translate-middle-y me-3 text-muted">
+                    <i class="bi bi-search"></i>
+                </span>
+            </div>
+        </form>
 
     @php
       use App\Models\Cart;
@@ -46,13 +47,14 @@
             ->latest()->take(20)->get()
         : collect();
 
-      $totalNotifUser = $notifikasiProdukBaru->count() + $notifikasiPengiriman->count();
-    @endphp
+            $totalNotifUser = $notifikasiProdukBaru->count() + $notifikasiPengiriman->count();
+        @endphp
 
-    <div class="d-flex align-items-center gap-2">
-      <button class="btn d-lg-none text-dark bg-transparent border-0" data-bs-toggle="modal" data-bs-target="#searchModalMobile">
-        <i class="bi bi-search fs-5"></i>
-      </button>
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn d-lg-none text-dark bg-transparent border-0" data-bs-toggle="modal"
+                data-bs-target="#searchModalMobile">
+                <i class="bi bi-search fs-5"></i>
+            </button>
 
       @auth
         <div class="position-relative">
@@ -117,7 +119,16 @@
                 <div class="text-muted small">Tidak ada update produk.</div>
               @endforelse
 
-              <hr class="my-2">
+            @if($notifikasiProdukBaru->count() > 0)
+              <div class="mt-2">
+                <form action="{{ route('notifikasi.markSeen') }}" method="POST">
+                  @csrf
+                  <button class="btn btn-outline-secondary btn-sm w-100" type="submit">Tandai Produk: Sudah Dibaca</button>
+                </form>
+              </div>
+            @endif
+
+            <hr class="my-3">
 
               <h6 class="mb-2">Barang Sedang Dikirim</h6>
               @forelse($notifikasiPengiriman as $deliv)

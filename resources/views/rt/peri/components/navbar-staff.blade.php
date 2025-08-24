@@ -55,11 +55,7 @@
         <ul class="dropdown-menu dropdown-menu-end rounded-3 shadow-sm">
           <li class="px-3 py-2 small text-muted">Role: <strong>{{ Auth::user()->role }}</strong></li>
           <li><hr class="dropdown-divider"></li>
-          <li>
-            <a class="dropdown-item" href="{{ route('staff-pengiriman.dashboard') }}">
-              <i class="ri-truck-line me-2"></i>My Progress
-            </a>
-          </li>
+          <li><a class="dropdown-item" href="{{ route('home') }}"><i class="bi bi-house me-2"></i>Homepage</a></li>
           <li><hr class="dropdown-divider"></li>
           <li>
             <form method="POST" action="{{ route('logout') }}">
@@ -103,11 +99,7 @@
       <ul class="dropdown-menu shadow-sm rounded-3">
         <li class="px-3 py-2 small text-muted">Role: <strong>{{ Auth::user()->role }}</strong></li>
         <li><hr class="dropdown-divider"></li>
-        <li>
-          <a class="dropdown-item" href="{{ route('staff-pengiriman.dashboard') }}">
-            <i class="ri-truck-line me-2"></i>My Progress
-          </a>
-        </li>
+        <li><a class="dropdown-item" href="{{ route('home') }}"><i class="bi bi-truck me-2"></i>Homepages</a></li>
         <li><hr class="dropdown-divider"></li>
         <li>
           <form method="POST" action="{{ route('logout') }}">
@@ -124,5 +116,5 @@
 </div>
 
 @push('scripts')
-<script src="{{ asset('js/peri/navbar.js') }}"></script>
+<script src="{{ asset('assets/js/peri/navbar.js') }}"></script>
 @endpush
