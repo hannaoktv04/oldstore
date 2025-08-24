@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const cartIcon = document.getElementById('cart-icon');
+  const cartIcon  = document.getElementById('cart-icon');
   const cartPopup = document.getElementById('cart-popup');
 
-  const notifIcon = document.getElementById('notif-icon');
+  const notifIcon  = document.getElementById('notif-icon');
   const notifPopup = document.getElementById('notif-popup');
 
-  const userIcon = document.getElementById('user-icon');
+  const userIcon  = document.getElementById('user-icon');
   const userPopup = document.getElementById('user-popup');
 
   function closeAllPopups() {
@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
     notifPopup?.classList.add('d-none');
     userPopup?.classList.add('d-none');
   }
+
+  cartPopup?.addEventListener('click',  e => e.stopPropagation());
+  notifPopup?.addEventListener('click', e => e.stopPropagation());
+  userPopup?.addEventListener('click',  e => e.stopPropagation());
 
   cartIcon?.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -35,11 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isOpen) userPopup.classList.remove('d-none');
   });
 
-  document.addEventListener('click', () => {
-    closeAllPopups();
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeAllPopups();
-  });
+  document.addEventListener('click', () => closeAllPopups());
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllPopups(); });
 });

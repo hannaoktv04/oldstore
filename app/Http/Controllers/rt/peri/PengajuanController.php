@@ -6,6 +6,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Writer\PngWriter;
+use Illuminate\Support\Facades\Storage;
+
 
 class PengajuanController extends Controller
 {
@@ -40,5 +42,34 @@ class PengajuanController extends Controller
         $autoPrint = $request->query('auto') == 1;
 
         return view('peri::admin.resi', compact('pengajuan', 'kodeResi', 'qrBase64'));
+    }
+
+    public function signature($id)
+    {
+        $request = ItemRequest::findOrFail($id);
+        return view('peri::user.signature', compact('request'));
+    }
+
+    public function signatureStore(Request $http, $id)
+    {
+        $http->validate([
+            'signature' => ['required','string'],
+        ]);
+
+        $dataUrl = $http->input('signature');
+        $png = preg_replace('/^data:image\/\w+;base64,/', '', $dataUrl);
+        $png = str_replace(' ', '+', $png);
+        $binary = base64_decode($png);
+
+        $path = 'signatures/' . now()->format('YmdHis') . "_req{$id}.png";
+        Storage::disk('public')->put($path, $binary);
+
+        $pengajuan = ItemRequest::findOrFail($id);
+        $pengajuan->ttd_path = $path;      
+        $pengajuan->save();
+
+        return redirect()
+            ->route('pengajuan.enota', $pengajuan->id)  
+            ->with('success', 'Tanda tangan berhasil disimpan.');
     }
 }

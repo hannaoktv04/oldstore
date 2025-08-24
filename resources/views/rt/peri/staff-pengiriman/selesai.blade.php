@@ -21,7 +21,7 @@
                         <small class="text-muted">| Resi: KP{{ str_pad($item->request->id, 6, '0', STR_PAD_LEFT) }}</small>
                     </div>
                     <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $item->id }}">
-                        <i class="bi bi-card-checklist"></i> Cek Detail
+                        <i class="ri-clipboard-line me-1"></i> Cek Detail
                     </button>
                 </div>
 
@@ -56,26 +56,33 @@
 
                         <ul class="timeline list-unstyled">
                             <li class="mb-3">
-                                <div><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Pengajuan Diajukan</strong></div>
+                                <div><i class="ri-check-circle-fill text-success me-2"></i><strong>Pengajuan Diajukan</strong></div>
                                 <small class="text-muted">{{ \Carbon\Carbon::parse($item->request->tanggal_permintaan)->format('H:i:s, d M Y') }}</small>
                             </li>
 
                             <li class="mb-3">
-                                <div><i class="bi bi-box-seam text-warning me-2"></i><strong>Disetujui</strong></div>
+                                <div><i class="ri-box-3-line text-warning me-2"></i><strong>Disetujui</strong></div>
                                 <small class="text-muted">{{ \Carbon\Carbon::parse($item->request->updated_at)->format('H:i:s, d M Y') }}</small>
                             </li>
 
                             <li class="mb-3">
-                                <div><i class="bi bi-calendar-event text-primary me-2"></i><strong>Dikirimkan sesuai jadwal</strong></div>
+                                <div><i class="ri-calendar-check-line text-primary me-2"></i><strong>Dikirimkan sesuai jadwal</strong></div>
                                 <small class="text-muted">{{ \Carbon\Carbon::parse($item->tanggal_kirim)->format('H:i:s, d M Y') }}</small>
                             </li>
 
                             <li class="mb-3">
-                                <div><i class="bi bi-clipboard-check text-danger me-2"></i><strong>Diterima</strong></div>
+                                <div><i class="ri-clipboard-check-line text-danger me-2"></i><strong>Diterima</strong></div>
 
-                                <button type="button" class="btn btn-link p-0 text-primary text-decoration-none" data-bs-toggle="modal" data-bs-target="#buktiModal-{{ $item->id }}">
-                                    <i class="bi bi-image"></i> Lihat Bukti Pengiriman
-                                </button> <br>
+                                @if($item->bukti_foto)
+                                  <a href="{{ asset('storage/' . $item->bukti_foto) }}"
+                                     target="_blank" rel="noopener"
+                                     class="btn btn-link p-0 text-primary text-decoration-none">
+                                    <i class="ri-image-line"></i> Lihat Bukti Pengiriman
+                                  </a>
+                                @else
+                                  <small class="text-muted d-block">Bukti pengiriman belum tersedia.</small>
+                                @endif
+                                <br>
 
                                 <small class="text-muted">
                                     Diantar oleh: <strong>{{ $item->staff->nama ?? 'Staff tidak ditemukan' }}</strong><br>
@@ -89,14 +96,13 @@
                             $end = \Carbon\Carbon::parse($item->updated_at);
                             $diff = $start->diff($end);
                             $diffText = '';
-
                             if ($diff->d > 0) $diffText .= $diff->d . ' hari ';
                             if ($diff->h > 0) $diffText .= $diff->h . ' jam ';
                             if ($diff->i > 0) $diffText .= $diff->i . ' menit ';
                         @endphp
 
                         <div class="alert alert-success mt-4 text-center">
-                            <i class="bi bi-check-circle-fill me-2"></i> Pesanan sudah selesai <br>
+                            <i class="ri-check-circle-fill me-2"></i> Pesanan sudah selesai <br>
                             <small class="d-block mt-1">Waktu proses: {{ $diffText ?: 'Kurang dari 1 menit' }}</small>
                         </div>
                     </div>
@@ -104,26 +110,6 @@
             </div>
         </div>
 
-        @if($item->bukti_foto)
-        <div class="modal fade" id="buktiModal-{{ $item->id }}" tabindex="-1" aria-labelledby="buktiModalLabel-{{ $item->id }}" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content rounded-4">
-              <div class="modal-header border-0">
-                <h5 class="modal-title" id="buktiModalLabel-{{ $item->id }}">Bukti Pengiriman</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body text-center">
-                <img
-                  src="{{ asset('storage/' . $item->bukti_foto) }}"
-                  alt="Bukti Pengiriman"
-                  class="img-thumbnail"
-                  style="max-width: 100%; width: 100%; max-height: 300px; object-fit: contain;"
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-        @endif
 
     @empty
         <div class="alert alert-info text-center">
@@ -138,7 +124,6 @@
     position: relative;
     padding-left: 25px;
 }
-
 .timeline li::before {
     content: '';
     position: absolute;

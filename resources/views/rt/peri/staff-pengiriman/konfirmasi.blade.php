@@ -2,15 +2,18 @@
 
 @section('content')
 <div class="container py-4">
-    <h4 class="mb-4">📦 Konfirmasi Pengiriman - <span class="text-succ">{{ $kodeResi }}</span></h4>
+    <h4 class="mb-4 d-flex align-items-center">
+        <i class="ri-box-3-line me-2 text-success"></i>
+        Konfirmasi Pengiriman - <span class="text-succ">{{ $kodeResi }}</span>
+    </h4>
 
     <div class="mb-3">
-        <p><strong>Pemohon:</strong> {{ $pengajuan->user->nama }}</p>
-        <p><strong>Tanggal Pengajuan:</strong> {{ \Carbon\Carbon::parse($pengajuan->tanggal_permintaan)->translatedFormat('d F Y') }}</p>
+        <p><strong><i class="ri-user-3-line me-1 align-middle"></i> Pemohon:</strong> {{ $pengajuan->user->nama }}</p>
+        <p><strong><i class="ri-calendar-line me-1 align-middle"></i> Tanggal Pengajuan:</strong> {{ \Carbon\Carbon::parse($pengajuan->tanggal_permintaan)->translatedFormat('d F Y') }}</p>
     </div>
 
     <div class="mb-4">
-        <h6>Daftar Barang</h6>
+        <h6 class="d-flex align-items-center"><i class="ri-shopping-bag-3-line me-2 text-success"></i>Daftar Barang</h6>
         <ul class="list-group">
             @foreach ($pengajuan->details as $detail)
                 @if ($detail->qty_approved > 0)
@@ -27,23 +30,31 @@
         @csrf
 
         <div class="mb-3">
-            <label class="form-label">📷 Bukti Pengiriman</label>
+            <label class="form-label d-flex align-items-center">
+                <i class="ri-camera-line me-2"></i> Bukti Pengiriman
+            </label>
             <input type="file" name="bukti_foto" class="form-control @error('bukti_foto') is-invalid @enderror" accept="image/*" required onchange="previewImage(event)">
             @error('bukti_foto')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
             <div class="mt-2 position-relative" style="max-width: 300px;">
                 <img id="buktiPreview" src="#" class="img-thumbnail d-none w-100 object-fit-cover" style="height: 200px;">
-                <button type="button" onclick="removeImage()" class="btn btn-sm btn-danger position-absolute top-0 end-0 d-none" id="removeBtn" style="z-index:10;">&times;</button>
+                <button type="button" onclick="removeImage()" class="btn btn-sm btn-danger position-absolute top-0 end-0 d-none" id="removeBtn" style="z-index:10;">
+                    <i class="ri-close-line"></i>
+                </button>
             </div>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">📝 Catatan (Opsional)</label>
+            <label class="form-label d-flex align-items-center">
+                <i class="ri-edit-2-line me-2"></i> Catatan (Opsional)
+            </label>
             <textarea name="catatan" class="form-control">{{ old('catatan') }}</textarea>
         </div>
 
-        <button type="submit" class="btn btn-success w-100">✔️ Konfirmasi Pengiriman</button>
+        <button type="submit" class="btn btn-success w-100 d-flex justify-content-center align-items-center gap-2">
+            <i class="ri-check-line"></i> Konfirmasi Pengiriman
+        </button>
     </form>
 </div>
 

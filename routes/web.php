@@ -207,3 +207,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/notifikasi/user/produk/baca/{id?}', [UserNotifikasiController::class, 'markProdukAsRead'])->name('user.notif.produk.baca');
     Route::post('/notifikasi/user/pengiriman/baca/{id?}', [UserNotifikasiController::class, 'markPengirimanAsRead'])->name('user.notif.pengiriman.baca');
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/pengajuan/{id}/ttd', [PengajuanController::class, 'signature'])
+        ->name('pengajuan.signature');
+
+    Route::post('/pengajuan/{id}/ttd', [PengajuanController::class, 'signatureStore'])
+        ->name('pengajuan.signature.store');
+});

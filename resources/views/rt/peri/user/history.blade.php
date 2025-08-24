@@ -63,7 +63,7 @@
         </div>
 
                     <div class="col-12 col-md-1 col-lg-1 d-flex flex-column align-items-center text-center">
-                        <a href="#" class="btn btn-outline-secondary btn-sm" title="Bubuhi TTD">
+                        <a href="{{ route('pengajuan.signature', $request->id) }}" class="btn btn-outline-secondary btn-sm" title="Bubuhi TTD">
                             <i class="bi bi-pen-fill"></i>
                         </a>
                     </div>
@@ -220,5 +220,5 @@
     @endsection
 
 @push('scripts')
-<script src="{{ asset('js/peri/history.js') }}"></script>
+<script src="{{ asset('assets/js/peri/history.js') }}"></script>
 @endpush

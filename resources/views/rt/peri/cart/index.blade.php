@@ -161,5 +161,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/peri/cart.js') }}"></script>
+<script src="{{ asset('assets/js/peri/cart.js') }}"></script>
 @endpush
