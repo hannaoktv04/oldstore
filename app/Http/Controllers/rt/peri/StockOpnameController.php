@@ -152,7 +152,7 @@ class StockOpnameController extends Controller
             'items'       => $allItems,
             'currentDate' => Carbon::now()
         ];
-        $pdf = PDF::loadView('admin.stock_opname.print', $data);
+        $pdf = PDF::loadView('peri::admin.stock_opname.print', $data);
         $pdf->setPaper('a4', 'potrait');
         return $pdf->download('laporan-stock-opname-' . $stock_opname->periode_bulan . '-' . $stock_opname->id . '.pdf');
     }

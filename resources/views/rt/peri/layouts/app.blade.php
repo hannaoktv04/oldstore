@@ -143,10 +143,6 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <!-- Custom JS -->
-<script src="{{ asset('js/peri/purchase_order.js') }}" defer></script>
-<script src="{{ asset('js/peri/category-table.js') }}" defer></script>
-<script src="{{ asset('js/peri/formPO.js') }}" defer></script>
-<script src="{{ asset('js/peri/showPO.js') }}" defer></script>
 
 @stack('scripts')
 </body>

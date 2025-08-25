@@ -60,7 +60,7 @@ class PurchaseOrderController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.purchase_orders.index')->with('success', 'Daftar Pengajuan Berhasil Dibuat');
+        return redirect()->route('admin.purchase_orders.index')->with('success', 'Daftar Pengajuan Disimpan Sebagai Draft.');
     }
     public function show(PurchaseOrder $purchaseOrder)
     {
@@ -70,7 +70,7 @@ class PurchaseOrderController extends Controller
     public function submit(PurchaseOrder $purchaseOrder)
     {
         if ($purchaseOrder->status !== 'draft') {
-            return redirect()->back()->with('error', 'Only draft orders can be submitted.');
+            return redirect()->back()->with('error', 'Hanya bisa mengajukan barang dengan status draft.');
         }
         $purchaseOrder->update(['status' => 'submitted']);
 
@@ -124,7 +124,7 @@ class PurchaseOrderController extends Controller
     public function edit(PurchaseOrder $purchaseOrder)
     {
         $items = Item::select('id', 'kode_barang', 'nama_barang', 'satuan_id')->get();
-        $purchaseOrder->load('details.item');
+        $purchaseOrder->load('details.item','details.item.stocks');
         $existingItems = $purchaseOrder->details;
 
         return view('peri::admin.purchaseOrder.edit', compact('purchaseOrder', 'items', 'existingItems'));
@@ -153,12 +153,12 @@ class PurchaseOrderController extends Controller
         }
 
         return redirect()->route('admin.purchase_orders.index')
-            ->with('success', 'Purchase Order updated successfully');
+            ->with('success', 'Daftar Pengajuan berhasil diperbarui.');
     }
     public function downloadPdf($id)
     {
         $purchaseOrder = PurchaseOrder::with('details.item')->findOrFail($id);
-        $pdf = Pdf::loadView('admin.purchaseOrder.pdf', compact('purchaseOrder'));
+        $pdf = Pdf::loadView('peri::admin.purchaseOrder.pdf', compact('purchaseOrder'));
         $pdf->setPaper('A4', 'portrait');
         return $pdf->stream('PO-'.$purchaseOrder->nomor_po.'.pdf');
     }

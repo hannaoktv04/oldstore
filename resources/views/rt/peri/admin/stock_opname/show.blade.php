@@ -1,7 +1,5 @@
 @extends('peri::layouts.admin')
 
-@section('title', 'Detail Stock Opname')
-
 @section('content')
 <div class="mb-4">
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -95,7 +93,7 @@
                             @switch($session->status)
                                 @case('menunggu') bg-secondary @break
                                 @case('aktif') bg-primary @break
-                                @case('selesai') bg-success @break
+                                @case('selesai') bg-primary @break
                                 @default bg-dark
                             @endswitch">
                             {{ ucfirst($session->status) }}
@@ -125,31 +123,19 @@
 
         </div>
 
-        <div class="text-start mt-4 mb-2">
-            <a href="{{ route('admin.stock_opname.downloadPdf', $session->id) }}" class="btn btn-flat btn-success"
+        <div class="text-end mt-4 mb-2">
+            <a href="{{ route('admin.stock_opname.index') }}" class="btn btn-flat btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </a>
+             <a href="{{ route('admin.stock_opname.downloadPdf', $session->id) }}" class="btn btn-flat btn-primary"
                 target="_blank">
                 <i class="fas fa-file-pdf"></i> Print
-            </a>
-            <a href="{{ route('admin.stock_opname.index') }}" class="btn btn-flat btn-dark">
-                <i class="fas fa-arrow-left"></i> Back
             </a>
         </div>
     </div>
 </div>
 @endsection
 
-@section('scripts')
-<script>
-    $(document).ready(function() {
-            $('#print').click(function() {
-                var printContents = document.getElementById('print_out').innerHTML;
-                var originalContents = document.body.innerHTML;
-
-                document.body.innerHTML = printContents;
-                window.print();
-                document.body.innerHTML = originalContents;
-                window.location.reload();
-            });
-        });
-</script>
-@endsection
+@push('scripts')
+    <script src="{{ asset('assets/js/peri/crud-stockOpname.js') }}"></script>
+@endpush

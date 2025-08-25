@@ -10,6 +10,8 @@ class PurchaseOrder extends Model
     use HasFactory;
 
     protected $fillable = ['nomor_po', 'tanggal_po', 'status', 'created_by'];
+    
+    protected $casts = ['tanggal_po' => 'date'];
 
     public function details()
     {

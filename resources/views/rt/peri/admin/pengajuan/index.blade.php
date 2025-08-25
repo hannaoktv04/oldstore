@@ -1,7 +1,7 @@
 @extends('peri::layouts.admin')
 
 @section('content')
-<div class="container py-4">
+<div class="container">
     <h4 class="mb-4">Daftar Pengajuan - Status: {{ ucfirst($status) }}</h4>
 
     @forelse ($pengajuans as $pengajuan)

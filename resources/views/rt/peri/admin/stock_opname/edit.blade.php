@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <div class="py-4">
+        <div class="mb-2">
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard.index') }}">Dashboard</a></li>
@@ -92,7 +92,7 @@
                                             <input type="hidden" name="items[{{ $item->id }}][item_id]"
                                                 value="{{ $item->id }}">
                                             <input type="number" name="items[{{ $item->id }}][qty_fisik]"
-                                                step="0.01" min="0"
+                                                step="1" min="0"
                                                 class="form-control form-control-sm qty-fisik text-end"
                                                 value="{{ !is_null($qtyFisik) ? $qtyFisik : '' }}"
                                                 data-sistem="{{ $qtySistem }}" placeholder="0">
@@ -114,7 +114,7 @@
                         </table>
                     </div>
 
-                    <div>
+                    <div class="text-end">
                         <a href="{{ route('admin.stock_opname.index') }}" class="btn btn-outline-secondary">
                             <i class="fas fa-arrow-left me-1"></i> Kembali
                         </a>
@@ -138,55 +138,5 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#stockOpnameTable').DataTable({
-                paging: false,
-                responsive: true,
-                language: {
-                    search: "Cari:",
-                    lengthMenu: "Tampilkan _MENU_ ",
-                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-                    infoEmpty: "Tidak ada data",
-                    zeroRecords: "Data tidak ditemukan"
-                },
-                columnDefs: [{
-                        orderable: false,
-                        targets: [6]
-                    },
-                    {
-                        className: "dt-head-center",
-                        targets: "_all"
-                    }
-                ]
-            });
-
-            $(document).on('input', '.qty-fisik', function() {
-                const fisik = parseFloat($(this).val()) || 0;
-                const sistem = parseFloat($(this).data('sistem')) || 0;
-                const selisih = (fisik - sistem).toFixed(2);
-
-                const tr = $(this).closest('tr');
-                const selisihCell = tr.find('.selisih');
-                const inputSelisih = tr.find('.input-selisih');
-
-                selisihCell.text(selisih);
-                inputSelisih.val(selisih);
-                selisihCell.removeClass('text-danger text-success text-muted');
-
-                if (selisih < 0) {
-                    selisihCell.addClass('text-danger');
-                } else if (selisih > 0) {
-                    selisihCell.addClass('text-success');
-                } else {
-                    selisihCell.addClass('text-muted');
-                }
-                if ($(this).val() === '') {
-                    selisihCell.text('-');
-                    inputSelisih.val('');
-                    selisihCell.removeClass('text-danger text-success text-muted');
-                }
-            });
-        });
-    </script>
+    <script src="{{ asset('assets/js/peri/crud-stockOpname.js') }}"></script>
 @endpush

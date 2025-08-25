@@ -55,7 +55,7 @@
             </table>
         </div>
 
-        <div>
+        <div class="text-end">
             <a href="{{ route('admin.stock_opname.index') }}" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left me-1"></i> Kembali
             </a>
@@ -68,24 +68,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    $(document).ready(function () {
-        $('#datatable-opname').DataTable({
-            paging: false,
-            searching: true,
-            ordering: true,
-            info: false,
-            columnDefs: [
-                { orderable: false, targets: [3] }
-            ],
-            language: {
-                search: "Cari:",
-                lengthMenu: "Tampilkan _MENU_ entri",
-                zeroRecords: "Data tidak ditemukan",
-                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-                infoEmpty: "Tidak ada data tersedia"
-            }
-        });
-    });
-</script>
+    <script src="{{ asset('assets/js/peri/crud-stockOpname.js') }}"></script>
 @endpush
