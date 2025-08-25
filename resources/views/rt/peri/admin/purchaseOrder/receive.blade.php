@@ -24,7 +24,7 @@
                     @foreach ($details as $detail)
                     <tr>
                         <td>{{ $detail->item->nama_barang }}</td>
-                        <td>{{ $detail->item->satuan->nama_satuan }}</td>
+                        <td>{{ $detail->item?->satuan?->nama_satuan ?? '—' }}</td>
                         <td>{{ $detail->qty }}</td>
                         <td>
                             <input type="number" name="details[{{ $detail->id }}]" class="form-control"

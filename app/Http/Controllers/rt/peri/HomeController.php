@@ -14,10 +14,10 @@ class HomeController extends Controller
     public function index()
     {
         $items = Item::with(['category', 'photo'])
-            ->withSum('stocks', 'qty')
-            ->withSum('details', 'qty_requested')
-            ->whereHas('state', fn($q) => $q->where('is_archived', '0'))
-            ->orderByRaw('(COALESCE(stocks_sum_qty, 0) = 0) ASC')
+            ->withSum('stocks as stocks_sum_qty', 'qty')
+            ->withSum('details as details_sum_qty_requested', 'qty_requested')
+            ->whereHas('state', fn($q) => $q->where('is_archived', false))
+            ->orderBy('stocks_sum_qty', 'asc')            
             ->orderByDesc('details_sum_qty_requested')
             ->take(24)
             ->get();

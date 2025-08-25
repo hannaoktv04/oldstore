@@ -8,6 +8,7 @@ use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 
 class CategoryController extends Controller
@@ -17,11 +18,12 @@ class CategoryController extends Controller
     {
         $categories = Category::withCount('items')->get();
 
-        $items = Item::with(['category', 'photo'])
-            ->withSum('stocks', 'qty')
-            ->whereHas('state', fn($q) => $q->where('is_archived', '0'))
-            ->orderByRaw('stocks_sum_qty = 0')
-            ->orderBy('stocks_sum_qty', 'desc')
+        $sumExpr = 'COALESCE((SELECT SUM(item_stocks.qty) FROM item_stocks WHERE items.id = item_stocks.item_id), 0)';
+
+        $items = Item::with(['category','photo'])
+            ->whereHas('state', fn($q) => $q->where('is_archived', false))
+            ->orderByRaw("($sumExpr = 0) DESC")
+            ->orderByRaw("$sumExpr DESC")
             ->paginate(20);
 
         return view('peri::layouts.kategori', compact('categories', 'items'));

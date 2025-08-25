@@ -32,11 +32,6 @@ class AdminController extends Controller
             $query->where('qty', '=', 0);
         })->count();
 
-        // -------------------
-        // NOTIFIKASI OTOMATIS
-        // -------------------
-
-        // Notifikasi Stok Menipis
         $stokKritisItems = Item::whereHas('stocks', function ($query) {
             $query->where('qty', '>', 0)
                 ->whereColumn('item_stocks.qty', '<=', 'items.stok_minimum');
@@ -58,7 +53,6 @@ class AdminController extends Controller
             }
         }
 
-        // Notifikasi Stok Habis
         $stokHabisItems = Item::whereHas('stocks', fn ($q) => $q->where('qty', '=', 0))->get();
 
         foreach ($stokHabisItems as $item) {
@@ -77,7 +71,6 @@ class AdminController extends Controller
             }
         }
 
-        // Notifikasi Pengajuan Baru
         if ($pengajuanBaru > 0) {
             $exists = StockNotification::where('judul', 'Pengajuan Baru')
                 ->where('seen', false)
@@ -92,10 +85,6 @@ class AdminController extends Controller
                 ]);
             }
         }
-
-        // -------------------
-        // FILTER PRODUK
-        // -------------------
 
         $inventarisFilter = $request->input('inventaris', 'all');
 
@@ -131,9 +120,6 @@ class AdminController extends Controller
         $produkTerbaru = Item::with(['category', 'photo'])
             ->orderBy('created_at', 'desc')->take(5)->get();
 
-        // -------------------
-        // GRAFIK
-        // -------------------
 
         $tahunDipilih = $request->input('tahun', date('Y'));
         $bulanDipilih = $request->input('bulan', 'all');
@@ -146,19 +132,17 @@ class AdminController extends Controller
 
         $barangKeluarPerBulan = ItemLog::where('tipe', 'out')
             ->whereYear('created_at', $tahunDipilih)
-            ->selectRaw('MONTH(created_at) as bulan, SUM(qty) as total')
-            ->groupByRaw('MONTH(created_at)')
+            ->selectRaw("EXTRACT(MONTH FROM created_at)::int AS bulan, SUM(qty) AS total")
+            ->groupByRaw("EXTRACT(MONTH FROM created_at)::int")
             ->orderBy('bulan')
-            ->pluck('total', 'bulan')->toArray();
+            ->pluck('total', 'bulan')   
+            ->toArray();
 
         $grafikBulanan = [];
         foreach (range(1, 12) as $i) {
             $grafikBulanan[] = $barangKeluarPerBulan[$i] ?? 0;
         }
 
-        // -------------------
-        // TOP PRODUK & USER
-        // -------------------
 
         $topProduk = ItemRequestDetail::whereYear('created_at', $tahunDipilih)
             ->when($bulanDipilih != 'all', fn ($q) => $q->whereMonth('created_at', $bulanDipilih))
@@ -184,7 +168,6 @@ class AdminController extends Controller
             ->groupBy('user_id')->orderByDesc('total')
             ->with('user')->take(5)->get();
 
-        // Notifikasi kecil dashboard box
         $notifikasi = [];
         if ($stokKritis > 0) $notifikasi[] = "Ada {$stokKritis} barang dengan stok menipis.";
         if ($perluDikirim > 0) $notifikasi[] = "{$perluDikirim} pengajuan perlu dikirim.";
