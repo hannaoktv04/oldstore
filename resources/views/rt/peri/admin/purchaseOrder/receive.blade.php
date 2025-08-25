@@ -28,7 +28,7 @@
                         <td>{{ $detail->qty }}</td>
                         <td>
                             <input type="number" name="details[{{ $detail->id }}]" class="form-control"
-                                value="{{ $detail->qty }}" min="0.01" step="0.01" required>
+                                value="{{ $detail->qty }}" min="0" step="1" required>
                         </td>
                     </tr>
                     @endforeach
@@ -43,3 +43,6 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+    <script src="{{ asset('assets/js/peri/crud-po.js') }}"></script>
+@endpush

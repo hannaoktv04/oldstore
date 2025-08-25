@@ -110,30 +110,18 @@
             </div>
 
             <div class="text-end mt-4 mb-2">
-                <a href="{{ route('admin.purchase_orders.downloadPdf', $purchaseOrder->id) }}"
-                    class="btn btn-flat btn-primary" target="_blank">
-                    <i></i> Cetak
-                </a>
                 <a href="{{ route('admin.purchase_orders.index') }}" class="btn btn-flat btn-outline-secondary">
                     <i></i> Kembali
+                </a>
+                 <a href="{{ route('admin.purchase_orders.downloadPdf', $purchaseOrder->id) }}"
+                    class="btn btn-flat btn-primary" target="_blank">
+                    <i></i> Cetak
                 </a>
             </div>
         </div>
     </div>
 @endsection
 
-@section('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#print').click(function() {
-                var printContents = document.getElementById('print_out').innerHTML;
-                var originalContents = document.body.innerHTML;
-
-                document.body.innerHTML = printContents;
-                window.print();
-                document.body.innerHTML = originalContents;
-                window.location.reload();
-            });
-        });
-    </script>
-@endsection
+@push('scripts')
+    <script src="{{ asset('assets/js/peri/crud-po.js') }}"></script>
+@endpush

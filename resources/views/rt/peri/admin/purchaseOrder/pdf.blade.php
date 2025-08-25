@@ -105,3 +105,6 @@
 </body>
 
 </html>
+@push('scripts')
+    <script src="{{ asset('assets/js/peri/crud-po.js') }}"></script>
+@endpush

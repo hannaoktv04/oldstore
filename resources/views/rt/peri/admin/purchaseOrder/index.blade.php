@@ -138,41 +138,8 @@
                     </div>
                 </div>
             </div>
-        @endsection
-
-        @push('scripts')
-            <script>
-                $(document).ready(function() {
-                    $('#poTable').DataTable({
-                        responsive: true,
-                        language: {
-                            search: "Cari:",
-                            lengthMenu: "Tampilkan _MENU_ data",
-                            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-                            infoEmpty: "Tidak ada data yang tersedia",
-                            zeroRecords: "Data tidak ditemukan",
-                            paginate: {
-                                previous: "<",
-                                next: ">",
-                            }
-                        },
-                        columnDefs: [{
-                            orderable: false,
-                            targets: [4, 6]
-                        }],
-                        order: [
-                            [1, 'desc']
-                        ]
-                        createdRow: function(row, data, dataIndex) {
-                            if (data.length === 1 && $(row).find('td').attr('colspan')) {
-                                var colCount = $(row).find('td')[0].colSpan;
-                                var emptyRow = new Array(colCount).join('<td></td>');
-                                $(row).html(emptyRow);
-                                $(row).find('td:first').attr('colspan', colCount).html(
-                                    "Belum ada data purchase order.");
-                            }
-                        }
-                    });
-                });
-            </script>
-        @endpush
+        </div>
+    @endsection
+    @push('scripts')
+        <script src="{{ asset('assets/js/peri/crud-po.js') }}"></script>
+    @endpush

@@ -51,6 +51,9 @@
                                                         Edit
                                                     </a>
                                                 </li>
+                                                 <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
                                                 <li>
                                                     <form action="{{ route('admin.stock_opname.endSession', $session) }}"
                                                         method="POST">
@@ -99,7 +102,7 @@
                                                 <li>
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.stock_opname.show', $session) }}">
-                                                        Lihat Detail
+                                                        Lihat
                                                     </a>
                                                 </li>
                                             @endif
@@ -119,44 +122,5 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#opnameTable').DataTable({
-                responsive: true,
-                language: {
-                    search: "Cari:",
-                    responsive: true,
-                    lengthMenu: "Tampilkan _MENU_ data",
-                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-                    infoEmpty: "Tidak ada data yang tersedia",
-                    zeroRecords: "Data tidak ditemukan",
-                    paginate: {
-                        previous: "<",
-                        next: ">",
-                    }
-                },
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                }],
-                order: [
-                    [0, 'desc']
-                ]
-            });
-            $(document).on('click', '.btn-delete', async function(e) {
-                e.preventDefault();
-                const form = $(this).closest('form');
-
-                const confirmed = await swalConfirm(
-                    'Sesi ini akan dihapus dan tidak dapat dikembalikan.', {
-                        confirmText: 'Ya, hapus',
-                        cancelText: 'Batal'
-                    });
-
-                if (confirmed) {
-                    form.submit();
-                }
-            });
-        });
-    </script>
+    <script src="{{ asset('assets/js/peri/crud-stockOpname.js') }}"></script>
 @endpush

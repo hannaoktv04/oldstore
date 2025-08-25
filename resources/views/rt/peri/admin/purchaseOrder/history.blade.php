@@ -40,14 +40,6 @@
 </div>
 @endsection
 
-@section('scripts')
-<script>
-    $(document).ready(function () {
-        $('#history-table').DataTable({
-            responsive: true,
-            ordering: true,
-            autoWidth: false
-        });
-    });
-</script>
-@endsection
+@push('scripts')
+  <script src="{{ asset('assets/js/peri/crud-po.js') }}"></script>
+@endpush
