@@ -11,7 +11,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="poTable" class="table table-bordered w-100 table-hover">
+                    <table id="poTable" class="table w-100 table-hover">
                         <colgroup>
                             <col width="5%">
                             <col width="20%">

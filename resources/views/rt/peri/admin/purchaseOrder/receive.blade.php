@@ -12,7 +12,7 @@
             @csrf
 
             <table class="table table-bordered">
-                <thead class="table-light">
+                <thead>
                     <tr>
                         <th>Item</th>
                         <th>Satuan</th>

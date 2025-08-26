@@ -1110,24 +1110,24 @@ a.plyr__control::after, a.plyr__control::before {
 }
 
 .plyr--full-ui input[type=range]:focus-visible {
-  outline-color: #666cff;
+  outline-color: #198754;
 }
 
 .plyr--full-ui input[type=range]:focus-visible::-webkit-slider-runnable-track {
-  outline-color: #666cff;
+  outline-color: #198754;
 }
 
 .plyr--full-ui input[type=range]:focus-visible::-moz-range-track {
-  outline-color: #666cff;
+  outline-color: #198754;
 }
 
 .plyr--full-ui input[type=range]:focus-visible::-ms-track {
-  outline-color: #666cff;
+  outline-color: #198754;
 }
 
 .plyr--video .plyr__control:focus-visible,
 .plyr--audio .plyr__control:focus-visible {
-  background-color: #666cff;
+  background-color: #198754;
   outline: none;
 }
 

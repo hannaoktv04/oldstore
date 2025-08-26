@@ -9,7 +9,7 @@
     </div>
     <div class="card-body">
         <table id="history-table" class="table table-bordered table-striped">
-            <thead class="table-light">
+            <thead>
                 <tr>
                     <th>No</th>
                     <th>Periode</th>

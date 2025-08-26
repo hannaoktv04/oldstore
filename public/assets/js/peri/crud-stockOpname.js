@@ -41,7 +41,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         infoEmpty: "Tidak ada data",
                         infoFiltered: "(difilter dari _MAX_ total data)",
                         zeroRecords: "Data tidak ditemukan",
-                        paginate: { previous: "<", next: ">" },
+                        paginate: {
+                            next: '<i class="ri-arrow-right-s-line"></i>',
+                            previous: '<i class="ri-arrow-left-s-line"></i>',
+                        },
                     },
                 },
                 options || {}
@@ -52,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initDataTable("#itemsTable");
 
     $(document).on("input", ".qty-fisik", function () {
-        const fisik = parseInt($(this).val(), 10) || 0; 
+        const fisik = parseInt($(this).val(), 10) || 0;
         const sistem = parseInt($(this).data("sistem"), 10) || 0;
         const selisih = fisik - sistem;
 

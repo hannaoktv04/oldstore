@@ -29,6 +29,6 @@ class UserController extends Controller
         $user->active = $request->input('status');
         $user->save();
 
-        return back()->with('success', 'User berhasil diperbarui');
+        return back()->with('success', 'Role berhasil diperbarui');
     }
 }

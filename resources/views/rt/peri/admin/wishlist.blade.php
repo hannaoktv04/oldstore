@@ -15,12 +15,11 @@
                 <div class="alert alert-info">Belum ada wishlist yang diajukan.</div>
             @else
                 <div class="table-responsive">
-                    <table class="table table-hover table-striped">
-                        <thead class="table-light">
+                    <table class="table">
+                        <thead>
                             <tr>
                                 <th width="5%">No</th>
                                 <th>Nama Barang</th>
-                                <th>Deskripsi</th>
                                 <th>Kategori</th>
                                 <th>Jumlah</th>
                                 <th>Pemohon</th>
@@ -33,9 +32,8 @@
                             <tr>
                                 <td>{{ $loop->iteration + ($wishlists->currentPage() - 1) * $wishlists->perPage() }}</td>
                                 <td>
-                                    <strong>{{ $wishlist->nama_barang }}</strong>
+                                    {{ $wishlist->nama_barang }}
                                 </td>
-                                <td>{{ Str::limit($wishlist->deskripsi, 50) }}</td>
                                 <td>{{ $wishlist->category->categori_name ?? '-' }}</td>
                                 <td>{{ $wishlist->qty_diusulkan }}</td>
                                 <td>{{ $wishlist->user->nama ?? 'Tidak diketahui' }}</td>
@@ -43,7 +41,7 @@
                                     @if($wishlist->status == 'pending')
                                         <span class="badge bg-warning text-dark">Pending</span>
                                     @elseif($wishlist->status == 'diakomodasi')
-                                        <span class="badge bg-primary text-white">Diakomodasi</span>
+                                        <span class="badge bg-success text-white">Diakomodasi</span>
                                     @else
                                         <span class="badge bg-danger text-white">Ditolak</span>
                                     @endif
@@ -105,18 +103,3 @@
 </div>
 @endsection
 
-@push('styles')
-<style>
-    .table th {
-        white-space: nowrap;
-    }
-    .badge {
-        font-size: 0.85em;
-        padding: 0.35em 0.65em;
-    }
-    .btn-group-sm > .btn {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.765625rem;
-    }
-</style>
-@endpush

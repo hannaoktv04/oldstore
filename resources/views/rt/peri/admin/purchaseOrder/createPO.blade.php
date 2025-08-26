@@ -54,7 +54,7 @@
             </div>
 
             <table class="table table-bordered" id="po-table">
-                <thead class="table-light">
+                <thead>
                     <tr>
                         <th class="text-center">Kode Item</th>
                         <th class="text-center">Nama Item</th>
@@ -67,8 +67,8 @@
             </table>
 
             <div class="mt-4 text-end">
-                <a href="{{ route('admin.purchase_orders.index') }}" class="btn btn-outline-secondary">Batal</a>
                 <button type="submit" class="btn btn-primary">Simpan</button>
+                <a href="{{ route('admin.purchase_orders.index') }}" class="btn btn-outline-secondary">Batal</a>
             </div>
         </form>
     </div>

@@ -30,9 +30,12 @@ document.addEventListener("DOMContentLoaded", function () {
             lengthMenu: "_MENU_ data",
             info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
             infoEmpty: "Tidak ada data",
-            infoFiltered: "",
+            infoFiltered: "(difilter dari _MAX_ total data)",
             zeroRecords: "Data tidak ditemukan",
-            paginate: { previous: "<", next: ">" },
+            paginate: {
+                next: '<i class="ri-arrow-right-s-line"></i>',
+                previous: '<i class="ri-arrow-left-s-line"></i>',
+            },
         },
     });
     function checkOffcanvasPosition() {
@@ -137,10 +140,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
                     if (window.Swal)
-                        Swal.fire(
-                            "Berhasil",
-                            resp.message || "Kategori berhasil ditambahkan!",
-                            "success"
+                        swalSuccess(
+                            resp.message || "Kategori berhasil ditambahkan!"
                         );
                     $form[0].reset();
                     document
@@ -154,7 +155,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
                 if (window.Swal)
-                    Swal.fire("Berhasil", "Kategori ditambahkan.", "success");
+                    swalSuccess(
+                        "Berhasil",
+                        "Kategori ditambahkan.",
+                        "success"
+                    );
                 document
                     .querySelector("#modalTambahKategori .btn-close")
                     ?.click();
@@ -172,16 +177,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         $input.focus();
                     }
                     if (window.Swal)
-                        Swal.fire(
-                            "Gagal",
-                            "Periksa kembali input Anda.",
-                            "error"
-                        );
+                        swalError("Periksa kembali input Anda.", {
+                            title: "Gagal",
+                        });
                     return;
                 }
                 const msg =
                     xhr?.responseJSON?.message || "Gagal menambahkan kategori.";
-                if (window.Swal) Swal.fire("Gagal", msg, "error");
+                if (window.Swal) swalError(msg);
                 else alert(msg);
             });
     });
@@ -234,7 +237,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 if (window.Swal)
-                    Swal.fire(
+                    swalSuccess(
                         "Berhasil",
                         resp?.message || "Kategori diperbarui.",
                         "success"
@@ -242,7 +245,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 document
                     .querySelector("#modalEditKategori .btn-close")
                     ?.click();
-            })
+            }
+        )
             .fail(function (xhr) {
                 if (xhr.status === 422 && xhr.responseJSON?.errors) {
                     const errs = xhr.responseJSON.errors;
@@ -264,14 +268,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 const msg =
                     xhr?.responseJSON?.message || "Gagal memperbarui kategori.";
-                if (window.Swal) Swal.fire("Gagal", msg, "error");
+                if (window.Swal) swalError(msg);
                 else alert(msg);
             });
     });
 
-    // ===========================
-    // DELETE satuan via AJAX
-    // ===========================
     document
         .getElementById("categoryTable")
         ?.addEventListener("click", function (e) {
@@ -288,18 +289,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     .done(function (resp) {
                         if (tr) dt.row(tr).remove().draw();
                         if (window.Swal)
-                            Swal.fire(
-                                "Terhapus",
-                                `Kategori "${categoryName}" dihapus.`,
-                                "success"
-                            );
+                            swalSuccess(`Kategori "${categoryName}" dihapus.`);
                         updateBulkUI();
                     })
                     .fail(function (xhr) {
                         const msg =
                             xhr?.responseJSON?.message ||
                             "Gagal menghapus kategori.";
-                        if (window.Swal) Swal.fire("Gagal", msg, "error");
+                        if (window.Swal) swalError(msg);
                         else alert(msg);
                     });
             };
@@ -352,11 +349,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         });
                         dt.draw();
                         if (window.Swal)
-                            Swal.fire(
-                                "Berhasil",
-                                `${ids.length} kategori dihapus.`,
-                                "success"
-                            );
+                            swalSuccess(`${ids.length} kategori dihapus.`, {
+                                title: "Berhasil",
+                            });
                         if (selectAll) selectAll.checked = false;
                         updateBulkUI();
                     })
@@ -364,7 +359,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         const msg =
                             xhr?.responseJSON?.message ||
                             "Gagal menghapus kategori terpilih.";
-                        if (window.Swal) Swal.fire("Gagal", msg, "error");
+                        if (window.Swal) swalError(msg);
                         else alert(msg);
                     });
             };

@@ -20,8 +20,18 @@ window.swalSuccess = (text, opts={}) =>
     ...opts
   });
 
-window.swalError = (text, opts={}) =>
-  swalBase.fire({ icon:'error', title:'Error', text, ...opts });
+window.swalError = (text, opts = {}) =>
+  swalBase.fire({
+    icon: 'error',
+    title: 'Error',
+    text,
+    showConfirmButton: true,   
+    confirmButtonText: 'OK',
+    showCancelButton: false,   
+    allowOutsideClick: false, 
+    allowEscapeKey: true,
+    ...opts
+  });
 
 window.swalWarn = (text, opts={}) =>
   swalBase.fire({ icon:'warning', title:'Peringatan', text, ...opts });

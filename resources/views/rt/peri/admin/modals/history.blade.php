@@ -8,7 +8,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <ul class="list-unstyled small">
+        <ul class="list-unstyled fs-6">
           <li class="mb-3">
             <strong><i class="ri-checkbox-circle-line me-1"></i> Pengajuan Diajukan</strong><br>
             {{ \Carbon\Carbon::parse($pengajuan->created_at)->format('H:i:s, d M Y') }}

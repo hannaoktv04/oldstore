@@ -4,7 +4,7 @@
 <div class="container mt-4">
     <h4>{{ $judul }}</h4>
     <table class="table table-bordered mt-3">
-        <thead class="table-light">
+        <thead>
             <tr>
                 <th>No</th>
                 <th>Nama Pegawai</th>

@@ -274,13 +274,13 @@ html[dir=rtl] .fc .fc-toolbar .fc-button-group .fc-button:last-child {
 }
 .light-style .fc-event-primary:not(.fc-list-event) {
   background-color: #e7e7ff !important;
-  color: #666cff !important;
+  color: #198754 !important;
 }
 .light-style .fc-event-primary:not(.fc-list-event) {
   border-color: rgba(102, 108, 255, 0.15);
 }
 .light-style .fc-event-primary.fc-list-event .fc-list-event-dot {
-  border-color: #666cff !important;
+  border-color: #198754 !important;
 }
 .light-style .fc-event-secondary:not(.fc-list-event) {
   background-color: #e8e9ed !important;
@@ -449,14 +449,14 @@ html[dir=rtl] .fc .fc-toolbar .fc-button-group .fc-button:last-child {
 }
 .dark-style .fc-event-primary:not(.fc-list-event) {
   background-color: #393c6a !important;
-  color: #666cff !important;
+  color: #198754 !important;
 }
 .dark-style .fc-event-primary:not(.fc-list-event) {
   border-color: rgba(102, 108, 255, 0.15);
   box-shadow: none;
 }
 .dark-style .fc-event-primary.fc-list-event .fc-list-event-dot {
-  border-color: #666cff !important;
+  border-color: #198754 !important;
 }
 .dark-style .fc-event-secondary:not(.fc-list-event) {
   background-color: #3a3e58 !important;

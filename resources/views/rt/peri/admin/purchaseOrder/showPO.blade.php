@@ -38,7 +38,7 @@
                 </div>
 
                 <table class="table table-bordered">
-                    <thead class="table-light text-center">
+                    <thead class="text-center">
                         <tr>
                             <th style="width: 5%;">No</th>
                             <th style="width: 15%;">Kode Barang</th>
