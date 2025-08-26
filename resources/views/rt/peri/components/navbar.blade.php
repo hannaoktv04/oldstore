@@ -1,12 +1,12 @@
 <nav class="navbar navbar-expand-lg bg-white shadow-sm py-2 sticky-top">
-    <div class="container d-flex justify-content-between align-items-center">
+  <div class="container d-flex justify-content-between align-items-center">
 
-        <div class="d-flex align-items-center">
-            @if (Auth::check() && Auth::user()->hasRole('admin'))
-                <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
-                    <i class="bi bi-list fs-4"></i>
-                </button>
-            @endif
+    <div class="d-flex align-items-center">
+      @if (Auth::check() && Auth::user()->hasRole('admin'))
+        <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
+          <i class="bi bi-list fs-4"></i>
+        </button>
+      @endif
 
       <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
         <img src="{{ asset('assets/img/peri.png') }}" alt="PERI Logo" style="height: 50px;">
@@ -15,18 +15,18 @@
         @endif
       </a>
 
-            <a class="nav-link fw-medium ms-3" href="{{ url('/kategori') }}">Kategori</a>
-        </div>
+      <a class="nav-link fw-medium ms-3" href="{{ url('/kategori') }}">Kategori</a>
+    </div>
 
-        <form class="d-none d-lg-flex flex-grow-1 mx-3" method="GET" action="{{ route('search') }}">
-            <div class="input-group position-relative w-100">
-                <input name="q" class="form-control rounded-pill ps-4" type="search" placeholder="Cari barang..."
-                    value="{{ request('q') }}">
-                <span class="position-absolute top-50 end-0 translate-middle-y me-3 text-muted">
-                    <i class="bi bi-search"></i>
-                </span>
-            </div>
-        </form>
+    <form class="d-none d-lg-flex flex-grow-1 mx-3" method="GET" action="{{ route('search') }}">
+      <div class="input-group position-relative w-100">
+        <input name="q" class="form-control rounded-pill ps-4" type="search" placeholder="Cari barang..."
+          value="{{ request('q') }}">
+        <span class="position-absolute top-50 end-0 translate-middle-y me-3 text-muted">
+          <i class="bi bi-search"></i>
+        </span>
+      </div>
+    </form>
 
     @php
       use App\Models\Cart;
@@ -37,7 +37,7 @@
       $jumlahKeranjang = $cartItems->count();
 
       $notifikasiProdukBaru = (Auth::check() && Auth::user()->hasRole('pegawai'))
-        ? StockNotification::where('seen', false)->with('item')->latest()->take(20)->get()   // ambil lebih banyak, yang tampil tetap ~8 (scroll)
+        ? StockNotification::where('seen', false)->with('item')->latest()->take(20)->get()
         : collect();
 
       $notifikasiPengiriman = (Auth::check() && Auth::user()->hasRole('pegawai'))
@@ -47,14 +47,14 @@
             ->latest()->take(20)->get()
         : collect();
 
-            $totalNotifUser = $notifikasiProdukBaru->count() + $notifikasiPengiriman->count();
-        @endphp
+      $totalNotifUser = $notifikasiProdukBaru->count() + $notifikasiPengiriman->count();
+    @endphp
 
-        <div class="d-flex align-items-center gap-2">
-            <button class="btn d-lg-none text-dark bg-transparent border-0" data-bs-toggle="modal"
-                data-bs-target="#searchModalMobile">
-                <i class="bi bi-search fs-5"></i>
-            </button>
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn d-lg-none text-dark bg-transparent border-0" data-bs-toggle="modal"
+        data-bs-target="#searchModalMobile">
+        <i class="bi bi-search fs-5"></i>
+      </button>
 
       @auth
         <div class="position-relative">
@@ -72,7 +72,8 @@
             <h6 class="mb-3">Barang yang ada di Keranjang</h6>
             @forelse($cartItems as $item)
               <div class="d-flex align-items-start mb-2">
-                <img src="{{ asset('storage/' . ($item->item->photo->image ?? 'placeholder.jpg')) }}" width="50" class="me-2 rounded" style="object-fit:cover;">
+                <img src="{{ asset('storage/' . ($item->item->photo->image ?? 'placeholder.jpg')) }}" width="50"
+                     class="me-2 rounded" style="object-fit:cover;">
                 <div>
                   <small>{{ $item->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</small><br>
                   <strong>{{ $item->item->nama_barang }}</strong><br>
@@ -92,7 +93,8 @@
 
       @if(Auth::check() && Auth::user()->hasRole('pegawai'))
         <div class="position-relative">
-          <button class="icon-button text-dark bg-transparent border-0 p-0 position-relative" id="notif-icon" aria-expanded="false" aria-controls="notif-popup">
+          <button class="icon-button text-dark bg-transparent border-0 p-0 position-relative" id="notif-icon"
+            aria-expanded="false" aria-controls="notif-popup">
             <i class="bi bi-bell-fill fs-5"></i>
             @if($totalNotifUser > 0)
               <span class="badge bg-success rounded-pill position-absolute top-0 start-100 translate-middle">
@@ -119,34 +121,23 @@
                 <div class="text-muted small">Tidak ada update produk.</div>
               @endforelse
 
-            @if($notifikasiProdukBaru->count() > 0)
-              <div class="mt-2">
-                <form action="{{ route('notifikasi.markSeen') }}" method="POST">
-                  @csrf
-                  <button class="btn btn-outline-secondary btn-sm w-100" type="submit">Tandai Produk: Sudah Dibaca</button>
-                </form>
-              </div>
-            @endif
-
-            <hr class="my-3">
-
-              <h6 class="mb-2">Barang Sedang Dikirim</h6>
-              @forelse($notifikasiPengiriman as $deliv)
-                <div class="d-flex align-items-start mb-2" style="min-height:48px;">
-                  <i class="bi bi-truck me-2 mt-1"></i>
-                  <div>
-                    <strong>{{ $deliv->itemRequest->kode_request ?? 'Pengiriman' }}</strong><br>
-                    <small class="text-muted">
-                      Status: {{ ucfirst(str_replace('_',' ', $deliv->status)) }} •
-                      {{ \Carbon\Carbon::parse($deliv->updated_at ?? $deliv->created_at)->diffForHumans() }}
-                    </small>
+              @if($notifikasiPengiriman->count() > 0)
+                <hr class="my-3">
+                <h6 class="mb-2">Barang Sedang Dikirim</h6>
+                @foreach($notifikasiPengiriman as $deliv)
+                  <div class="d-flex align-items-start mb-2" style="min-height:48px;">
+                    <i class="bi bi-truck me-2 mt-1"></i>
+                    <div>
+                      <strong>{{ $deliv->itemRequest->kode_request ?? 'Pengiriman' }}</strong><br>
+                      <small class="text-muted">
+                        Status: {{ ucfirst(str_replace('_',' ', $deliv->status)) }} •
+                        {{ \Carbon\Carbon::parse($deliv->updated_at ?? $deliv->created_at)->diffForHumans() }}
+                      </small>
+                    </div>
                   </div>
-                </div>
-              @empty
-                <div class="text-muted small">Tidak ada pengiriman aktif.</div>
-              @endforelse
+                @endforeach
+              @endif
             </div>
-
             <div class="p-2 border-top bg-white" style="position:sticky; bottom:0;">
               <form action="{{ route('notifikasi.markSeen') }}" method="POST" class="mb-0">
                 @csrf
@@ -164,7 +155,8 @@
         <button id="user-icon" class="icon-button text-dark bg-transparent border-0 pe-3">
           <i class="bi bi-person-fill fs-4"></i>
         </button>
-        <div id="user-popup" class="position-absolute end-0 mt-2 p-3 rounded shadow bg-white d-none" style="min-width:250px; z-index:1050;">
+        <div id="user-popup" class="position-absolute end-0 mt-2 p-3 rounded shadow bg-white d-none"
+             style="min-width:250px; z-index:1050;">
           @guest
             <div class="text-center mb-2">Masuk sebagai...</div>
             <div class="d-flex">

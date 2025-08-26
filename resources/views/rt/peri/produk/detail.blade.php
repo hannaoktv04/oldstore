@@ -18,7 +18,7 @@
         <div class="col-md-6">
             <div class="mb-3 d-flex justify-content-center position-relative w-75">
                 @php
-                $stokHabis = $produk->stocks->qty == 0;
+                $stokHabis = ($stokQty == 0);
                 @endphp
                 @if($stokHabis)
                 <div class="position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center"
@@ -60,7 +60,7 @@
                     style="width: fit-content; border: 1px solid #198754; border-radius: 50px; overflow: hidden;">
                     <button type="button" class="btn btn-outline-success px-3 py-1 border-0 qty-btn bg-white"
                         onclick="ubahQty(-1)">-</button>
-                    <input type="number" id="qty" value="1" min="1" max="{{ $produk->stocks->qty }}"
+                    <input type="number" id="qty" value="1" min="1" max="{{ $stokQty }}"
                         class="form-control text-center border-0 bg-white"
                         style="max-width: 45px; height: 40px; line-height: 1; padding: 0 0.25rem;">
                     <button type="button" class="btn btn-outline-success px-3 py-1 border-0 qty-btn bg-white"
@@ -68,9 +68,9 @@
                 </div>
                 <div id="qtyAlertContainer" class="mt-2"></div>
             </div>
-            <p class="mb-5"> <span class="fw-bold text-black">{{ $produk->stocks->qty }}</span> produk tersedia</p>
+            <p class="mb-5"> <span class="fw-bold text-black">{{ $stokQty }}</span> produk tersedia</p>
             <div class="d-flex gap-3">
-                @if ($produk->stocks->qty > 0)
+                @if ($stokQty > 0)
                 <form method="POST" action="{{ route('user.wishlist', ['id' => $produk->id]) }}">
                     @csrf
                     <button type="button" id="heart-icon" class="icon-button text-dark bg-transparent border-0 p-1 "
@@ -146,7 +146,7 @@
                     <h5 class="modal-title" id="wishlistModalLabel">Add to Wishlist</h5>
                 </div>
                 <div class="modal-body border-0">
-                    <p><strong>Stok tersedia:</strong> {{ $produk->stocks->qty }}</p>
+                    <p><strong>Stok tersedia:</strong> {{ $stokQty }}</p>
                     <div class="mb-3">
                         <label for="qtyWishlist" class="form-label">Jumlah yang Dibutuhkan</label>
                         <input type="number" class="form-control" name="qty" id="qtyWishlist" min="1" value="1"
