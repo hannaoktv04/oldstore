@@ -188,11 +188,11 @@ class CategoryController extends Controller
         $items = Item::with(['category', 'photo'])
             ->where('category_id', $id)
             ->withSum('stocks', 'qty')
-            ->orderByRaw('stocks_sum_qty = 0')
-            ->orderBy('stocks_sum_qty', 'desc')
+            ->orderByRaw('(select sum(qty) from item_stocks where item_id = items.id) = 0')
+            ->orderByDesc('stocks_sum_qty')
             ->paginate(20);
 
-        return view('peri::layouts.kategori', compact('categories', 'items'));
+        return view('peri::layouts.kategori', compact('categories', 'selectedCategory', 'items'));
     }
 
     public function publicView()
