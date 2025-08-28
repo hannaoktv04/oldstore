@@ -57,7 +57,7 @@
                         <ul class="timeline list-unstyled">
                             <li class="mb-3">
                                 <div><i class="ri-check-circle-fill text-success me-2"></i><strong>Pengajuan Diajukan</strong></div>
-                                <small class="text-muted">{{ \Carbon\Carbon::parse($item->request->tanggal_permintaan)->format('H:i:s, d M Y') }}</small>
+                                <small class="text-muted">{{ \Carbon\Carbon::parse($item->request->created_at)->format('H:i:s, d M Y') }}</small>
                             </li>
 
                             <li class="mb-3">
@@ -92,7 +92,7 @@
                         </ul>
 
                         @php
-                            $start = \Carbon\Carbon::parse($item->request->tanggal_permintaan);
+                            $start = \Carbon\Carbon::parse($item->request->created_at);
                             $end = \Carbon\Carbon::parse($item->updated_at);
                             $diff = $start->diff($end);
                             $diffText = '';
