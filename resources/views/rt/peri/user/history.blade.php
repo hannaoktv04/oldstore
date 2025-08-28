@@ -114,34 +114,34 @@
                 aria-labelledby="statusModalLabel-{{ $request->id }}" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content rounded-4 p-3">
-                        <div class="modal-header border-0">
+                        <div class="modal-header">
                             <h5 class="modal-title">Status Pesanan</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
-                        <div class="modal-body px-3">
-                            <ul class="list-unstyled small">
+                        <div class="modal-body">
+                            <ul class="list-unstyled">
                                 <li class="mb-3">
-                                    <strong>✅ Pengajuan Diajukan</strong><br>
+                                    <strong><i class="ri-checkbox-circle-line me-1"></i> Pengajuan Diajukan</strong><br>
                                     {{ \Carbon\Carbon::parse($request->created_at)->format('H:i:s, d M Y') }}
                                 </li>
 
-                                @if (in_array($request->status, ['approved', 'delivered', 'received']) && $request->itemDelivery)
+                                @if (in_array($request->status, ['approved', 'delivered', 'received']) && $request)
                                     <li class="mb-3">
-                                        <strong>📦 Disetujui</strong><br>
-                                        {{ \Carbon\Carbon::parse($request->itemDelivery->created_at)->format('H:i:s, d M Y') }}
+                                        <strong><i class="ri-box-3-fill text-primary me-1"></i>  Disetujui</strong><br>
+                                        {{ \Carbon\Carbon::parse($request->approved_at)->format('H:i:s, d M Y') }}
                                     </li>
                                 @endif
 
                                 @if ($request->tanggal_pengiriman)
                                     <li class="mb-3">
-                                        <strong>📅 Dikirimkan sesuai jadwal pengiriman</strong><br>
+                                        <strong><i class="ri-calendar-event-fill text-info me-1"></i>  Dikirimkan sesuai jadwal pengiriman</strong><br>
                                         {{ \Carbon\Carbon::parse($request->tanggal_pengiriman)->format('H:i, d M Y') }}
                                     </li>
                                 @endif
 
                                 @if ($request->itemDelivery && $request->itemDelivery->status === 'in_progress')
                                     <li class="mb-3">
-                                        <strong>🚚 Dalam Pengiriman</strong><br>
+                                        <strong><i class="ri-truck-fill text-warning me-1"></i> Dalam Pengiriman</strong><br>
                                         Sedang diantar oleh
                                         <strong>{{ $request->itemDelivery->staff->nama ?? 'Staff tidak ditemukan' }}</strong><br>
                                         {{ \Carbon\Carbon::parse($request->itemDelivery->tanggal_kirim)->format('H:i:s, d M Y') }}
@@ -150,7 +150,7 @@
 
                                 @if ($request->status === 'received' && $request->itemDelivery && $request->itemDelivery->bukti_foto)
                                     <li class="mb-3">
-                                        <strong>📥 Diterima</strong><br>
+                                        <strong><i class="ri-download-2-fill text-success me-1"></i> Diterima</strong><br>
                                         <a href="#" data-bs-toggle="modal"
                                             data-bs-target="#buktiModal-{{ $request->id }}">
                                             Lihat Bukti Pengiriman
@@ -163,7 +163,7 @@
 
                                 @if ($request->status == 'rejected')
                                     <li class="mb-3 text-danger">
-                                        <strong>❌ Ditolak</strong><br>
+                                        <strong><i class="ri-close-circle-3-fill text-primary me-1"></i>  Ditolak</strong><br>
                                         {{ $request->keterangan ?? 'Tidak ada keterangan' }}<br>
                                         {{ \Carbon\Carbon::parse($request->updated_at)->format('H:i:s, d M Y') }}
                                     </li>

@@ -27,40 +27,6 @@
 
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
-<script>
-    function onScanSuccess(decodedText, decodedResult) {
-        console.log("Scanned:", decodedText);
-
-        if (decodedText.includes("/staff-pengiriman/konfirmasi/KP")) {
-            window.location.href = decodedText;
-            return;
-        }
-
-        if (decodedText.startsWith("KP")) {
-            const id = decodedText.replace("KP", "").replace(/^0+/, '');
-            window.location.href = `/staff-pengiriman/konfirmasi/${id}`;
-            return;
-        }
-
-        alert("QR Code tidak sesuai format.");
-    }
-
-    const html5QrCode = new Html5Qrcode("reader");
-
-    Html5Qrcode.getCameras().then(cameras => {
-        if (cameras && cameras.length) {
-            html5QrCode.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: 250 },
-                onScanSuccess
-            );
-        } else {
-            alert("Kamera tidak ditemukan.");
-        }
-    }).catch(err => {
-        alert("Tidak bisa mengakses kamera: " + err);
-    });
-</script>
 @endsection
 @push('scripts')
 <script src="{{ asset('assets/js/peri/scan-resi.js') }}"></script>

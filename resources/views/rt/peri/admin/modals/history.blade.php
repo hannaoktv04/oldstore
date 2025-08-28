@@ -8,7 +8,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <ul class="list-unstyled fs-6">
+        <ul class="list-unstyled">
           <li class="mb-3">
             <strong><i class="ri-checkbox-circle-line me-1"></i> Pengajuan Diajukan</strong><br>
             {{ \Carbon\Carbon::parse($pengajuan->created_at)->format('H:i:s, d M Y') }}
@@ -17,7 +17,7 @@
           @if(in_array($pengajuan->status, ['approved', 'delivered', 'received']) && $pengajuan->itemDelivery)
           <li class="mb-3">
             <strong><i class="ri-box-3-fill text-primary me-1"></i> Disetujui</strong><br>
-            {{ \Carbon\Carbon::parse($pengajuan->itemDelivery->created_at)->format('H:i:s, d M Y') }}
+            {{ \Carbon\Carbon::parse($pengajuan->approved_at)->format('H:i:s, d M Y') }}
           </li>
           @endif
 
