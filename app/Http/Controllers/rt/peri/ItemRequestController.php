@@ -58,7 +58,7 @@ class ItemRequestController extends Controller
     }
 
     public function showENota($id)
-    {
+    { 
         $request = ItemRequest::with(['user', 'details.item.category', 'itemDelivery.staff'])->findOrFail($id);
         $user = User::with('roles')->findOrFail(auth()->id());
         if ($request->user_id !== $user->id && !$user->hasRole('admin')) {
