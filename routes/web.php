@@ -36,9 +36,9 @@ Route::get('/phpinfo', function () {
 });
 
 
-Route::get('/portal', function () {
-    return view('peri::portal.index');
-})->name('portal.index');
+Route::get('/home', function () {
+    return view('peri::layouts.home');
+})->name('layouts.home');
 
 
 Route::get('/tes-barcode', function () {

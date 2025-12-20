@@ -27,7 +27,7 @@ body {
 .logo {
   font-size: 35px;
   font-weight: 1000;
-  color: #2aa7a7;
+  color: #a19d53ff;
 }
 
 .kategori {
@@ -38,7 +38,7 @@ body {
 }
 
 .kategori:hover {
-  color: #2aa7a7;
+  color: #a19d53ff;
 }
 
 
@@ -74,7 +74,7 @@ body {
 }
 
 .icons i:hover {
-  color: #2aa7a7;
+  color: #a19d53ff;
 }
 
 .cart-icon-container {
@@ -110,7 +110,7 @@ body {
 }
 
 .cart-popup a {
-  color: #2aa7a7;
+  color: #a19d53ff;
   font-weight: bold;
   text-decoration: none;
   font-size: 12px;
@@ -199,7 +199,7 @@ body {
 .btn {
   display: inline-block;
   padding: 12px 24px;
-  background-color: #2aa7a7;
+  background-color: #a19d53ff;
   color: white;
   text-decoration: none;
   border-radius: 8px;
@@ -396,3 +396,5 @@ body {
   font-size: 14px;
   color: #666;
 }
+
+

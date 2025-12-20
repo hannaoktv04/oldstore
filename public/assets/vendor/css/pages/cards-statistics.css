@@ -50,7 +50,7 @@ html:not([dir=rtl]) .swiper-container.swiper-container-horizontal > .swiper-pagi
   background: rgba(38, 43, 67, 0.26) !important;
 }
 .light-style .swiper-container.swiper-sales.swiper-container-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet.swiper-pagination-bullet-active {
-  background: #198754 !important;
+  background: #a19d53ff !important;
 }
 .light-style .swiper-container.swiper-sales .sales-text-bg {
   background-color: #eeeef0;
@@ -64,7 +64,7 @@ html:not([dir=rtl]) .swiper-container.swiper-container-horizontal > .swiper-pagi
   background: rgba(234, 234, 255, 0.26) !important;
 }
 .dark-style .swiper-container.swiper-sales.swiper-container-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet.swiper-pagination-bullet-active {
-  background: #198754 !important;
+  background: #a19d53ff !important;
 }
 .dark-style .swiper-container.swiper-sales .sales-text-bg {
   background-color: #3f415c;

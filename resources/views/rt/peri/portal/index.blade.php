@@ -24,13 +24,7 @@
             'url' => route($route),
             'color' => 'purple'
         ],
-        ['title' => 'Lorem', 'icon' => 'ri-school-line', 'url' => '#', 'color' => 'teal'],
-        ['title' => 'Lorem', 'icon' => 'ri-time-line', 'url' => '#', 'color' => 'deep-orange'],
-        ['title' => 'Lorem', 'icon' => 'ri-bar-chart-2-line', 'url' => '#', 'color' => 'green'],
-        ['title' => 'Lorem', 'icon' => 'ri-folder-line', 'url' => '#', 'color' => 'blue'],
-        ['title' => 'Lorem', 'icon' => 'ri-mail-send-line', 'url' => '#', 'color' => 'indigo'],
-        ['title' => 'Lorem', 'icon' => 'ri-user-settings-line', 'url' => '#', 'color' => 'brown'],
-        ['title' => 'Lorem', 'icon' => 'ri-service-line', 'url' => '#', 'color' => 'pink'],
+        
     ];
   @endphp
 
