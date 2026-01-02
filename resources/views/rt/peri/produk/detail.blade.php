@@ -116,9 +116,6 @@
             <input type="hidden" name="qty" id="formPesanQtyFinal">
             <input type="hidden" name="tanggal_pengiriman" id="tanggalPengambilanLangsung">
             <div class="modal-content">
-                <div class="modal-header border-0 justify-content-center">
-                    <h5 class="modal-title" id="modalTanggalLabel">Pilih Tanggal Pengiriman</h5>
-                </div>
                 <div class="modal-body border-0">
                     <input type="text" class="form-control" id="tanggalPickerLangsung" value="{{ $now }}"
                         required>
@@ -130,7 +127,7 @@
                         id="btnKirimPermintaan">
                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"
                             id="spinnerKirim"></span>
-                        <span id="textKirim">Kirim Permintaan</span>
+                        <span id="textKirim">Lakukan Transaksi</span>
                     </button>
                 </div>
             </div>

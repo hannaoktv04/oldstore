@@ -115,7 +115,7 @@
             <div class="bg-white rounded shadow-sm p-3">
                 <h5 class="fw-semibold mb-3">Ringkasan Permintaan</h5>
                 <div class="d-flex justify-content-between mb-3">
-                    <span>Total Items</span>
+                    <span>Total Produk</span>
                     <span class="jumlah-terpilih">0</span>
                 </div>
 
@@ -123,13 +123,13 @@
                     @csrf
                     <input type="hidden" name="tanggal_pengiriman" id="tanggal_pengiriman">
                     <div class="mb-3">
-                        <label for="tanggal_pengiriman_input" class="form-label">Tanggal Pengiriman</label>
+                        <label for="tanggal_pengiriman_input" class="form-label">Total Harga</label>
                         <input type="text" id="tanggal_pengiriman_input" class="form-control"
                                placeholder="Pilih tanggal & waktu" required
                                {{ $opnameAktif ? 'disabled' : '' }}>
                     </div>
                     <button type="submit" class="btn btn-success w-100"
-                            {{ $opnameAktif ? 'disabled' : '' }}>Ajukan Permintaan</button>
+                            {{ $opnameAktif ? 'disabled' : '' }}>Checkout</button>
                 </form>
             </div>
         </div>

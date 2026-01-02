@@ -18,7 +18,7 @@ class LoginController extends Controller
         $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->route('portal'); // 👈 diarahkan ke route portal
+            return redirect()->route('home');
         }
 
         return back()->withErrors([
