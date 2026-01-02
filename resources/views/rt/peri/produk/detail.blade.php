@@ -4,7 +4,7 @@
 <div class="container py-3">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('home') }}">PERI</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}">OLD</a></li>
             <li class="breadcrumb-item"><a href="{{ route('kategori.index') }}">Kategori Barang</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ $produk->nama_barang }}</li>
         </ol>
@@ -57,7 +57,7 @@
             <div class="mb-3 ">
                 <label for="qty " class="form-label fw-bold">Jumlah</label>
                 <div class="input-group btn-outline-success"
-                    style="width: fit-content; border: 1px solid #198754; border-radius: 50px; overflow: hidden;">
+                    style="width: fit-content; border: 1px solid #a19d53ff; border-radius: 50px; overflow: hidden;">
                     <button type="button" class="btn btn-outline-success px-3 py-1 border-0 qty-btn bg-white"
                         onclick="ubahQty(-1)">-</button>
                     <input type="number" id="qty" value="1" min="1" max="{{ $stokQty }}"

@@ -2827,7 +2827,7 @@
   color: #fdb528;
 }
 .light-style .jstree .jstree-container-ul .jstree-icon.ri-file-text-line {
-  color: #198754;
+  color: #a19d53ff;
 }
 .light-style .jstree .jstree-container-ul .jstree-anchor {
   color: #3b4056;
@@ -2880,7 +2880,7 @@
   color: #fdb528;
 }
 .dark-style .jstree .jstree-container-ul .jstree-icon.ri-file-text-line {
-  color: #198754;
+  color: #a19d53ff;
 }
 .dark-style .jstree .jstree-container-ul .jstree-anchor {
   color: #d7d8ed;

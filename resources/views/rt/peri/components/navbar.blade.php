@@ -9,7 +9,7 @@
       @endif
 
       <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
-        <img src="{{ asset('assets/img/peri.png') }}" alt="PERI Logo" style="height: 50px;">
+        <img src="{{ asset('assets/img/old.jpg') }}" alt="old Logo" style="height: 50px;">
         @if(Auth::check() && Auth::user()->hasRole('admin'))
           <span class="fw-normal text-secondary fs-6 ms-2">Admin</span>
         @endif
@@ -61,7 +61,7 @@
           <button id="cart-icon" class="icon-button text-dark bg-transparent border-0 p-0">
             <i class="bi bi-bag-fill fs-5"></i>
             @if($jumlahKeranjang > 0)
-              <span class="badge bg-success rounded-pill position-absolute top-0 start-100 translate-middle">
+              <span class="badge bg-custom rounded-pill position-absolute top-0 start-100 translate-middle">
                 {{ $jumlahKeranjang }}
               </span>
             @endif

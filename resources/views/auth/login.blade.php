@@ -4,8 +4,8 @@
 <div class="auth-wrapper d-flex align-items-stretch justify-content-center vh-100 vw-100">
   <div class="auth-card d-flex flex-wrap flex-md-nowrap w-100">
 
-    <div class="image-section d-none d-md-flex align-items-center justify-content-center" style="width: 60%;">
-      <img src="{{ asset('assets/img/login.png') }}" alt="Login Illustration" class="img-fluid" style="max-height: 450px;">
+    <div class="image-section d-none d-md-flex align-items-center justify-content-center mr-4" style="width: 60%;">
+      <img src="{{ asset('assets/img/old.jpg') }}" alt="Login Illustration" class="img-fluid" style="max-height: 500px; margin-left: 250px;">
     </div>
 
     <div class="form-container d-flex align-items-center justify-content-center w-100" style="min-height: 100vh;">
@@ -15,7 +15,7 @@
         </div>
 
         <div class="text-center mb-1">
-          <img src="{{ asset('assets/img/peri.png') }}" alt="Logo" style="height: 70px;">
+          <img src="{{ asset('assets/img/old.jpg') }}" alt="Logo" style="height: 70px;">
         </div>
 
         <form method="POST" action="{{ route('login') }}">

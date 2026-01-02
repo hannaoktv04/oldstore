@@ -4,19 +4,19 @@
 
 <div class="container">
   <div class="position-relative mb-5 overflow-hidden rounded-4 hero-wrapper" style="height: 400px;">
-    <img src="{{ asset('assets/img/hero.jpg') }}" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="Hero Image">
+    <img src="{{ asset('assets/img/aneka sepatu.jpeg') }}" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="Hero Image">
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50"></div>
 
     <div class="position-absolute top-50 start-0 translate-middle-y ps-4 ps-sm-5 text-white hero-content fade-in">
-      <h1 class="fw-bold display-6 mb-2">Selamat Datang</h1>
-      <p class="lead mb-3">Temukan barang yang paling sering dibutuhkan dan ajukan permintaan sekarang juga.</p>
-      <a href="{{ route('kategori.index') }}" class="btn fw-bold text-white px-4 py-2" style="background-color: #2aa7a7;">Ajukan Sekarang</a>
+      <h1 class="fw-bold display-6 mb-2">OLD Store</h1>
+      <p class="lead mb-3">Barang Pre-Loved Kualitas Good.</p>
+      <a href="{{ route('kategori.index') }}" class="btn fw-bold text-white px-4 py-2" style="background-color: #a19d53ff;">Belanja Sekarang</a>
     </div>
   </div>
 </div>
 
 <section class="container">
-  <h5 class="mb-4 fw-semibold">Paling Banyak Dipesan</h5>
+  <h5 class="mb-4 fw-semibold">Produk Terbaru</h5>
   <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
     @forelse ($items as $item)
       @php

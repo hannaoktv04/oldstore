@@ -5,7 +5,7 @@
   <div class="auth-card d-flex flex-wrap flex-md-nowrap w-100 flex-row-reverse">
 
     <div class="image-section d-none d-md-flex align-items-center justify-content-center" style="width: 50%;">
-      <img src="{{ asset('assets/img/register.png') }}" alt="Register Illustration" class="img-fluid" style="max-height: 500px;">
+      <img src="{{ asset('assets/img/old.jpg') }}" alt="Register Illustration" class="img-fluid" style="max-height: 500px; margin-right: 250px;">
     </div>
 
     <div class="form-container d-flex align-items-center justify-content-center" style="width: 100%; min-height: 100vh;">

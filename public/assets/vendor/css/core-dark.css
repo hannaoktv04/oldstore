@@ -2,7 +2,7 @@
 :root,
 [data-bs-theme=light] {
   --bs-blue: #26c6f9;
-  --bs-indigo: #198754;
+  --bs-indigo: #a19d53ff;
   --bs-purple: #6f42c1;
   --bs-pink: #e83e8c;
   --bs-red: #ff4d49;
@@ -17,7 +17,7 @@
   --bs-gray-dark: rgba(234, 234, 255, 0.8);
   --bs-gray-25: rgba(234, 234, 255, 0.015);
   --bs-gray-50: rgba(234, 234, 255, 0.03);
-  --bs-primary: #198754;
+  --bs-primary: #a19d53ff;
   --bs-secondary: #6d788d;
   --bs-success: #72e128;
   --bs-info: #26c6f9;
@@ -84,7 +84,7 @@
   --bs-tertiary-bg: rgba(234, 234, 255, 0.06);
   --bs-tertiary-bg-rgb: 234, 234, 255;
   --bs-heading-color: #d7d8ed;
-  --bs-link-color: #198754;
+  --bs-link-color: #a19d53ff;
   --bs-link-color-rgb: 102, 108, 255;
   --bs-link-decoration: none;
   --bs-link-hover-color: #157347;
@@ -2914,10 +2914,10 @@ textarea.form-control-lg {
   pointer-events: none;
 }
 .form-range:disabled::-webkit-slider-thumb {
-  background-color: #198754;
+  background-color: #a19d53ff;
 }
 .form-range:disabled::-moz-range-thumb {
-  background-color: #198754;
+  background-color: #a19d53ff;
 }
 
 .form-floating {
@@ -3299,7 +3299,7 @@ textarea.form-control-lg {
   --bs-dropdown-link-color: #d7d8ed;
   --bs-dropdown-link-hover-color: #d7d8ed;
   --bs-dropdown-link-hover-bg: #3b3e59;
-  --bs-dropdown-link-active-color: #198754;
+  --bs-dropdown-link-active-color: #a19d53ff;
   --bs-dropdown-link-active-bg: rgba(102, 108, 255, 0.1);
   --bs-dropdown-link-disabled-color: #7b7c95;
   --bs-dropdown-item-padding-x: 1.25rem;
@@ -3567,7 +3567,7 @@ textarea.form-control-lg {
   --bs-dropdown-link-hover-color: #fff;
   --bs-dropdown-divider-bg: rgba(255, 255, 255, 0.09);
   --bs-dropdown-link-hover-bg: rgba(255, 255, 255, 0.15);
-  --bs-dropdown-link-active-color: #198754;
+  --bs-dropdown-link-active-color: #a19d53ff;
   --bs-dropdown-link-active-bg: rgba(102, 108, 255, 0.1);
   --bs-dropdown-link-disabled-color: rgba(234, 234, 255, 0.5);
   --bs-dropdown-header-color: rgba(234, 234, 255, 0.5);
@@ -4600,8 +4600,8 @@ textarea.form-control-lg {
   --bs-pagination-focus-bg: #3b3e59;
   --bs-pagination-focus-box-shadow: none;
   --bs-pagination-active-color: #fff;
-  --bs-pagination-active-bg: #198754;
-  --bs-pagination-active-border-color: #198754;
+  --bs-pagination-active-bg: #a19d53ff;
+  --bs-pagination-active-border-color: #a19d53ff;
   --bs-pagination-disabled-color: #d7d8ed;
   --bs-pagination-disabled-bg: #3f425c;
   --bs-pagination-disabled-border-color: #595b75;
@@ -4814,7 +4814,7 @@ textarea.form-control-lg {
   --bs-progress-border-radius: 50rem;
   --bs-progress-box-shadow: var(--bs-box-shadow-inset);
   --bs-progress-bar-color: #fff;
-  --bs-progress-bar-bg: #198754;
+  --bs-progress-bar-bg: #a19d53ff;
   --bs-progress-bar-transition: width 0.6s ease;
   display: flex;
   height: var(--bs-progress-height);
@@ -4878,7 +4878,7 @@ textarea.form-control-lg {
   --bs-list-group-action-active-bg: #393c6a;
   --bs-list-group-disabled-color: #7b7c95;
   --bs-list-group-disabled-bg: transparent;
-  --bs-list-group-active-color: #198754;
+  --bs-list-group-active-color: #a19d53ff;
   --bs-list-group-active-bg: #393c6a;
   --bs-list-group-active-border-color: #464963;
   display: flex;
@@ -9279,7 +9279,7 @@ button:focus-visible {
 }
 
 .nav .nav-link:not(.active):hover {
-  color: #198754;
+  color: #a19d53ff;
 }
 
 .nav-tabs .nav-link,
@@ -9344,11 +9344,11 @@ div:not(.nav-align-left):not(.nav-align-right) > .nav-tabs {
 }
 .nav-tabs.nav-tabs-widget .nav-link.active {
   border-style: solid;
-  border-color: #198754;
+  border-color: #a19d53ff;
 }
 .nav-tabs.nav-tabs-widget .nav-link.active .avatar-initial {
   background-color: #3c4075 !important;
-  color: #198754 !important;
+  color: #a19d53ff !important;
 }
 .nav-tabs.nav-tabs-widget .tab-slider {
   display: none;
@@ -11099,11 +11099,11 @@ select.form-select:hover:not([disabled]):not([focus]) {
 }
 .form-range:disabled::-webkit-slider-runnable-track {
   opacity: 0.45;
-  background: #198754;
+  background: #a19d53ff;
 }
 .form-range:disabled::-moz-range-track {
   opacity: 0.45;
-  background: #198754;
+  background: #a19d53ff;
 }
 
 .input-group .input-group-text {
@@ -12307,7 +12307,7 @@ button.list-group-item-gray.active {
 .list-group .list-group-item.active .h5,
 .list-group .list-group-item.active h6,
 .list-group .list-group-item.active .h6 {
-  color: #198754;
+  color: #a19d53ff;
 }
 
 .navbar {
@@ -13280,7 +13280,7 @@ button.list-group-item-gray.active {
 }
 
 .border-primary {
-  border-color: #198754 !important;
+  border-color: #a19d53ff !important;
 }
 
 .border-secondary {
@@ -25310,7 +25310,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
   cursor: pointer;
 }
 .layout-navbar .navbar-dropdown.dropdown-notifications .dropdown-notifications-list .dropdown-notifications-item:not(.mark-as-read) .dropdown-notifications-read span {
-  background-color: #198754;
+  background-color: #a19d53ff;
 }
 .layout-navbar .navbar-dropdown.dropdown-notifications .dropdown-notifications-list .dropdown-notifications-item .dropdown-notifications-actions {
   text-align: center;
@@ -26137,7 +26137,7 @@ html:not(.layout-footer-fixed) .content-wrapper {
   opacity: 1;
 }
 .custom-option-image.custom-option-image-check:hover .form-check-input:checked {
-  border-color: #198754;
+  border-color: #a19d53ff;
 }
 
 .switch {
@@ -26786,7 +26786,7 @@ html:not(.layout-footer-fixed) .content-wrapper {
   box-shadow: 0 0 0 10px #282a42;
 }
 .timeline .timeline-item .timeline-indicator i {
-  color: #198754;
+  color: #a19d53ff;
 }
 .timeline .timeline-item .timeline-point {
   position: absolute;
@@ -26797,7 +26797,7 @@ html:not(.layout-footer-fixed) .content-wrapper {
   height: 0.75rem;
   width: 0.75rem;
   border-radius: 50%;
-  background-color: #198754;
+  background-color: #a19d53ff;
   box-shadow: 0 0 0 10px #30334e;
 }
 .timeline .timeline-item.timeline-item-transparent .timeline-event {
@@ -26811,7 +26811,7 @@ html:not(.layout-footer-fixed) .content-wrapper {
 .timeline.timeline-outline .timeline-item .timeline-point {
   outline: unset;
   background-color: #30334e !important;
-  border: 2px solid #198754;
+  border: 2px solid #a19d53ff;
 }
 .timeline.timeline-center .timeline-item {
   width: 50%;

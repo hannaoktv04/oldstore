@@ -6,7 +6,7 @@
             <script>
                 document.write(new Date().getFullYear());
             </script>
-                Inspektorat Jenderal Komdigi
+            ❤️ by Old Store
             </div>
         </div>
     </div>

@@ -5,7 +5,7 @@
 @section('content')
 <div class="container">
   <div class="position-relative mb-3 overflow-hidden rounded-4" style="height: 200px;">
-    <img src="{{ asset('assets/img/hero.jpg') }}" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="Hero Image">
+    <img src="{{ asset('assets/img/aneka sepatu.jpeg') }}" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="Hero Image">
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50"></div>
     <div class="position-absolute top-50 start-0 translate-middle-y text-white ps-5">
       <h4 class="fw-semibold display-6 mb-3">Kategori Barang</h4>
@@ -32,7 +32,7 @@
           <li class="list-group-item small px-3 py-2">
             <a href="{{ route('kategori.show', $category->id) }}" class="text-decoration-none d-flex justify-content-between align-items-center w-100">
               {{ $category->categori_name }}
-              <span class="badge bg-success rounded-pill">{{ $category->items_count }}</span>
+              00<span class="badge bg-custom rounded-pill">{{ $category->items_count }}</span>
             </a>
           </li>
         @endforeach
@@ -50,7 +50,7 @@
               class="nav-link text-decoration-none d-flex justify-content-between align-items-center w-100
                       {{ request()->routeIs('kategori.show') && request()->route('id') == $category->id ? 'text-success fw-semibold' : 'text-dark' }}">
                 {{ $category->categori_name }}
-                <span class="badge bg-success rounded-pill">{{ $category->items_count }}</span>
+                <span class="badge bg-custom rounded-pill">{{ $category->items_count }}</span>
             </a>
           </li>
         @endforeach

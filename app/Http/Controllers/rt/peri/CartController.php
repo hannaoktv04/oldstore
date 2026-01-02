@@ -131,10 +131,10 @@ class CartController extends Controller
             Cart::whereIn('id', $cartIds)->delete();
 
             DB::commit();
-            return redirect()->route('user.history')->with('success', 'Permintaan berhasil diajukan dan menunggu konfirmasi admin.');
+            return redirect()->route('user.history')->with('success', 'Pembelian berhasil.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('user.history')->with('error', 'Gagal mengajukan permintaan.');
+            return redirect()->route('user.history')->with('error', 'Gagal melakukan pembelian.');
         }
     }
 

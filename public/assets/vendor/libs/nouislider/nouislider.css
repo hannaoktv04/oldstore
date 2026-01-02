@@ -470,14 +470,14 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
   opacity: 0.45;
 }
 [disabled] .noUi-connect {
-  background: #198754;
+  background: #a19d53ff;
 }
 
 [disabled].noUi-target,
 [disabled].noUi-handle,
 [disabled] .noUi-handle {
   cursor: not-allowed;
-  border-color: #198754;
+  border-color: #a19d53ff;
 }
 
 .noUi-pips,

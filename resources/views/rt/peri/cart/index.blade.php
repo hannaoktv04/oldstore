@@ -41,7 +41,7 @@
         $stokHabis = $item->stocks->qty <= 0;
         $nonaktif = $stokHabis || $opnameAktif;
         $buttonStyle = $nonaktif ? 'btn-outline-secondary' : 'btn-outline-success';
-        $borderColor = $nonaktif ? '#6c757d' : '#198754';
+        $borderColor = $nonaktif ? '#6c757d' : '#a19d53ff';
     @endphp
 
     <div class="card border-0 mb-3 p-3 shadow-sm position-relative {{ $nonaktif ? 'bg-light grayscale-card' : '' }}">
@@ -129,7 +129,7 @@
                                {{ $opnameAktif ? 'disabled' : '' }}>
                     </div>
                     <button type="submit" class="btn btn-success w-100"
-                            {{ $opnameAktif ? 'disabled' : '' }}>Checkout</button>
+                            {{ $opnameAktif ? 'disabled' : '' }}>Beli Sekarang</button>
                 </form>
             </div>
         </div>

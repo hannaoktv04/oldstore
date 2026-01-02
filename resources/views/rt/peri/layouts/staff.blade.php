@@ -37,7 +37,7 @@
           icon: 'success',
           title: 'Berhasil!',
           text: '{{ session('success') }}',
-          confirmButtonColor: '#198754'
+          confirmButtonColor: '#a19d53ff'
       });
   </script>
   @endif

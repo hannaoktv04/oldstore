@@ -4,7 +4,7 @@
     font-size: 0.9rem;
     padding: 6px 10px;
   }
-  .nav-link:hover { color: #2aa7a7 !important; }
+  .nav-link:hover { color: #a19d53ff !important; }
 
   .navbar-brand img { height: 36px; }
   .navbar-brand span { font-size: 0.85rem; color: #6c757d; }

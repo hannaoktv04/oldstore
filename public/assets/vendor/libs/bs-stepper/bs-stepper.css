@@ -625,10 +625,10 @@ html:not([dir=rtl]) .dark-style .bs-stepper.vertical .bs-stepper-header {
 }
 .light-style .wizard-vertical-icons.vertical .bs-stepper-header .step.crossed .avatar-initial {
   background-color: #e7e7ff;
-  color: #198754;
+  color: #a19d53ff;
 }
 .light-style .wizard-vertical-icons.vertical .bs-stepper-header .step.active .avatar-initial {
-  background-color: #198754;
+  background-color: #a19d53ff;
   color: #fff;
   box-shadow: 0 0.125rem 0.375rem 0 rgba(38, 43, 67, 0.14);
 }
@@ -639,10 +639,10 @@ html:not([dir=rtl]) .dark-style .bs-stepper.vertical .bs-stepper-header {
 }
 .dark-style .wizard-vertical-icons.vertical .bs-stepper-header .step.crossed .avatar-initial {
   background-color: #393c6a;
-  color: #198754;
+  color: #a19d53ff;
 }
 .dark-style .wizard-vertical-icons.vertical .bs-stepper-header .step.active .avatar-initial {
-  background-color: #198754;
+  background-color: #a19d53ff;
   color: #fff;
   box-shadow: 0 0.125rem 0.375rem 0 rgba(16, 17, 33, 0.2);
 }
