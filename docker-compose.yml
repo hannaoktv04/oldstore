@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # Service Aplikasi (PHP)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: oldstore-app
+    container_name: oldstore-app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    networks:
+      - oldstore-network
+
+  # Service Web Server (Nginx)
+  webserver:
+    image: nginx:alpine
+    container_name: oldstore-webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3000:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - oldstore-network
+    depends_on:
+      - app
+
+  # Service Database (PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    container_name: oldstore-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    networks:
+      - oldstore-network
+    ports:
+      - "5432:5432" # Host Port : Container Port
+
+networks:
+  oldstore-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
