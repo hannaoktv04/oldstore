@@ -14,8 +14,8 @@
                         <select name="item_id" id="item_id" class="form-select" required>
                             <option value="">Pilih Item</option>
                             @foreach ($items as $item)
-                                <option value="{{ $item->id }}">{{ $item->nama_barang }} (Stok:
-                                    {{ $item->stocks->qty ?? 0 }})</option>
+                                <option value="{{ $item->id }}">{{ $item->nama_barang }} 
+                                    (Stok: {{ $item->stok ?? 0 }})</option>
                             @endforeach
                         </select>
                     </div>

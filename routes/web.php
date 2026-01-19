@@ -153,7 +153,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::resource('satuan', SatuanController::class)->except(['show'])->names('admin.satuan');
 
     Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
-    Route::post('/users/{user}/assign-role', [UserController::class, 'assignRole'])->name('admin.users.assign-role');
 });
 
 // -------------------------
@@ -214,3 +213,31 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pengajuan/{id}/ttd', [PengajuanController::class, 'signatureStore'])
         ->name('pengajuan.signature.store');
 });
+
+Route::prefix('cart')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/store/{id}', [CartController::class, 'store'])->name('cart.store');
+    Route::post('/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/delete/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::post('/bulk-delete', [CartController::class, 'bulkDelete'])->name('cart.bulkDelete');
+
+    // checkout
+    Route::get('/checkout', [CartController::class, 'checkoutPage'])->name('cart.checkoutPage');
+    Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+
+    // invoice
+    Route::get('/invoice/{id}', [CartController::class, 'invoice'])->name('cart.invoice');
+
+    // ongkir
+    Route::post('/calc-ongkir', [CartController::class, 'calcOngkir'])
+        ->name('cart.calcOngkir');
+});
+
+Route::prefix('cart/api/regions')->group(function () {
+    Route::get('/provinces', [CartController::class, 'getProvinces']);
+    Route::get('/cities/{province_code}', [CartController::class, 'getCities']);
+    Route::get('/districts/{city_code}', [CartController::class, 'getDistricts']);
+    Route::get('/villages/{district_code}', [CartController::class, 'getVillages']);
+});
+
+Route::post('/midtrans-callback', [CartController::class, 'handleNotification']);

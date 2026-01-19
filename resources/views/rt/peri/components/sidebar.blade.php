@@ -59,11 +59,6 @@
                         <div data-i18n="Kategori">Kategori</div>
                     </a>
                 </li>
-                <li class="menu-item {{ request()->routeIs('admin.satuan.*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.satuan.index') }}" class="menu-link">
-                        <div data-i18n="Satuan">Satuan</div>
-                    </a>
-                </li>
                 <li class="menu-item {{ request()->routeIs('admin.stok.koreksi') ? 'active' : '' }}">
                     <a href="{{ route('admin.stok.koreksi') }}" class="menu-link">
                         <div data-i18n="Koreksi Stok">Koreksi Stok</div>
@@ -72,7 +67,6 @@
             </ul>
         </li>
 
-        {{-- Riwayat Pengajuan --}}
         @php
             $pengajuanOpen = request()->routeIs('admin.pengajuan.status');
         @endphp
@@ -103,19 +97,6 @@
                     </a>
                 </li>
             </ul>
-        </li>
-
-        <li class="menu-item {{ request()->routeIs('admin.purchase_orders.*') ? 'active' : '' }}">
-            <a href="{{ route('admin.purchase_orders.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons ri-receipt-line"></i>
-                <div data-i18n="Purchase Order">Purchase Order</div>
-            </a>
-        </li>
-        <li class="menu-item {{ request()->routeIs('admin.stock_opname.*') ? 'active' : '' }}">
-            <a href="{{ route('admin.stock_opname.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons ri-list-check"></i>
-                <div data-i18n="Stock Opname">Stock Opname</div>
-            </a>
         </li>
         <li class="menu-item {{ request()->routeIs('admin.wishlist.index') ? 'active' : '' }}">
             <a href="{{ route('admin.wishlist.index') }}" class="menu-link">

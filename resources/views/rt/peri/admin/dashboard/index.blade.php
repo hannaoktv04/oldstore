@@ -166,10 +166,10 @@
                                     <small class="text-muted">{{ $produk->category->categori_name }}</small>
                                 </div>
                                 <span class="badge 
-                                    @if($produk->stocks->qty <= 0) bg-label-danger
-                                    @elseif($produk->stocks->qty <= $produk->stok_minimum) bg-label-warning
+                                    @if($produk->stok <= 0) bg-label-danger
+                                    @elseif($produk->stok <= 5) bg-label-warning
                                     @else bg-label-success @endif">
-                                    {{ $produk->stocks->qty }}
+                                    {{ $produk->stok }}
                                 </span>
                             </div>
                             @empty

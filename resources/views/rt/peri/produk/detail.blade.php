@@ -18,7 +18,7 @@
         <div class="col-md-6">
             <div class="mb-3 d-flex justify-content-center position-relative w-75">
                 @php
-                $stokHabis = ($stokQty == 0);
+                $stokHabis = ($produk->stok == 0);
                 @endphp
                 @if($stokHabis)
                 <div class="position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center"
@@ -48,7 +48,9 @@
             <span class="text-black fw-bold d-block mb-1 fs-6">{{ $produk->category->categori_name ?? 'Kategori Tidak
                 Diketahui' }}</span>
             <h3 class="fw-bold mb-3"> {{ $produk->nama_barang }}</h3>
-
+            <p class="fw-bold mb-3" style="font-size: 20px;">Rp
+                {{ number_format($produk->harga, 0, ',', '.') }} 
+            </p>
             <div class="deskripsi-item text-muted mb-4">
                 <p class="fw-bold text-black mb-1">Detail produk</p>
                 <p class="text-black" style="line-height: 1.6;"> {!! nl2br(e($produk->deskripsi)) !!}</p>
@@ -60,7 +62,7 @@
                     style="width: fit-content; border: 1px solid #a19d53ff; border-radius: 50px; overflow: hidden;">
                     <button type="button" class="btn btn-outline-success px-3 py-1 border-0 qty-btn bg-white"
                         onclick="ubahQty(-1)">-</button>
-                    <input type="number" id="qty" value="1" min="1" max="{{ $stokQty }}"
+                    <input type="number" id="qty" value="1" min="1" max="{{ $produk->stok }}"
                         class="form-control text-center border-0 bg-white"
                         style="max-width: 45px; height: 40px; line-height: 1; padding: 0 0.25rem;">
                     <button type="button" class="btn btn-outline-success px-3 py-1 border-0 qty-btn bg-white"
@@ -68,9 +70,9 @@
                 </div>
                 <div id="qtyAlertContainer" class="mt-2"></div>
             </div>
-            <p class="mb-5"> <span class="fw-bold text-black">{{ $stokQty }}</span> produk tersedia</p>
+            <p class="mb-5"> <span class="fw-bold text-black">{{ $produk->stok }}</span> produk tersedia</p>
             <div class="d-flex gap-3">
-                @if ($stokQty > 0)
+                @if ($produk->stok > 0)
                 <form method="POST" action="{{ route('user.wishlist', ['id' => $produk->id]) }}">
                     @csrf
                     <button type="button" id="heart-icon" class="icon-button text-dark bg-transparent border-0 p-1 "

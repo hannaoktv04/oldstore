@@ -10,14 +10,23 @@ class Item extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nama_barang',
         'kode_barang',
-        'category_id',
-        'satuan_id',
-        'stok_minimum',
+        'nama_barang',
+        'size',
+        'harga',
+        'stok',
         'deskripsi',
+        'category_id',
         'photo_id',
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($item) {
+            $lastId = self::max('id') + 1;
+            $item->kode_barang = 'ITM-' . str_pad($lastId, 4, '0', STR_PAD_LEFT);
+        });
+    }
 
     public function images()
     {
@@ -27,11 +36,6 @@ class Item extends Model
     public function photo()
     {
         return $this->belongsTo(ItemImage::class, 'photo_id');
-    }
-
-    public function stocks()
-    {
-        return $this->hasOne(ItemStock::class, 'item_id');
     }
 
     public function carts()
@@ -49,11 +53,6 @@ class Item extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function state()
-    {
-        return $this->hasOne(ItemState::class, 'item_id');
-    }
-
     public function purchaseOrderDetails()
     {
         return $this->hasMany(PurchaseOrderDetail::class);
@@ -63,6 +62,32 @@ class Item extends Model
     {
         return $this->hasMany(ItemLog::class, 'item_id');
     }
+
+    public function sizes()
+    {
+        return $this->hasMany(ItemSize::class);
+    }
+
+    public function stockNotifications()
+    {
+        return $this->hasMany(StockNotification::class);
+    }
+
+    public function stockOpnames()
+    {
+        return $this->hasMany(StockOpname::class, 'item_id');
+    }
+
+    public function adjustments()
+    {
+        return $this->hasMany(StockAdjustment::class, 'item_id');
+    }
+
+    public function getSatuanAttribute()
+    {
+        return 'pasang';
+    }
+
     public function getGalleryAttribute()
     {
         $gallery = collect();
@@ -89,27 +114,5 @@ class Item extends Model
         return $this->photo && $this->photo->image
             ? $this->photo->image
             : 'assets/img/default.png';
-    }
-
-    public function getTotalStokAttribute()
-    {
-        return $this->stocks?->qty ?? 0;
-    }
-
-    public function stockNotifications()
-    {
-        return $this->hasMany(StockNotification::class);
-    }
-    public function stockOpnames()
-    {
-        return $this->hasMany(StockOpname::class, 'item_id');
-    }
-    public function adjustments()
-    {
-        return $this->hasMany(StockAdjustment::class, 'item_id');
-    }
-    public function satuan()
-    {
-        return $this->belongsTo(Satuan::class, 'satuan_id');
     }
 }

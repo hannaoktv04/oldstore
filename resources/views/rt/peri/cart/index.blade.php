@@ -38,13 +38,15 @@
     @forelse($carts as $cart)
     @php
         $item = $cart->item;
-        $stokHabis = $item->stocks->qty <= 0;
+        $stokHabis = ($item->stok ?? 0) <= 0;
         $nonaktif = $stokHabis || $opnameAktif;
         $buttonStyle = $nonaktif ? 'btn-outline-secondary' : 'btn-outline-success';
         $borderColor = $nonaktif ? '#6c757d' : '#a19d53ff';
     @endphp
 
-    <div class="card border-0 mb-3 p-3 shadow-sm position-relative {{ $nonaktif ? 'bg-light grayscale-card' : '' }}">
+    <div class="card border-0 mb-3 p-3 shadow-sm position-relative {{ $nonaktif ? 'bg-light grayscale-card' : '' }}"
+        data-harga="{{ $item->harga }}"
+        data-qty="{{ $cart->qty }}">
         @if($stokHabis)
             <span class="badge bg-secondary position-absolute" style="top: 10px; left: 10px;">HABIS</span>
         @elseif($opnameAktif)
@@ -65,10 +67,15 @@
                     <div>
                         <div class="text-muted small">{{ $item->category->categori_name ?? '-' }}</div>
                         <div class="fw-semibold text-dark">{{ $item->nama_barang }}</div>
-                        <div class="text-muted small">Stok tersedia: {{ $item->stocks->qty ?? '0' }} {{ $item->satuan->nama_satuan ?? '-' }}</div>
+                        <div class="text-muted small">Stok tersedia: {{ $item->stok ?? 0 }} {{ $item->satuan ?? '-' }}</div>
+
+                        <div class="text-success small fw-semibold">
+                            Harga: Rp {{ number_format($item->harga ?? 0, 0, ',', '.') }}
+                        </div>
                     </div>
                 </div>
             </a>
+
             <div class="d-flex align-items-center">
                 <form method="POST" action="{{ route('cart.destroy', $cart->id) }}" class="me-3">
                     @csrf
@@ -88,7 +95,7 @@
                                 class="btn {{ $buttonStyle }} px-2 py-1 border-0"
                                 {{ $nonaktif ? 'disabled' : '' }}>−</button>
                         <input type="number" name="manual_qty" value="{{ $cart->qty }}"
-                               min="1" max="{{ $item->stocks->qty ?? 0 }}"
+                               min="1" max="{{ $item->stok ?? 0 }}"
                                class="form-control text-center border-0"
                                style="width: 43px; height: 32px; padding: 0 0.1rem;"
                                {{ $nonaktif ? 'disabled' : '' }}>
@@ -114,22 +121,27 @@
         <div class="col-lg-4">
             <div class="bg-white rounded shadow-sm p-3">
                 <h5 class="fw-semibold mb-3">Ringkasan Permintaan</h5>
+
                 <div class="d-flex justify-content-between mb-3">
                     <span>Total Items</span>
                     <span class="jumlah-terpilih">0</span>
                 </div>
 
-                <form method="POST" action="{{ route('cart.checkout') }}" id="checkoutForm">
+                <!-- Total Harga -->
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Total Harga</span>
+                    <span id="totalHarga" class="fw-semibold">
+                        Rp 0
+                    </span>
+                </div>
+
+
+                <form method="GET" action="{{ route('cart.checkoutPage') }}" id="checkoutForm">
                     @csrf
-                    <input type="hidden" name="tanggal_pengiriman" id="tanggal_pengiriman">
-                    <div class="mb-3">
-                        <label for="tanggal_pengiriman_input" class="form-label">Tanggal Pengiriman</label>
-                        <input type="text" id="tanggal_pengiriman_input" class="form-control"
-                               placeholder="Pilih tanggal & waktu" required
-                               {{ $opnameAktif ? 'disabled' : '' }}>
-                    </div>
                     <button type="submit" class="btn btn-success w-100"
-                            {{ $opnameAktif ? 'disabled' : '' }}>Beli Sekarang</button>
+                            {{ $opnameAktif ? 'disabled' : '' }}>
+                        Beli Sekarang
+                    </button>
                 </form>
             </div>
         </div>

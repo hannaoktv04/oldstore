@@ -14,23 +14,31 @@ class StockAdjustmentController extends Controller
 {
     public function create()
     {
-        $items = Item::with('stocks')->get();
+        $items = Item::all();
         return view('peri::admin.koreksi_stok', compact('items'));
     }
 
+
     public function store(Request $request)
     {
+        $request->validate([
+            'item_id' => 'required|exists:items,id',
+            'qty_fisik' => 'required|integer|min:0',
+        ]);
+
         DB::beginTransaction();
 
         try {
             $itemId = $request->input('item_id');
             $qtyFisik = $request->input('qty_fisik');
 
-            $stock = ItemStock::where('item_id', $itemId)->first();
-            $qtySebelum = $stock->qty ?? 0;
+            // Ambil item dari table items
+            $item = Item::findOrFail($itemId);
+
+            $qtySebelum = $item->stok ?? 0;
             $qtySelisih = $qtyFisik - $qtySebelum;
 
-            $adjustment = StockAdjustment::create(attributes: [
+            $adjustment = StockAdjustment::create([
                 'item_id' => $itemId,
                 'qty_sebelum' => $qtySebelum,
                 'qty_fisik' => $qtyFisik,
@@ -41,8 +49,8 @@ class StockAdjustmentController extends Controller
                 'adjusted_at' => now(),
             ]);
 
-
-            $stock->update(['qty' => $qtyFisik]);
+            // update stok di table items
+            $item->update(['stok' => $qtyFisik]);
 
             ItemLog::create([
                 'item_id' => $itemId,
@@ -53,6 +61,7 @@ class StockAdjustmentController extends Controller
                 'deskripsi' => 'Koreksi stok',
             ]);
 
+            // notifikasi hanya kalau stok awal 0 lalu jadi >0
             if ($qtySebelum <= 0 && $qtyFisik > 0) {
                 StockNotification::create([
                     'item_id' => $itemId,
@@ -68,4 +77,5 @@ class StockAdjustmentController extends Controller
             return redirect()->back()->with('error', 'Gagal koreksi stok: ' . $e->getMessage());
         }
     }
+
 }

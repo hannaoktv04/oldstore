@@ -14,26 +14,31 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'nama',
-        'nip',
-        'jabatan',
         'email',
+        'no_telp',
+        'alamat',
         'password',
     ];
 
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * Auto hash password 
+     */
     public function setPasswordAttribute($password)
     {
-        $this->attributes['password'] = Str::startsWith($password, '$2y$')
-            ? $password
-            : Hash::make($password);
+        if ($password) {
+            $this->attributes['password'] = Str::startsWith($password, '$2y$')
+                ? $password
+                : Hash::make($password);
+        }
     }
 
-    public function roles()
+    public function isAdmin()
     {
-        return $this->belongsToMany(Role::class, 'users_role', 'user_id', 'role_id');
-    }
-
-    public function hasRole($roleName)
-    {
-        return $this->roles->pluck('nama_role')->contains($roleName);
+        return $this->email === 'admin@gmail.com';
     }
 }
