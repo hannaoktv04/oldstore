@@ -18,12 +18,8 @@ class CategoryController extends Controller
     {
         $categories = Category::withCount('items')->get();
 
-        $sumExpr = 'COALESCE((SELECT SUM(item_stocks.qty) FROM item_stocks WHERE items.id = item_stocks.item_id), 0)';
-
         $items = Item::with(['category','photo'])
-            ->whereHas('state', fn($q) => $q->where('is_archived', false))
-            ->orderByRaw("($sumExpr = 0) DESC")
-            ->orderByRaw("$sumExpr DESC")
+            ->orderBy('stok', 'asc')
             ->paginate(20);
 
         return view('peri::layouts.kategori', compact('categories', 'items'));
@@ -187,9 +183,7 @@ class CategoryController extends Controller
 
         $items = Item::with(['category', 'photo'])
             ->where('category_id', $id)
-            ->withSum('stocks', 'qty')
-            ->orderByRaw('(select sum(qty) from item_stocks where item_id = items.id) = 0')
-            ->orderByDesc('stocks_sum_qty')
+            ->orderBy('stok', 'asc')
             ->paginate(20);
 
         return view('peri::layouts.kategori', compact('categories', 'selectedCategory', 'items'));
@@ -200,8 +194,7 @@ class CategoryController extends Controller
         $categories = Category::withCount('items')->get();
 
         $items = Item::with(['category', 'photo'])
-            ->orderByRaw('stok_minimum = 0')
-            ->orderBy('stok_minimum', 'desc')
+            ->orderBy('stok', 'asc')
             ->get();
 
         return view('peri::admin.category.index', compact('categories', 'items'));

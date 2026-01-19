@@ -12,21 +12,6 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="product_status">
-                        <select id="filter-status" class="form-select form-select-sm">
-                            <option value="">Semua Status</option>
-                            <option value="aktif">Aktif</option>
-                            <option value="arsip">Diarsip</option>
-                        </select>
-                    </div>
-                    <div class="product_stock">
-                        <select id="filter-stok" class="form-select form-select-sm">
-                            <option value="">Semua Stok</option>
-                            <option value="aman">Aman</option>
-                            <option value="menipis">Menipis</option>
-                            <option value="habis">Habis</option>
-                        </select>
-                    </div>
                 </div>
                 <div class="d-flex justify-content-end">
                     <a href="{{ route('admin.items.create') }}" class="btn btn-primary">
@@ -34,18 +19,18 @@
                     </a>
                 </div>
             </div>
+
             <hr>
+
             <div class="table-responsive px-3 mb-2">
                 <table class="table table-hover" id="itemTable" data-source="{{ route('admin.items.data') }}">
                     <thead>
                         <tr>
-                            <th></th>
-                            <th><input type="checkbox" id="select-all-checkbox" class="form-check-input"></th>
                             <th>Produk</th>
                             <th>Kategori</th>
                             <th class="text-center">Stok</th>
-                            <th class="text-center">Stok Min.</th>
-                            <th class="text-center">Status</th>
+                            <th class="text-center">Harga</th>
+                            <th class="text-center">Size</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -53,24 +38,9 @@
                 </table>
             </div>
         </div>
-
-        <div class="offcanvas offcanvas-bottom" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-            id="bulkActionsOffcanvas" aria-labelledby="bulkActionsOffcanvasLabel">
-            <div class="offcanvas-body">
-                <div class="container d-flex flex-wrap justify-content-between align-items-center">
-                    <div class="text-dark">
-                        <span id="selected-items-count" class="fw-semibold">0</span> item terpilih.
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-danger" id="bulk-delete">Hapus</button>
-                        <button class="btn btn-warning" id="bulk-archive">Arsipkan</button>
-                        <button class="btn btn-success" id="bulk-unarchive">Aktifkan</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
+    <!-- Detail Modal -->
     <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -91,8 +61,8 @@
             </div>
         </div>
     </div>
-<input type="hidden" id="bulkActionRoute" value="{{ route('admin.items.bulkAction') }}">
 @endsection
+
 @push('scripts')
   <script src="{{ asset('assets/js/peri/daftar-item.js') }}" defer></script>
 @endpush

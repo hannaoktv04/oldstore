@@ -8,20 +8,16 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckRole
 {
-    public function handle(Request $request, Closure $next, ...$roles)
+    public function handle(Request $request, Closure $next)
     {
         if (!Auth::check()) {
             return redirect()->route('login');
         }
 
-        $user = Auth::user()->load('roles');
-
-        foreach ($roles as $role) {
-            if ($user->hasRole($role)) {
-                return $next($request);
-            }
+        if (Auth::user()->email !== 'admin@gmail.com') {
+            abort(403, 'Akses khusus admin');
         }
 
-        abort(403);
+        return $next($request);
     }
 }

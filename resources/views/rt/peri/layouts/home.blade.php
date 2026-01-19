@@ -20,7 +20,7 @@
   <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
     @forelse ($items as $item)
       @php
-        $stokHabis = ($item->stocks->qty ?? 0) == 0;
+        $stokHabis = ($item->stok ?? 0) == 0;
         $nonaktif = $opnameAktif ?? false;
       @endphp
 
@@ -44,15 +44,18 @@
             <div class="card-body py-2 px-3">
               <h6 class="card-title mb-1" style="font-size: 14px">{{ $item->nama_barang }}</h6>
               <p class="card-text small text-muted mb-1">{{ $item->category?->categori_name ?? '-' }}</p>
+              <p class="card-text mb-1" style="font-size: 14px;">
+                <strong>Rp {{ number_format($item->harga, 0, ',', '.') }}</strong>
+              </p>
               <p class="card-text mb-0" style="font-size: 13px;">
                 @if ($stokHabis)
                   <span class="text-danger">0 Tersisa</span>
                 @else
-                  <strong>{{ number_format($item->stocks->qty, 0) }}</strong> Tersisa
+                  <strong>{{ number_format($item->stok, 0) }}</strong> Tersisa
                 @endif
               </p>
+              
             </div>
-
           </div>
         </a>
       </div>

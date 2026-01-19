@@ -22,20 +22,13 @@ class AdminController extends Controller
         $pengajuanSelesai = ItemRequest::where('status', 'received')->count();
         $pembatalan = ItemRequest::where('status', 'rejected')->count();
 
-        $totalBarang = Item::count();        
-        $stokKritis = Item::whereHas('stocks', function ($query) {
-            $query->where('qty', '>', 0)
-                ->whereColumn('item_stocks.qty', '<=', 'items.stok_minimum');
-        })->count();
+        $totalBarang = Item::count();
 
-        $stokHabis = Item::whereHas('stocks', function ($query) {
-            $query->where('qty', '=', 0);
-        })->count();
+        // stok kritis & habis (stok kritis <= 5)
+        $stokKritis = Item::where('stok', '<=', 5)->count();
+        $stokHabis = Item::where('stok', '=', 0)->count();
 
-        $stokKritisItems = Item::whereHas('stocks', function ($query) {
-            $query->where('qty', '>', 0)
-                ->whereColumn('item_stocks.qty', '<=', 'items.stok_minimum');
-        })->get();
+        $stokKritisItems = Item::where('stok', '<=', 5)->get();
 
         foreach ($stokKritisItems as $item) {
             $exists = StockNotification::where('item_id', $item->id)
@@ -53,7 +46,7 @@ class AdminController extends Controller
             }
         }
 
-        $stokHabisItems = Item::whereHas('stocks', fn ($q) => $q->where('qty', '=', 0))->get();
+        $stokHabisItems = Item::where('stok', '=', 0)->get();
 
         foreach ($stokHabisItems as $item) {
             $exists = StockNotification::where('item_id', $item->id)
@@ -88,18 +81,13 @@ class AdminController extends Controller
 
         $inventarisFilter = $request->input('inventaris', 'all');
 
-        $produkQuery = Item::with(['category', 'photo', 'stocks']);
+        $produkQuery = Item::with(['category', 'photo']);
         switch ($inventarisFilter) {
             case 'critical':
-                $produkQuery->whereHas('stocks', function ($query) {
-                    $query->where('qty', '>', 0)
-                        ->whereColumn('item_stocks.qty', '<=', 'items.stok_minimum');
-                });
+                $produkQuery->where('stok', '<=', 5);
                 break;
             case 'out_of_stock':
-                $produkQuery->whereHas('stocks', function ($query) {
-                    $query->where('qty', '=', 0);
-                });
+                $produkQuery->where('stok', '=', 0);
                 break;
             default:
                 $produkQuery->orderBy('created_at', 'desc');
@@ -109,12 +97,11 @@ class AdminController extends Controller
         $produkToShow = $produkQuery->take(5)->get();
 
         $produkStokHabis = Item::with(['category', 'photo'])
-            ->whereHas('stocks', fn ($q) => $q->where('qty', '=', 0))
+            ->where('stok', '=', 0)
             ->orderBy('nama_barang')->take(5)->get();
 
         $produkStokKritis = Item::with(['category', 'photo'])
-            ->whereHas('stocks', fn ($q) => $q->where('qty', '>', 0)
-                ->whereColumn('item_stocks.qty', '<=', 'items.stok_minimum'))
+            ->where('stok', '<=', 5)
             ->orderBy('nama_barang')->take(5)->get();
 
         $produkTerbaru = Item::with(['category', 'photo'])
@@ -142,7 +129,6 @@ class AdminController extends Controller
         foreach (range(1, 12) as $i) {
             $grafikBulanan[] = $barangKeluarPerBulan[$i] ?? 0;
         }
-
 
         $topProduk = ItemRequestDetail::whereYear('created_at', $tahunDipilih)
             ->when($bulanDipilih != 'all', fn ($q) => $q->whereMonth('created_at', $bulanDipilih))
@@ -198,6 +184,7 @@ class AdminController extends Controller
             'notifikasi'
         ));
     }
+
 
     public function pengajuanByStatus($status)
     {
