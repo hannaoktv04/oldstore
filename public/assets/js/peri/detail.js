@@ -1,25 +1,18 @@
 document.addEventListener('DOMContentLoaded', function () {
     const qtyInput = document.getElementById('qty');
-    const formTambahQty = document.getElementById('formTambahQty');
     const formPesanQty = document.getElementById('formPesanQty');
-    const formPesanQtyFinal = document.getElementById('formPesanQtyFinal');
-    const tanggalInput = document.getElementById('tanggalPickerLangsung');
-    const tanggalHidden = document.getElementById('tanggalPengambilanLangsung');
+    const formTambahQty = document.getElementById('formTambahQty');
     const thumbnails = document.querySelectorAll('.thumbnail-click');
     const mainImage = document.getElementById('mainImage');
     const formPesan = document.getElementById('formPesan');
     const formTambah = document.getElementById('formTambah');
-    const formPesanLangsung = document.getElementById('formPesanLangsung');
-    const btnKirim = document.getElementById('btnKirimPermintaan');
-    const spinnerKirim = document.getElementById('spinnerKirim');
-    const textKirim = document.getElementById('textKirim');
+
 
     function syncQty() {
         if (!qtyInput) return;
         const qty = qtyInput.value;
-        if (formTambahQty) formTambahQty.value = qty;
         if (formPesanQty) formPesanQty.value = qty;
-        if (formPesanQtyFinal) formPesanQtyFinal.value = qty;
+        if (formTambahQty) formTambahQty.value = qty;
     }
 
     function showQtyAlert(message) {
@@ -30,24 +23,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 <small>${message}</small>
             </div>
         `;
-        setTimeout(() => {
-            container.innerHTML = '';
-        }, 2000);
+        setTimeout(() => { container.innerHTML = ''; }, 2000);
     }
 
-    function showLoadingOnButton(button) {
-        if (!button) return;
-        button.disabled = true;
-        button.innerHTML = `
-            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-            Memproses...
-        `;
-    }
 
     window.ubahQty = function (change) {
         if (!qtyInput) return;
-        const max = parseInt(qtyInput.max);
-        let current = parseInt(qtyInput.value);
+        const max = parseInt(qtyInput.max) || 999;
+        let current = parseInt(qtyInput.value) || 1;
         current += change;
 
         if (current < 1) current = 1;
@@ -60,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
         syncQty();
     };
 
+  
     if (qtyInput) {
         qtyInput.addEventListener('input', function () {
             this.value = this.value.replace(/[^0-9]/g, '');
@@ -72,61 +56,47 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (val < 1 || isNaN(val)) {
                 this.value = 1;
             }
-
             syncQty();
         });
     }
 
+
     if (formPesan) {
-        formPesan.addEventListener('submit', function () {
-            showLoadingOnButton(this.querySelector('button'));
+        formPesan.addEventListener('submit', function (e) {
+            syncQty(); // Pastikan qty terbaru terbawa
+            const btn = document.getElementById('btnPesanLangsung');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Memproses...`;
+            }
         });
     }
 
+  
     if (formTambah) {
         formTambah.addEventListener('submit', function () {
-            showLoadingOnButton(this.querySelector('button'));
-        });
-    }
-
-    if (formPesanLangsung) {
-        formPesanLangsung.addEventListener('submit', function (e) {
-            if (!tanggalInput || !tanggalInput.value) {
-                e.preventDefault();
-                alert("Silakan pilih Tanggal Pengiriman terlebih dahulu.");
-                return;
+            syncQty();
+            const btn = this.querySelector('button[type="submit"]');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Menambahkan...`;
             }
-            if (tanggalHidden) tanggalHidden.value = tanggalInput.value;
-            if (spinnerKirim) spinnerKirim.classList.remove('d-none');
-            if (textKirim) textKirim.textContent = 'Mengirim...';
-            if (btnKirim) btnKirim.disabled = true;
         });
     }
 
+ 
     if (thumbnails.length && mainImage) {
         thumbnails.forEach(thumbnail => {
             thumbnail.addEventListener('click', function () {
                 const fullSrc = this.getAttribute('data-full');
                 if (fullSrc) mainImage.src = fullSrc;
+                
+                // Efek aktif pada thumbnail
+                thumbnails.forEach(t => t.classList.remove('border-primary', 'border-2'));
+                this.classList.add('border-primary', 'border-2');
             });
         });
     }
 
     syncQty();
-
-    if (tanggalInput) {
-        flatpickr("#tanggalPickerLangsung", {
-            enableTime: true,
-            dateFormat: "Y-m-d H:i",
-            time_24hr: true,
-            minuteIncrement: 5,
-            defaultHour: 9,
-            defaultMinute: 0,
-            minDate: "today",
-            onChange: function (selectedDates, dateStr, instance) {
-                const tanggalHidden = document.getElementById("tanggalPengambilanLangsung");
-                if (tanggalHidden) tanggalHidden.value = dateStr;
-            }
-        });
-    }
 });

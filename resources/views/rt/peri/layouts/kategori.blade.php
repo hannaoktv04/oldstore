@@ -9,7 +9,7 @@
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50"></div>
     <div class="position-absolute top-50 start-0 translate-middle-y text-white ps-5">
       <h4 class="fw-semibold display-6 mb-3">Kategori Barang</h4>
-      <p class="lead mb-0">PERI / Kategori Barang</p>
+      <p class="lead mb-0"> OldStore / Kategori Barang</p>
     </div>
   </div>
 
@@ -83,6 +83,9 @@
                 <div class="card-body">
                   <h6 class="card-title">{{ $item->nama_barang }}</h6>
                   <p class="card-text small text-muted mb-1">{{ $item->category?->categori_name ?? '-' }}</p>
+                  <p class="card-text mb-1" style="font-size: 14px;">
+                    <strong>Rp {{ number_format($item->harga, 0, ',', '.') }}</strong>
+                  </p>
                   <p class="card-text">
                     @if ($stokHabis)
                       <span class="text-danger">0 Tersisa</span>

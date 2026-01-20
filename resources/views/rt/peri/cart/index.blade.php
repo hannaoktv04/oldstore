@@ -88,17 +88,24 @@
 
                 <form method="POST" action="{{ route('cart.update', $cart->id) }}" class="d-flex align-items-center">
                     @csrf
-                    @method('PUT')
+                    {{-- JANGAN pakai @method('PUT') karena route mendukung POST --}}
+                    
                     <div class="input-group {{ $buttonStyle }} flex-nowrap w-100"
-                         style="border: 1px solid {{ $borderColor }}; border-radius: 50px; overflow: hidden; opacity: {{ $nonaktif ? '0.5' : '1' }};">
+                        style="border: 1px solid {{ $borderColor }}; border-radius: 50px; overflow: hidden;">
+                        
+                        {{-- Tombol Kurang --}}
                         <button type="submit" name="action" value="decrease"
                                 class="btn {{ $buttonStyle }} px-2 py-1 border-0"
                                 {{ $nonaktif ? 'disabled' : '' }}>−</button>
-                        <input type="number" name="manual_qty" value="{{ $cart->qty }}"
-                               min="1" max="{{ $item->stok ?? 0 }}"
-                               class="form-control text-center border-0"
-                               style="width: 43px; height: 32px; padding: 0 0.1rem;"
-                               {{ $nonaktif ? 'disabled' : '' }}>
+                        
+                        {{-- Input Angka: Pastikan name="qty" --}}
+                        <input type="number" name="qty" value="{{ $cart->qty }}"
+                            min="1" max="{{ $item->stok ?? 0 }}"
+                            class="form-control text-center border-0 bg-white"
+                            style="width: 43px; height: 32px; padding: 0 0.1rem;"
+                            {{ $nonaktif ? 'disabled' : '' }}>
+                        
+                        {{-- Tombol Tambah --}}
                         <button type="submit" name="action" value="increase"
                                 class="btn {{ $buttonStyle }} px-2 py-1 border-0"
                                 {{ $nonaktif ? 'disabled' : '' }}>+</button>

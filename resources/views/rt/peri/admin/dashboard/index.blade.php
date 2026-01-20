@@ -14,7 +14,7 @@
                         </div>
                         <div class="card-info">
                             <h5 class="mb-0">{{ $pengajuanBaru }}</h5>
-                            <p class="mb-0">Pengajuan Baru</p>
+                            <p class="mb-0">Pesanan Baru</p>
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                         </div>
                         <div class="card-info">
                             <h5 class="mb-0">{{ $pengajuanSelesai }}</h5>
-                            <p class="mb-0">Pengajuan Selesai</p>
+                            <p class="mb-0">Pesanan Selesai</p>
                         </div>
                     </div>
                 </div>
@@ -326,124 +326,7 @@
             </div>
         </div>
     </div>
-
-    <div class="row g-6">
-        <div class="col-lg-6" id="topStaffSection">
-            <div class="card h-100">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-1">Top 5 Staff Pengiriman</h5>
-                        <p class="card-subtitle mb-0">
-                            Tahun {{ $tahunDipilih }} 
-                            @if($bulanDipilih != 'all')
-                                - Bulan {{ $bulanList[$bulanDipilih] }}
-                            @endif
-                        </p>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="bulanStaffDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                @if($bulanDipilih == 'all') Semua Bulan @else {{ $bulanList[$bulanDipilih] }} @endif
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="bulanStaffDropdown">
-                                <li><a class="dropdown-item" href="?tahun={{ $tahunDipilih }}&bulan=all&section=staff">Semua Bulan</a></li>
-                                @foreach($bulanList as $key => $bulan)
-                                    <li><a class="dropdown-item" href="?tahun={{ $tahunDipilih }}&bulan={{ $key }}&section=staff">{{ $bulan }}</a></li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama Staff</th>
-                                <th class="text-end">Jumlah Pengiriman</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($topStaffPengiriman->take(5) as $index => $staff)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td class="d-flex align-items-center gap-2">
-                                    @php
-                                        $foto = ($staff->staff->profile_picture ?? '') !== ''
-                                            ? $staff->staff->profile_picture
-                                            : '/assets/img/avatars/jay.jpg';
-                                    @endphp
-                                    <img src="{{ $foto }}" alt="{{ $staff->staff->nama ?? '-' }}"
-                                        width="30" height="30" class="rounded-circle" style="object-fit:cover;">
-                                    <span>{{ $staff->staff->nama ?? '-' }}</span>
-                                </td>
-                                <td class="text-end">{{ $staff->total }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-6" id="topUserSection">
-            <div class="card h-100">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-1">Top 5 User Paling Banyak Meminta</h5>
-                        <p class="card-subtitle mb-0">
-                            Tahun {{ $tahunDipilih }} 
-                            @if($bulanDipilih != 'all')
-                                - Bulan {{ $bulanList[$bulanDipilih] }}
-                            @endif
-                        </p>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="bulanUserDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                @if($bulanDipilih == 'all') Semua Bulan @else {{ $bulanList[$bulanDipilih] }} @endif
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="bulanUserDropdown">
-                                <li><a class="dropdown-item" href="?tahun={{ $tahunDipilih }}&bulan=all&section=user">Semua Bulan</a></li>
-                                @foreach($bulanList as $key => $bulan)
-                                    <li><a class="dropdown-item" href="?tahun={{ $tahunDipilih }}&bulan={{ $key }}&section=user">{{ $bulan }}</a></li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama User</th>
-                                <th class="text-end">Jumlah Permintaan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($topUserRequest->take(5) as $index => $user)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td class="d-flex align-items-center gap-2">
-                                    @php
-                                        $foto = ($user->user->profile_picture ?? '') !== ''
-                                            ? $user->user->profile_picture
-                                            : '/assets/img/avatars/jay.jpg';
-                                    @endphp
-                                    <img src="{{ $foto }}" alt="{{ $user->user->nama }}"
-                                        width="30" height="30" class="rounded-circle" style="object-fit:cover;">
-                                    <span>{{ $user->user->nama }}</span>
-                                </td>
-                                <td class="text-end">{{ $user->total }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
 </div>
 @endsection
 

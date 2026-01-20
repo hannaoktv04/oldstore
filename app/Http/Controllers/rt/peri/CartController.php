@@ -16,7 +16,6 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
-// Import SDK Midtrans
 use Midtrans\Config;
 use Midtrans\Snap;
 
@@ -33,7 +32,7 @@ class CartController extends Controller
 
     public function index()
     {
-        $carts = Cart::with(['item.images', 'item.photo', 'item.category'])
+        $carts = Cart::with(['item.images', 'item.photo', 'item.category', 'item.size'])
             ->where('user_id', Auth::id())
             ->latest()
             ->get()
@@ -333,5 +332,58 @@ class CartController extends Controller
         }
 
         return response()->json(['message' => 'Notification handled']);
+    }
+
+    public function pesanLangsung(Request $request, $id)
+    {
+        $item = Item::findOrFail($id);
+        
+        $request->validate([
+            'qty' => "required|numeric|min:1|max:{$item->stok}",
+        ]);
+
+        $cart = Cart::updateOrCreate(
+            [
+                'user_id' => Auth::id(),
+                'item_id' => $id,
+            ],
+            [
+                'qty' => $request->qty
+            ]
+        );
+
+        return redirect()->route('cart.checkoutPage')
+            ->with('success', 'Silakan lanjutkan pembayaran untuk produk ini.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $cart = Cart::with('item')->findOrFail($id);
+        
+        // Pastikan menggunakan field 'stok', bukan 'stok_minimum'
+        $stokTersedia = $cart->item->stok;
+
+        if ($request->action === 'increase') {
+            if ($cart->qty < $stokTersedia) {
+                $cart->qty += 1;
+            } else {
+                return redirect()->route('cart.index')->with('error', 'Jumlah melebihi stok tersedia.');
+            }
+        } elseif ($request->action === 'decrease') {
+            if ($cart->qty > 1) {
+                $cart->qty -= 1;
+            }
+        } 
+        // Jika input angka diketik manual
+        elseif ($request->filled('qty')) {
+            $qtyBaru = max(1, intval($request->qty));
+            if ($qtyBaru > $stokTersedia) {
+                return redirect()->route('cart.index')->with('error', 'Jumlah melebihi stok tersedia.');
+            }
+            $cart->qty = $qtyBaru;
+        }
+
+        $cart->save();
+        return redirect()->route('cart.index')->with('success', 'Jumlah berhasil diperbarui.');
     }
 }
