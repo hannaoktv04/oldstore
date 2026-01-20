@@ -1,224 +1,83 @@
 @extends('peri::layouts.app')
 
 @section('content')
-    <div class="container py-4">
-        <h4 class="mb-4">Status Pengajuan Anda</h4>
+<div class="container py-4">
+    <h4 class="mb-4">Riwayat Aktivitas Anda</h4>
 
-        @forelse ($requests as $request)
-            @php
-                $pengajuanNumber = str_pad($requests->count() - $loop->index, 3, '0', STR_PAD_LEFT);
-                $statusPengajuan = $request->status;
-
-                if ($request->itemDelivery && $request->itemDelivery->status === 'in_progress') {
-                    $statusPengajuan = 'in_progress';
-                }
-            @endphp
-
+    {{-- BAGIAN PESANAN BELANJA (MIDTRANS) --}}
+    @if($orders->count() > 0)
+        <h6 class="text-muted mb-3"><i class="bi bi-cart-fill"></i> Pesanan Belanja (Midtrans)</h6>
+        @foreach ($orders as $order)
             <div class="card border-0 mb-3 p-3 shadow-sm">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <div>
-                        <h5 class="fw-bold mb-0">Pengajuan #{{ $pengajuanNumber }}</h5>
-                        <small
-                            class="text-muted">{{ \Carbon\Carbon::parse($request->tanggal_permintaan)->format('d F Y') }}</small>
+                        <h5 class="fw-bold mb-0">{{ $order->order_number }}</h5>
+                        <small class="text-muted">{{ $order->created_at->format('d F Y, H:i') }}</small>
+                    </div>
+                    <div>
+                        {{-- Logika Status Pending/Success --}}
+                        @if($order->payment_status == 'pending')
+                            <em class="fw-bold text-warning"><i class="bi bi-hourglass-split"></i> Menunggu Pembayaran</em>
+                        @elseif($order->payment_status == 'success')
+                            <em class="fw-bold text-success"><i class="bi bi-check-circle-fill"></i> Pembayaran Berhasil</em>
+                        @else
+                            <em class="fw-bold text-danger"><i class="bi bi-x-circle"></i> {{ strtoupper($order->payment_status) }}</em>
+                        @endif
                     </div>
                 </div>
 
-                <div class="row gy-4 gx-2 align-items-center">
-                    <div class="col-12 col-md-6 col-lg-4">
-                        @foreach ($request->details as $detail)
-                            <div class="d-flex align-items-start mb-3">
-                                <img src="{{ asset('storage/' . ($detail->item->gallery->first() ?? 'assets/img/default.png')) }}"
-                                    class="me-3 rounded" width="80" height="80" style="object-fit: cover;">
+                <div class="row align-items-center mt-2">
+                    <div class="col-md-7">
+                        @foreach ($order->items as $item)
+                            <div class="d-flex align-items-center mb-2">
+                                <img src="{{ asset('storage/' . ($item->item->photo_url ?? 'assets/img/default.png')) }}"
+                                    class="rounded me-3" width="50" height="50" style="object-fit: cover;">
                                 <div>
-                                    <strong>{{ $detail->item->category->categori_name ?? 'Kategori Tidak Diketahui' }}</strong><br>
-                                    {{ $detail->item->nama_barang }}<br>
-                                    Jumlah: {{ $detail->qty_requested }}
-                                    {{ $detail->item->satuan->nama_satuan ?? 'Satuan Tidak Diketahui' }}
-                                    @if ($request->status == 'approved')
-                                        | Disetujui: {{ $detail->qty_approved }}
-                                        {{ $detail->item->satuan->nama_satuan ?? '' }}
-                                    @endif
+                                    <span class="small fw-semibold">{{ $item->item->nama_barang }}</span><br>
+                                    <small class="text-muted">{{ $item->quantity }} x Rp {{ number_format($item->price, 0, ',', '.') }}</small>
                                 </div>
                             </div>
                         @endforeach
                     </div>
-
-        <div class="col-15 col-md-4 col-lg-4 text-center">
-          @if($request->tanggal_pengiriman)
-              <em>{{ \Carbon\Carbon::parse($request->tanggal_pengiriman)->format('d F Y') }}</em>
-              @if($request->status == 'submitted')
-                <a href="#" class="text-dark ms-2 btn-calendar" data-request-id="{{ $request->id }}">
-                  <i class="bi bi-calendar"></i>
-                </a>
-              @endif
-          @elseif($request->status == 'submitted')
-              <a href="#" class="text-dark btn-calendar" data-request-id="{{ $request->id }}">
-                <em>Atur Tanggal Pengiriman</em> <i class="bi bi-calendar"></i>
-              </a>
-          @elseif($request->status == 'rejected')
-              <strong class="text-danger"><em>Permintaan ditolak</em></strong>
-          @else
-              <strong class="text-danger"><em>Belum Dijadwalkan</em></strong>
-          @endif
-        </div>
-
-                    <div class="col-12 col-md-1 col-lg-1 d-flex flex-column align-items-center text-center">
-                        <a href="{{ route('pengajuan.signature', $request->id) }}" class="btn btn-outline-secondary btn-sm" title="Bubuhi TTD">
-                            <i class="bi bi-pen-fill"></i>
-                        </a>
-                    </div>
-
-                    <div
-                        class="col-12 col-md-3 col-lg-3 d-flex flex-column justify-content-center align-items-center text-center">
-                        <div>
-                            @switch($statusPengajuan)
-                                @case('submitted')
-                                    <em class="fw-semibold text-primary"><i class="bi bi-hourglass-split me-1"></i> Diproses</em>
-                                @break
-
-                                @case('approved')
-                                    <em class="fw-semibold text-warning"><i class="bi bi-check2-square me-1"></i> Disetujui</em>
-                                @break
-
-                                @case('in_progress')
-                                    <em class="fw-semibold text-info"><i class="bi bi-truck me-1"></i> Dikirim</em>
-                                @break
-
-                                @case('received')
-                                    @if ($request->user_confirmed)
-                                        <em class="fw-semibold text-success"><i class="bi bi-check-circle-fill me-1"></i>
-                                            Selesai</em>
-                                    @else
-                                        <em class="fw-semibold text-success"><i class="bi bi-box-seam me-1"></i> Diterima</em>
-                                    @endif
-                                @break
-
-                                @case('rejected')
-                                    <em class="fw-semibold text-danger"><i class="bi bi-x-circle me-1"></i> Ditolak</em>
-                                @break
-
-                                @default
-                                    <em class="text-muted">{{ ucfirst($statusPengajuan) }}</em>
-                            @endswitch
-                            <br>
-                            <a href="#" class="text-success" data-bs-toggle="modal"
-                                data-bs-target="#statusModal-{{ $request->id }}">
-                                Cek Status Pengajuan
-                            </a>
+                    <div class="col-md-5 text-end">
+                        <div class="mb-2">
+                            <small class="text-muted">Total Bayar:</small>
+                            <span class="fw-bold text-primary">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</span>
                         </div>
+                        
+                        {{-- Tombol bayar hanya muncul jika pending --}}
+                        @if($order->payment_status == 'pending')
+                            <a href="{{ route('cart.invoice', $order->id) }}" class="btn btn-sm btn-primary px-4">Bayar Sekarang</a>
+                        @else
+                            <a href="{{ route('cart.invoice', $order->id) }}" class="btn btn-sm btn-outline-secondary px-4">Detail Invoice</a>
+                        @endif
                     </div>
                 </div>
             </div>
+        @endforeach
+        <hr class="my-4">
+    @endif
 
-            <div class="modal fade" id="statusModal-{{ $request->id }}" tabindex="-1"
-                aria-labelledby="statusModalLabel-{{ $request->id }}" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content rounded-4 p-3">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Status Pesanan</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <ul class="list-unstyled">
-                                <li class="mb-3">
-                                    <strong><i class="ri-checkbox-circle-line me-1"></i> Pengajuan Diajukan</strong><br>
-                                    {{ \Carbon\Carbon::parse($request->created_at)->format('H:i:s, d M Y') }}
-                                </li>
-
-                                @if (in_array($request->status, ['approved', 'delivered', 'received']) && $request)
-                                    <li class="mb-3">
-                                        <strong><i class="ri-box-3-fill text-primary me-1"></i>  Disetujui</strong><br>
-                                        {{ \Carbon\Carbon::parse($request->approved_at)->format('H:i:s, d M Y') }}
-                                    </li>
-                                @endif
-
-                                @if ($request->tanggal_pengiriman)
-                                    <li class="mb-3">
-                                        <strong><i class="ri-calendar-event-fill text-info me-1"></i>  Dikirimkan sesuai jadwal pengiriman</strong><br>
-                                        {{ \Carbon\Carbon::parse($request->tanggal_pengiriman)->format('H:i, d M Y') }}
-                                    </li>
-                                @endif
-
-                                @if ($request->itemDelivery && $request->itemDelivery->status === 'in_progress')
-                                    <li class="mb-3">
-                                        <strong><i class="ri-truck-fill text-warning me-1"></i> Dalam Pengiriman</strong><br>
-                                        Sedang diantar oleh
-                                        <strong>{{ $request->itemDelivery->staff->nama ?? 'Staff tidak ditemukan' }}</strong><br>
-                                        {{ \Carbon\Carbon::parse($request->itemDelivery->tanggal_kirim)->format('H:i:s, d M Y') }}
-                                    </li>
-                                @endif
-
-                                @if ($request->status === 'received' && $request->itemDelivery && $request->itemDelivery->bukti_foto)
-                                    <li class="mb-3">
-                                        <strong><i class="ri-download-2-fill text-success me-1"></i> Diterima</strong><br>
-                                        <a href="#" data-bs-toggle="modal"
-                                            data-bs-target="#buktiModal-{{ $request->id }}">
-                                            Lihat Bukti Pengiriman
-                                        </a><br>
-                                        Diantar oleh
-                                        <strong>{{ $request->itemDelivery->staff->nama ?? 'Staff tidak ditemukan' }}</strong><br>
-                                        {{ \Carbon\Carbon::parse($request->itemDelivery->updated_at)->format('H:i:s, d M Y') }}
-                                    </li>
-                                @endif
-
-                                @if ($request->status == 'rejected')
-                                    <li class="mb-3 text-danger">
-                                        <strong><i class="ri-close-circle-3-fill text-primary me-1"></i>  Ditolak</strong><br>
-                                        {{ $request->keterangan ?? 'Tidak ada keterangan' }}<br>
-                                        {{ \Carbon\Carbon::parse($request->updated_at)->format('H:i:s, d M Y') }}
-                                    </li>
-                                @endif
-                            </ul>
-
-                            @if ($request->status === 'received')
-                                @if (!$request->user_confirmed)
-                                    <form action="{{ route('pengajuan.konfirmasiUser', $request->id) }}" method="POST"
-                                        class="text-center">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success btn-sm mt-2">Konfirmasi
-                                            Pesanan</button>
-                                    </form>
-                                @else
-                                    <div class="text-center text-success mt-2 fw-semibold">
-                                        <i class="bi bi-check-circle-fill"></i> Pesanan sudah selesai
-                                    </div>
-                                @endif
-                            @endif
-                        </div>
-                        <div class="modal-footer border-0 justify-content-center">
-                            <a href="{{ route('pengajuan.enota', $request->id) }}"
-                                class="btn btn-outline-success btn-sm">Lihat E-Nota</a>
-                        </div>
-                    </div>
+    {{-- BAGIAN PENGAJUAN BARANG (EXISTING) --}}
+    @if($requests->count() > 0)
+        <h6 class="text-muted mb-3"><i class="bi bi-clipboard-check"></i> Pengajuan Barang</h6>
+        @foreach ($requests as $request)
+            {{-- Pakai kode card pengajuan yang sudah kamu miliki sebelumnya --}}
+            <div class="card border-0 mb-3 p-3 shadow-sm bg-light">
+                {{-- Konten requests kamu di sini --}}
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold">Pengajuan #{{ str_pad($loop->revindex + 1, 3, '0', STR_PAD_LEFT) }}</h6>
+                    <span class="badge bg-info text-dark">{{ strtoupper($request->status) }}</span>
                 </div>
             </div>
+        @endforeach
+    @endif
 
-            @if ($request->itemDelivery && $request->itemDelivery->bukti_foto)
-                <div class="modal fade" id="buktiModal-{{ $request->id }}" tabindex="-1"
-                    aria-labelledby="buktiModalLabel-{{ $request->id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content rounded-4">
-                            <div class="modal-header border-0">
-                                <h5 class="modal-title" id="buktiModalLabel-{{ $request->id }}">Bukti Pengiriman</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body text-center">
-                                <img src="{{ asset('storage/' . $request->itemDelivery->bukti_foto) }}"
-                                    alt="Bukti Pengiriman" class="img-thumbnail"
-                                    style="max-width: 100%; width: 100%; max-height: 300px; object-fit: contain;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
-            @empty
-                <div class="alert alert-info">Belum ada pengajuan barang.</div>
-            @endforelse
+    @if($orders->isEmpty() && $requests->isEmpty())
+        <div class="text-center py-5">
+            <i class="bi bi-bag-x fs-1 text-muted"></i>
+            <p class="mt-3">Belum ada riwayat pesanan atau pengajuan.</p>
         </div>
-    @endsection
-
-@push('scripts')
-<script src="{{ asset('assets/js/peri/history.js') }}"></script>
-@endpush
+    @endif
+</div>
+@endsection

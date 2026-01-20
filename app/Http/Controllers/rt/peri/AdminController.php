@@ -11,16 +11,32 @@ use App\Models\ItemRequestDetail;
 use App\Models\ItemDelivery;
 use App\Models\ItemWishlist;
 use App\Models\StockNotification;
+use App\Models\Order;
 
 class AdminController extends Controller
 {
     public function dashboard(Request $request)
     {
-        $pengajuanBaru = ItemRequest::where('status', 'submitted')->count();
-        $perluDikirim = ItemRequest::where('status', 'approved')->count();
+        $pengajuanBaru = ItemRequest::where('status', 'submitted')->count() 
+                   + Order::where('payment_status', 'pending')->count();
+
+        $perluDikirim = ItemRequest::where('status', 'approved')->count() 
+                    + Order::where('payment_status', 'success')->count();
+
         $sedangDikirim = ItemRequest::where('status', 'delivered')->count(); 
+
         $pengajuanSelesai = ItemRequest::where('status', 'received')->count();
+
         $pembatalan = ItemRequest::where('status', 'rejected')->count();
+        $totalBarang = Item::count();
+        $stokKritis = Item::where('stok', '<=', 5)->count();
+        $pesananMasuk = Order::where('payment_status', 'success')->count(); // Total pesanan lunas
+
+        // Total Pendapatan Bulan Ini dari Midtrans
+        $totalPendapatan = Order::where('payment_status', 'success')
+            ->whereMonth('created_at', date('m'))
+            ->whereYear('created_at', date('Y'))
+            ->sum('total_amount');
 
         $totalBarang = Item::count();
 
@@ -130,11 +146,21 @@ class AdminController extends Controller
             $grafikBulanan[] = $barangKeluarPerBulan[$i] ?? 0;
         }
 
-        $topProduk = ItemRequestDetail::whereYear('created_at', $tahunDipilih)
-            ->when($bulanDipilih != 'all', fn ($q) => $q->whereMonth('created_at', $bulanDipilih))
-            ->selectRaw('item_id, SUM(qty_requested) as total')
-            ->groupBy('item_id')->orderByDesc('total')
-            ->with('item.category', 'item.photo')->take(5)->get();
+        $topProduk = DB::table('order_items as oi')
+            ->select(
+                'oi.item_id',
+                DB::raw('SUM(oi.quantity) as total')
+            )
+            ->join('orders as o', 'o.id', '=', 'oi.order_id')
+            ->where('o.payment_status', 'success') // hanya transaksi berhasil
+            ->whereYear('o.created_at', $tahunDipilih)
+            ->when($bulanDipilih != 'all', fn ($q) =>
+                $q->whereMonth('o.created_at', $bulanDipilih)
+            )
+            ->groupBy('oi.item_id')
+            ->orderByDesc('total')
+            ->limit(5)
+            ->get();
 
         $topWishlist = ItemWishlist::whereYear('created_at', $tahunDipilih)
             ->when($bulanDipilih != 'all', fn ($q) => $q->whereMonth('created_at', $bulanDipilih))
@@ -161,6 +187,8 @@ class AdminController extends Controller
 
         return view('peri::admin.dashboard.index', compact(
             'pengajuanBaru',
+            'totalPendapatan',
+            'pesananMasuk',
             'perluDikirim',
             'pengajuanSelesai',
             'sedangDikirim',
@@ -185,42 +213,51 @@ class AdminController extends Controller
         ));
     }
 
+    private function getStats()
+    {
+        return [
+            'pengajuanBaru' => ItemRequest::where('status', 'submitted')->count() + Order::where('payment_status', 'pending')->count(),
+            'perluDikirim' => ItemRequest::where('status', 'approved')->count() + Order::where('payment_status', 'success')->count(),
+            'sedangDikirim' => ItemRequest::where('status', 'delivered')->count(), 
+            'pengajuanSelesai' => ItemRequest::where('status', 'received')->count(),
+            'pesananMasuk' => Order::where('payment_status', 'success')->count(),
+            'totalPendapatan' => Order::where('payment_status', 'success')->whereMonth('created_at', date('m'))->sum('total_amount'),
+            'stokKritis' => Item::where('stok', '<=', 5)->count(),
+        ];
+    }
 
     public function pengajuanByStatus($status)
     {
-        $pengajuans = ItemRequest::with([
-            'user',
-            'details.item.photo',
-            'details.item.category',
-            'itemDelivery.staff'
-        ])->where('status', $status);
+        $stats = $this->getStats();
+        $pengajuans = collect(); // Default koleksi kosong
 
         if ($status === 'submitted') {
-            $pengajuans->orderBy('created_at', 'asc');
-        } elseif ($status === 'approved') {
-            $pengajuans->orderBy('tanggal_pengiriman', 'asc')->orderBy('id', 'asc');
-        } else {
-            $pengajuans->orderBy('created_at', 'desc');
+            // Gabungkan Pengajuan Manual 'submitted' & Order Midtrans 'pending'
+            $manual = ItemRequest::with(['user', 'details.item'])->where('status', 'submitted')->get();
+            $orders = Order::with(['user', 'items.item'])->where('payment_status', 'pending')->get();
+            $pengajuans = $manual->concat($orders);
+        } 
+        elseif ($status === 'approved') {
+            // Gabungkan Pengajuan Manual 'approved' & Order Midtrans 'success'
+            $manual = ItemRequest::with(['user', 'details.item'])->where('status', 'approved')->get();
+            $orders = Order::with(['user', 'items.item'])->where('payment_status', 'success')->get();
+            $pengajuans = $manual->concat($orders);
+        } 
+        elseif ($status === 'delivered') {
+            // Data yang sedang dalam perjalanan (sudah ada resi)
+            $pengajuans = ItemRequest::with(['user', 'details.item', 'itemDelivery.staff'])->where('status', 'delivered')->get();
+        } 
+        elseif ($status === 'received') {
+            // Data yang sudah dikonfirmasi sampai oleh user
+            $pengajuans = ItemRequest::with(['user', 'details.item', 'itemDelivery.staff'])->where('status', 'received')->get();
         }
 
-        if ($status === 'approved') {
-            $pengajuans->where(function ($q) {
-                $q->doesntHave('itemDelivery')
-                    ->orWhereHas('itemDelivery', function ($q) {
-                        $q->whereNull('staff_pengiriman');
-                    });
-            });
-        } elseif ($status === 'delivered') {
-            $pengajuans->where('status', 'delivered')
-                ->whereHas('itemDelivery', fn ($q) =>
-                    $q->whereNotNull('staff_pengiriman')->where('status', 'in_progress'));
-        }
+        $staff_pengiriman = User::all(); // Mengambil semua user untuk staff
 
-        $pengajuans = $pengajuans->get();
-
-        $staff_pengiriman = User::whereHas('roles', fn ($q) =>
-            $q->where('nama_role', 'staff_pengiriman'))->get();
-
-        return view('peri::admin.pengajuan.index', compact('pengajuans', 'status', 'staff_pengiriman'));
+        return view('peri::admin.pengajuan.index', array_merge($stats, [
+            'pengajuans' => $pengajuans,
+            'status' => $status,
+            'staff_pengiriman' => $staff_pengiriman
+        ]));
     }
 }

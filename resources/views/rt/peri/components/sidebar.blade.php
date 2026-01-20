@@ -1,6 +1,6 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-    <di v class="app-brand demo">
-        <a href="{{ route('home') }}" class="app-brand-link">
+    <div class="app-brand demo">
+        <a href="{{ route('admin.dashboard.index') }}" class="app-brand-link">
             <span class="app-brand-logo demo">
                 <span style="color: var(--bs-primary)">
                     <img src="{{ asset('assets/img/old.jpg') }}" style="height: 55px;" alt="">
@@ -18,7 +18,7 @@
                     fill-opacity="0.4" />
             </svg>
         </a>
-    </di>
+    </div>
 
     <div class="menu-inner-shadow"></div>
 
