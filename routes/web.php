@@ -240,7 +240,7 @@ Route::prefix('cart/api/regions')->group(function () {
     Route::get('/villages/{district_code}', [CartController::class, 'getVillages']);
 });
 
-Route::post('/midtrans-callback', [CartController::class, 'handleNotification']);
+Route::post('/api/midtrans-callback', [CartController::class, 'handleNotification']);
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
