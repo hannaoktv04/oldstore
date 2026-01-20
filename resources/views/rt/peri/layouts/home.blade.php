@@ -65,4 +65,18 @@
   </div>
 </section>
 
+<script type="text/javascript">
+    !function(c,e,k,a,t){
+    c.mychat=c.mychat||{server:"https://live.cekat.ai/widget.js",iframeWidth:"400px",iframeHeight:"700px",accessKey:"Oldstore-uvmswmuY"};
+    var q=[];
+    c.Cekat=function(){q.push(arguments)};
+    c.Cekat.q=q;
+    a=e.createElement(k);
+    t=e.getElementsByTagName(k)[0];
+    a.async=1;
+    a.src=c.mychat.server;
+    t.parentNode.insertBefore(a,t);
+    }(window,document,"script");
+</script>
+
 @endsection
