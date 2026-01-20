@@ -241,3 +241,8 @@ Route::prefix('cart/api/regions')->group(function () {
 });
 
 Route::post('/midtrans-callback', [CartController::class, 'handleNotification']);
+
+Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+});

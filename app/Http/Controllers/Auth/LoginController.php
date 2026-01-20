@@ -18,13 +18,21 @@ class LoginController extends Controller
         $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->route('home'); 
+
+            $user = Auth::user();
+
+            if ($user->isAdmin()) {
+                return redirect()->route('admin.dashboard.index');
+            }
+
+            return redirect()->route('home');
         }
 
         return back()->withErrors([
             'login_error' => 'Username atau password salah',
         ]);
     }
+
 
     public function logout(Request $request)
     {
