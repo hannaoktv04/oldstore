@@ -23,18 +23,26 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama'   => 'required|string|max:255', //
-            'email'  => 'required|email|unique:users,email,' . $id, //
-            'no_telp' => 'nullable|string|max:15', //
-            'alamat' => 'nullable|string', //
+            'nama'   => 'required|string|max:255', 
+            'email'  => 'required|email|unique:users,email,' . $id, 
+            'no_telp' => 'nullable|string|max:15', 
+            'alamat' => 'nullable|string', 
+            'role'    => 'required|in:admin,user', 
         ]);
 
-        $user = User::findOrFail($id); //
+        $user = User::findOrFail($id); 
+
+        $roleData = $request->role;
+        if (auth()->id() == $id) {
+            $roleData = $user->role; 
+        }
+
         $user->update([
-            'nama'    => $request->nama, //
-            'email'   => $request->email, //
-            'no_telp' => $request->no_telp, //
-            'alamat'  => $request->alamat, //
+            'nama'    => $request->nama, 
+            'email'   => $request->email, 
+            'no_telp' => $request->no_telp, 
+            'alamat'  => $request->alamat,
+            'role'    => $roleData, 
         ]);
 
         return redirect()->back()->with('success', 'Data profil anggota berhasil diperbarui.'); //

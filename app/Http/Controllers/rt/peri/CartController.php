@@ -32,7 +32,7 @@ class CartController extends Controller
 
     public function index()
     {
-        $carts = Cart::with(['item.images', 'item.photo', 'item.category', 'item.size'])
+        $carts = Cart::with(['item.images', 'item.photo', 'item.category'])
             ->where('user_id', Auth::id())
             ->latest()
             ->get()
@@ -50,11 +50,13 @@ class CartController extends Controller
         $request->validate([
             'item_id' => 'required|exists:items,id',
             'qty' => "required|numeric|min:1|max:{$item->stok}",
+            'size' => "required" 
         ]);
 
         $cart = Cart::firstOrNew([
             'user_id' => Auth::id(),
             'item_id' => $request->item_id,
+            'size'    => $request->size, 
         ]);
 
         $cart->qty += $request->qty;
@@ -63,17 +65,25 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Barang berhasil ditambahkan ke keranjang.');
     }
 
-    public function checkoutPage()
+    public function checkoutPage(Request $request)
     {
-        // Bersihkan order expired sebelum halaman dimuat
         $this->autoCancelExpiredOrders();
+
+        $selectedIds = $request->query('ids'); 
+
+        if (!$selectedIds) {
+            return redirect()->route('cart.index')->with('error', 'Silakan pilih produk terlebih dahulu.');
+        }
+
+        $ids = explode(',', $selectedIds);
 
         $carts = Cart::with('item')
             ->where('user_id', Auth::id())
+            ->whereIn('id', $ids)
             ->get();
 
         if ($carts->isEmpty()) {
-            return redirect()->route('cart.index')->with('error', 'Keranjang Anda kosong.');
+            return redirect()->route('cart.index')->with('error', 'Produk tidak ditemukan.');
         }
 
         $subtotal = $carts->sum(fn ($c) => $c->qty * ($c->item->harga ?? 0));
@@ -83,9 +93,8 @@ class CartController extends Controller
 
     public function checkout(Request $request)
     {
-        // Validasi data pengiriman dari form
         $request->validate([
-            'cart_ids'      => 'required',
+            'cart_ids'      => 'required|array',
             'ongkir'        => 'required|numeric',
             'province_code' => 'required',
             'city_code'     => 'required',
@@ -99,10 +108,11 @@ class CartController extends Controller
 
         DB::beginTransaction();
         try {
-            $ids = explode(',', $request->cart_ids);
-            $carts = Cart::with('item')->whereIn('id', $ids)->get();
+            $carts = Cart::with('item')
+                ->whereIn('id', $request->cart_ids)
+                ->where('user_id', Auth::id())
+                ->get();
 
-            // 1. Cek ketersediaan stok sebelum eksekusi
             foreach ($carts as $cart) {
                 if ($cart->item->stok < $cart->qty) {
                     throw new \Exception("Stok barang '{$cart->item->nama_barang}' tidak mencukupi.");
@@ -112,7 +122,6 @@ class CartController extends Controller
             $subtotal = $carts->sum(fn($c) => $c->qty * ($c->item->harga ?? 0));
             $totalAmount = $subtotal + $request->ongkir;
 
-            // 2. Buat Data Order
             $order = Order::create([
                 'order_number'   => 'ORD-' . strtoupper(Str::random(10)),
                 'user_id'        => Auth::id(),
@@ -130,22 +139,19 @@ class CartController extends Controller
                 'total_amount'   => $totalAmount,
             ]);
 
-            // 3. Simpan Detail & Potong Stok
             foreach ($carts as $cart) {
                 OrderItem::create([
                     'order_id' => $order->id,
                     'item_id'  => $cart->item_id,
                     'quantity' => $cart->qty,
                     'price'    => $cart->item->harga,
+                    'size'     => $cart->size, 
                 ]);
 
-                // Kurangi stok barang
                 $cart->item->decrement('stok', $cart->qty);
-                // Hapus dari keranjang
                 $cart->delete();
             }
 
-            // 4. Integrasi Midtrans
             $params = [
                 'transaction_details' => [
                     'order_id'     => $order->order_number,
@@ -171,7 +177,6 @@ class CartController extends Controller
 
     private function autoCancelExpiredOrders()
     {
-        // Cari order pending yang sudah lebih dari 24 jam
         $expiredOrders = Order::where('payment_status', 'pending')
             ->where('created_at', '<', Carbon::now()->subDay())
             ->with('items')
@@ -179,11 +184,9 @@ class CartController extends Controller
 
         foreach ($expiredOrders as $order) {
             DB::transaction(function () use ($order) {
-                // Kembalikan stok untuk setiap item di dalam order
                 foreach ($order->items as $detail) {
                     Item::where('id', $detail->item_id)->increment('stok', $detail->quantity);
                 }
-                // Ubah status menjadi expired
                 $order->update(['payment_status' => 'expired']);
             });
         }
@@ -283,7 +286,6 @@ class CartController extends Controller
         $payload = $request->getContent();
         $notification = json_decode($payload);
 
-        // 1. Verifikasi Signature Key untuk keamanan
         $validSignature = hash("sha512", 
             $notification->order_id . 
             $notification->status_code . 
@@ -295,7 +297,6 @@ class CartController extends Controller
             return response()->json(['message' => 'Invalid signature'], 403);
         }
 
-        // 2. Cari data order berdasarkan order_number
         $order = Order::where('order_number', $notification->order_id)->first();
         if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
@@ -305,7 +306,6 @@ class CartController extends Controller
         $type = $notification->payment_type;
         $fraud = $notification->fraud_status;
 
-        // 3. Update status berdasarkan respon Midtrans
         if ($transactionStatus == 'capture') {
             if ($type == 'credit_card') {
                 if ($fraud == 'challenge') {
@@ -320,7 +320,6 @@ class CartController extends Controller
             $order->update(['payment_status' => 'pending']);
         } elseif (in_array($transactionStatus, ['deny', 'expire', 'cancel'])) {
             
-            // Kembalikan stok jika pembayaran gagal/expired
             if ($order->payment_status !== 'expired') {
                 DB::transaction(function () use ($order) {
                     foreach ($order->items as $item) {
@@ -337,30 +336,30 @@ class CartController extends Controller
     public function pesanLangsung(Request $request, $id)
     {
         $item = Item::findOrFail($id);
-        
+
         $request->validate([
             'qty' => "required|numeric|min:1|max:{$item->stok}",
+            'size' => "required"
         ]);
 
         $cart = Cart::updateOrCreate(
             [
                 'user_id' => Auth::id(),
                 'item_id' => $id,
+                'size'    => $request->size, 
             ],
             [
                 'qty' => $request->qty
             ]
         );
 
-        return redirect()->route('cart.checkoutPage')
-            ->with('success', 'Silakan lanjutkan pembayaran untuk produk ini.');
+        return redirect()->route('cart.checkoutPage');
     }
 
     public function update(Request $request, $id)
     {
         $cart = Cart::with('item')->findOrFail($id);
         
-        // Pastikan menggunakan field 'stok', bukan 'stok_minimum'
         $stokTersedia = $cart->item->stok;
 
         if ($request->action === 'increase') {
@@ -374,7 +373,6 @@ class CartController extends Controller
                 $cart->qty -= 1;
             }
         } 
-        // Jika input angka diketik manual
         elseif ($request->filled('qty')) {
             $qtyBaru = max(1, intval($request->qty));
             if ($qtyBaru > $stokTersedia) {

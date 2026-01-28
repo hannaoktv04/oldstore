@@ -112,6 +112,9 @@
               <a href="{{ route('user.wishlist') }}" class="dropdown-item">
                 <i class="bi bi-heart me-2"></i>Wishlist
               </a>
+              <a href="{{ route('user.setting') }}" class="dropdown-item">
+                <i class="bi bi-gear me-2"></i>Setting
+              </a>
             @endif
 
             <hr>

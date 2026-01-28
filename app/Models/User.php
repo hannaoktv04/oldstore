@@ -17,6 +17,7 @@ class User extends Authenticatable
         'email',
         'no_telp',
         'alamat',
+        'role',
         'password',
     ];
 
@@ -37,8 +38,7 @@ class User extends Authenticatable
         }
     }
 
-    public function isAdmin()
-    {
-        return $this->email === 'admin@gmail.com';
+    public function isAdmin() {
+        return $this->role === 'admin';
     }
 }

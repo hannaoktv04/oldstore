@@ -5,50 +5,50 @@ namespace App\Http\Controllers\rt\peri;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rules\File;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
 class ProfileController extends Controller
 {
-    public function upload(Request $request)
+    /**
+     * Menampilkan halaman pengaturan profil (Blade)
+     */
+    public function edit()
     {
-        $validated = $request->validate([
-            'user_id' => ['required','exists:users,id'],
-            'profile_picture' => [
-                'required',
-                File::image()->types(['jpg','jpeg','png','webp'])->max(2 * 1024) // 2MB
-            ],
-        ]);
-
-        $user = User::findOrFail($validated['user_id']);
-
-        $path = $request->file('profile_picture')->store('profile_pictures', 'public');
-
-        $fullUrl = asset('storage/' . $path);
-
-        $user->profile_picture = $fullUrl;
-        $user->save();
-
-        return response()->json([
-            'message' => 'Profile picture updated.',
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'profile_picture' => $user->profile_picture, 
-            ]
-        ]);
+        // Mengarahkan ke file view user/setting.blade.php
+        return view('peri::user.setting'); 
     }
 
-    public function show($id)
+    /**
+     * Memperbarui data profil lengkap
+     */
+    public function update(Request $request)
     {
-        $user = User::findOrFail($id);
+        $user = auth()->user();
+        assert($user instanceof User);
 
-        return response()->json([
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'profile_picture' => $user->profile_picture
-                ?: asset('assets/img/avatars/jay.jpg'),
+        $request->validate([
+            'nama'     => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'email'    => 'required|email|max:255|unique:users,email,' . $user->id,
+            'no_telp'  => 'nullable|string|max:20',
+            'alamat'   => 'nullable|string|max:255',
+            'password' => 'nullable|string|min:8',
         ]);
+
+        $user->nama = $request->nama;
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->no_telp = $request->no_telp;
+        $user->alamat = $request->alamat;
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return back()->with('success', 'Profil Anda telah berhasil diperbarui!');
     }
 }

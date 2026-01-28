@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const qtyInput = document.getElementById('qty');
     const formPesanQty = document.getElementById('formPesanQty');
     const formTambahQty = document.getElementById('formTambahQty');
+    const formPesanSize = document.getElementById('formPesanSize');
+    const formTambahSize = document.getElementById('formTambahSize');
     const thumbnails = document.querySelectorAll('.thumbnail-click');
     const mainImage = document.getElementById('mainImage');
     const formPesan = document.getElementById('formPesan');
@@ -15,17 +17,30 @@ document.addEventListener('DOMContentLoaded', function () {
         if (formTambahQty) formTambahQty.value = qty;
     }
 
-    function showQtyAlert(message) {
-        const container = document.getElementById('qtyAlertContainer');
-        if (!container) return;
-        container.innerHTML = `
-            <div class="alert alert-warning alert-dismissible fade show mt-2 py-1 px-2" role="alert">
-                <small>${message}</small>
-            </div>
-        `;
-        setTimeout(() => { container.innerHTML = ''; }, 2000);
+    function syncSize() {
+        const selectedSize = document.querySelector('input[name="size_selection"]:checked');
+        if (selectedSize) {
+            if (document.getElementById('formPesanSize')) {
+                document.getElementById('formPesanSize').value = selectedSize.value;
+            }
+            if (document.getElementById('formTambahSize')) {
+                document.getElementById('formTambahSize').value = selectedSize.value;
+            }
+            return true;
+        }
+        return false;
     }
 
+    function showAlert(containerId, message, type = 'warning') {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = `
+            <div class="alert alert-${type} alert-dismissible fade show mt-2 py-1 px-2" role="alert" style="font-size: 0.8rem;">
+                ${message}
+            </div>
+        `;
+        setTimeout(() => { container.innerHTML = ''; }, 3000);
+    }
 
     window.ubahQty = function (change) {
         if (!qtyInput) return;
@@ -36,14 +51,13 @@ document.addEventListener('DOMContentLoaded', function () {
         if (current < 1) current = 1;
         if (current > max) {
             current = max;
-            showQtyAlert("Jumlah tidak boleh melebihi stok.");
+            showAlert('qtyAlertContainer', "Jumlah tidak boleh melebihi stok.");
         }
 
         qtyInput.value = current;
         syncQty();
     };
 
-  
     if (qtyInput) {
         qtyInput.addEventListener('input', function () {
             this.value = this.value.replace(/[^0-9]/g, '');
@@ -52,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (val > max) {
                 this.value = max;
-                showQtyAlert("Jumlah tidak boleh melebihi stok.");
+                showAlert('qtyAlertContainer', "Jumlah tidak boleh melebihi stok.");
             } else if (val < 1 || isNaN(val)) {
                 this.value = 1;
             }
@@ -60,10 +74,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-
     if (formPesan) {
         formPesan.addEventListener('submit', function (e) {
-            syncQty(); // Pastikan qty terbaru terbawa
+            if (!syncSize()) {
+                e.preventDefault();
+                showAlert('sizeAlertContainer', "Silakan pilih ukuran terlebih dahulu!", "danger");
+                return;
+            }
+            syncQty();
             const btn = document.getElementById('btnPesanLangsung');
             if (btn) {
                 btn.disabled = true;
@@ -72,9 +90,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-  
     if (formTambah) {
-        formTambah.addEventListener('submit', function () {
+        formTambah.addEventListener('submit', function (e) {
+            if (!syncSize()) {
+                e.preventDefault();
+                showAlert('sizeAlertContainer', "Silakan pilih ukuran terlebih dahulu!", "danger");
+                return;
+            }
             syncQty();
             const btn = this.querySelector('button[type="submit"]');
             if (btn) {
@@ -84,14 +106,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
- 
     if (thumbnails.length && mainImage) {
         thumbnails.forEach(thumbnail => {
             thumbnail.addEventListener('click', function () {
                 const fullSrc = this.getAttribute('data-full');
                 if (fullSrc) mainImage.src = fullSrc;
-                
-                // Efek aktif pada thumbnail
                 thumbnails.forEach(t => t.classList.remove('border-primary', 'border-2'));
                 this.classList.add('border-primary', 'border-2');
             });
