@@ -65,7 +65,7 @@ class Item extends Model
 
     public function sizes()
     {
-        return $this->hasMany(ItemSize::class);
+        return $this->hasMany(ItemSize::class, 'item_id', 'id');
     }
 
     public function stockNotifications()

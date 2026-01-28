@@ -67,8 +67,11 @@
                     <div>
                         <div class="text-muted small">{{ $item->category->categori_name ?? '-' }}</div>
                         <div class="fw-semibold text-dark">{{ $item->nama_barang }}</div>
-                        <div class="text-muted small">Stok tersedia: {{ $item->stok ?? 0 }} {{ $item->satuan ?? '-' }}</div>
-
+                        @if(!empty($cart->size))
+                            <div class="small text-muted">
+                                Ukuran: <span class="fw-bold text-dark">{{ $cart->size }}</span>
+                            </div>
+                        @endif
                         <div class="text-success small fw-semibold">
                             Harga: Rp {{ number_format($item->harga ?? 0, 0, ',', '.') }}
                         </div>

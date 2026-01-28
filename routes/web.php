@@ -30,6 +30,7 @@ use App\Http\Controllers\rt\peri\SatuanController;
 use App\Http\Controllers\rt\peri\UserController;
 use App\Http\Controllers\rt\peri\DataTableController;
 use App\Http\Controllers\rt\peri\UserNotifikasiController;
+use App\Http\Controllers\rt\peri\ProfileController;
 
 Route::get('/phpinfo', function () {
     phpinfo();
@@ -245,4 +246,9 @@ Route::post('/api/midtrans-callback', [CartController::class, 'handleNotificatio
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/setting', [ProfileController::class, 'edit'])->name('user.setting');
+    Route::patch('/setting/update', [ProfileController::class, 'update'])->name('profile.update');
 });
