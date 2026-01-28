@@ -241,8 +241,6 @@ Route::prefix('cart/api/regions')->group(function () {
     Route::get('/villages/{district_code}', [CartController::class, 'getVillages']);
 });
 
-Route::post('/api/midtrans-callback', [CartController::class, 'handleNotification']);
-
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
@@ -252,3 +250,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/setting', [ProfileController::class, 'edit'])->name('user.setting');
     Route::patch('/setting/update', [ProfileController::class, 'update'])->name('profile.update');
 });
+
+
+Route::post('/api/midtrans-callback', [App\Http\Controllers\rt\peri\CartController::class, 'handleNotification']);
