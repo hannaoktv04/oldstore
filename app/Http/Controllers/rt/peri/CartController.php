@@ -344,6 +344,7 @@ class CartController extends Controller
             'size' => "required"
         ]);
 
+
         $cart = Cart::updateOrCreate(
             [
                 'user_id' => Auth::id(),
@@ -355,7 +356,7 @@ class CartController extends Controller
             ]
         );
 
-        return redirect()->route('cart.checkoutPage');
+        return redirect()->route('cart.checkoutPage', ['ids' => $cart->id]);
     }
 
     public function update(Request $request, $id)
