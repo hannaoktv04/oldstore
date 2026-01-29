@@ -1,6 +1,6 @@
 # 👟 OldStore – Sneaker E-Commerce Platform
 
-**OldStore** adalah platform e-commerce berbasis web yang dirancang khusus untuk penjualan sepatu dan pakaian. Aplikasi ini dibangun menggunakan framework **Laravel** dengan sistem pembayaran otomatis serta manajemen inventaris yang terintegrasi.
+**OldStore** adalah platform e-commerce berbasis web yang dirancang khusus untuk penjualan sepatu. Aplikasi ini dibangun menggunakan framework **Laravel** dengan sistem pembayaran otomatis serta manajemen inventaris yang terintegrasi.
 
 Repository:  
 🔗 https://github.com/hannaoktv04/oldstore
