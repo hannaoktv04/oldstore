@@ -94,7 +94,7 @@ class CartController extends Controller
     public function checkout(Request $request)
     {
         $request->validate([
-            'cart_ids'      => 'required|array',
+            'cart_ids'      => 'required|string',
             'ongkir'        => 'required|numeric',
             'province_code' => 'required',
             'city_code'     => 'required',
@@ -106,10 +106,12 @@ class CartController extends Controller
             'weight'        => 'required|numeric',
         ]);
 
+        $cartIdsArray = explode(',', $request->cart_ids);
+
         DB::beginTransaction();
         try {
             $carts = Cart::with('item')
-                ->whereIn('id', $request->cart_ids)
+                ->whereIn('id', $cartIdsArray) 
                 ->where('user_id', Auth::id())
                 ->get();
 
@@ -342,6 +344,7 @@ class CartController extends Controller
             'size' => "required"
         ]);
 
+
         $cart = Cart::updateOrCreate(
             [
                 'user_id' => Auth::id(),
@@ -353,7 +356,7 @@ class CartController extends Controller
             ]
         );
 
-        return redirect()->route('cart.checkoutPage');
+        return redirect()->route('cart.checkoutPage', ['ids' => $cart->id]);
     }
 
     public function update(Request $request, $id)
