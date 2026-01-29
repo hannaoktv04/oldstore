@@ -83,7 +83,11 @@ php artisan key:generate
 ```
 php artisan migrate
 ```
-### 6️ Jalankan Server
+### 6️ Storage Link
+```
+php artisan storage:link
+```
+### 7️ Jalankan Server
 ```
 php artisan serve
 ```
